@@ -1,12 +1,13 @@
 import sys
-from PyQt4.QtGui import QMainWindow, QMenuBar, QToolBar, QSplitter, QWidget, QApplication, QListWidgetItem, QLabel, \
-    QIcon, QCloseEvent
+from PyQt4.QtGui import QMainWindow, QApplication, QListWidgetItem, QLabel, \
+    QIcon, QCloseEvent, QColor, QSplashScreen, QPixmap
 from PyQt4.QtCore import QSettings
-from scipy.signal._arraytools import even_ext
+from PyQt4.Qt import Qt
 from ui_mainwinow import Ui_MainWindow
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-
+import time
+from datetime import datetime
 
 class favsorter():
     def __init__(self, favs: list):
@@ -21,9 +22,6 @@ class favsorter():
 
 class MainWindow(QMainWindow):
     def __init__(self, initial_stocks: dict, get_stock_datas_cb: callable):
-        # QApplication as a member
-        self.qApp = QApplication(sys.argv)
-
         # Initialize from Designer created
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
@@ -64,32 +62,33 @@ class MainWindow(QMainWindow):
 
     def on_lineEdit_search_textEdited(self, s: str):
         print("Text Edited: {}".format(s))
-
-    def on_listWidget_stocks_itemDoubleClicked(self, item: QListWidgetItem):
-        print("{} will be opened in a new tab/view.".format(item.text()))
-        self._get_stock_datas_cb(item.text())
-
-    def on_listWidget_stocks_itemClicked(self, item: QListWidgetItem):
-        print("{} clicked.".format(item.text()))
+        self.update_stocks({"OTP": 5000})
+        pass
 
     def on_listWidget_stocks_itemActivated(self, item: QListWidgetItem):
-        print("{} activated.".format(item.text()))
-
-    def on_listWidget_stocks_itemEntered(self, item: QListWidgetItem):
-        print("{} Entered.".format(item.text()))
-
-    def on_listWidget_stocks_itemPressed(self, item: QListWidgetItem):
-        print("{} Pressed.".format(item.text()))
+        self._get_stock_datas_cb(item.text())
 
     def on_listWidget_stocks_itemSelectionChanged(self):
-        print("{} SELECTED.".format(self.ui.listWidget_stocks.selectedItems()[0].text()))
-        self.ui.action_favorite.setEnabled(True)
+        if self.ui.listWidget_stocks.selectedItems():
+            self.ui.action_favorite.setEnabled(True)
+        else:
+            self.ui.action_favorite.setEnabled(False)
 
     def update_stocks(self, updated_stocks: dict):
         """Call it when new trades arrived.
         :param updated_stocks: is a names (str) keyed prize values.
         """
-        pass
+        for k, v in updated_stocks.items():
+            it = self.ui.listWidget_stocks.findItems(k, Qt.MatchExactly)[0]
+            if int(it.toolTip()) < v:
+                it.setBackgroundColor(QColor(0, 255, 0))
+                it.setToolTip(str(v))
+            elif int(it.toolTip()) > v:
+                it.setBackgroundColor(QColor(210, 0, 0))
+                it.setToolTip(str(v))
+            else:
+                it.setBackgroundColor(QColor(255, 255, 255))
+        # TODO: multi level coloring and represent datas divided from the widget
 
     def stock_values(self, name: str, datas):
         """Call it to show a time serie for the given stock.
@@ -97,17 +96,28 @@ class MainWindow(QMainWindow):
         :param datas:
         :return:
         """
+        print(name)
+        # TODO: implement
         pass
-
-    def exec(self) -> int:
-        return self.qApp.exec()
 
     def closeEvent(self, event: QCloseEvent):
         settings = QSettings("IntelliStock", "IntelliStock")
         settings.setValue("favorites", self._favorites)
         event.accept()
 
+
 if __name__ == '__main__':
-    w = MainWindow({"OTP": 3500, "MOL": 13400, "RICHTER": 3700, "DAX": 9950}, lambda n: print(n))
+    qApp = QApplication(sys.argv)
+    splash = QSplashScreen(QPixmap("main_icon.png"))
+    splash.show()
+    splash.showMessage("Loading modules", Qt.AlignBottom)
+    time.sleep(1)
+    splash.showMessage("Loading data", Qt.AlignBottom)
+    time.sleep(2)
+    w = MainWindow({"OTP": 3500, "MOL": 13400, "RICHTER": 3700, "DAX": 9950, "RÁBA": 1100, "UPDATE1": 990,
+                    "ELMŰ": 13900},
+                   lambda n: w.stock_values(n, [(datetime(2014, 11, 27, 9, 32), 12400, 2), (datetime(2014, 11, 27, 9,
+                                                                                                  35), 12350, 5)]))
     w.show()
-    w.exec()
+    splash.finish(w)
+    qApp.exec()

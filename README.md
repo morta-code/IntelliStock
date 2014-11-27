@@ -21,7 +21,14 @@ date)`
  
 ### methods
     update_stocks(updated_stock: dict) -> None
-Call it when new trades arrived. *updated_stocks* is a names (str) keyed prize values.
+Call it when new trades arrived. *updated_stocks* is a names (str) keyed price values.
     
-    stock_values(stock: str, IDE VALAMI ADATSZERKEZET)
-Call it to show a time serie for the given stock.
+    stock_values(stock: str, datas: list)
+Call it to show a time serie for the given stock. *name* is the name of stock, *datas* is a list of the following 
+tuples: *(date: datetime, price: int, amount: int)*
+
+### using
+    app = QApplication(sys.argv)
+    window = MainWindow(initial_stocks, get_stock_datas_cb)
+    window.show()
+    app.exec()
