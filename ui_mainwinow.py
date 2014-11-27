@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Thu Nov 27 11:47:26 2014
+# Created: Thu Nov 27 16:15:07 2014
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -140,6 +140,7 @@ class Ui_MainWindow(object):
         self.action_menubar.setChecked(True)
         self.action_menubar.setObjectName(_fromUtf8("action_menubar"))
         self.action_favorite = QtGui.QAction(MainWindow)
+        self.action_favorite.setEnabled(False)
         self.action_favorite.setObjectName(_fromUtf8("action_favorite"))
         self.menuStock.addAction(self.action_exit)
         self.menuView.addAction(self.action_showToolbar)
@@ -171,14 +172,19 @@ class Ui_MainWindow(object):
         self.toolBar.setWindowTitle(_translate("MainWindow", "Eszköztár", None))
         self.action_aboutStock.setText(_translate("MainWindow", "A &Stock névjegye", None))
         self.action_showToolbar.setText(_translate("MainWindow", "&Eszköztár", None))
+        self.action_showToolbar.setStatusTip(_translate("MainWindow", "Eszköztár megjelenítése/eltejtése.", None))
         self.action_showToolbar.setShortcut(_translate("MainWindow", "Ctrl+E, T", None))
         self.action_showStatusbar.setText(_translate("MainWindow", "&Állapotsor", None))
+        self.action_showStatusbar.setStatusTip(_translate("MainWindow", "Állapotsáv megjelenítése/elrejtése.", None))
         self.action_showStatusbar.setShortcut(_translate("MainWindow", "Ctrl+E, S", None))
         self.action_fullscreen.setText(_translate("MainWindow", "&Teljes képernyő", None))
+        self.action_fullscreen.setStatusTip(_translate("MainWindow", "Ablak teljes képernyőre váltása.", None))
         self.action_fullscreen.setShortcut(_translate("MainWindow", "F11", None))
         self.action_exit.setText(_translate("MainWindow", "&Kilépés", None))
         self.action_exit.setShortcut(_translate("MainWindow", "Ctrl+Q", None))
         self.action_menubar.setText(_translate("MainWindow", "Menüsor", None))
         self.action_menubar.setShortcut(_translate("MainWindow", "Ctrl+E, M", None))
         self.action_favorite.setText(_translate("MainWindow", "&Kedvenc", None))
+        self.action_favorite.setStatusTip(_translate("MainWindow", "Kijelölt részvény hozzáadása/eltávolitása a kedvencek közül.", None))
+        self.action_favorite.setShortcut(_translate("MainWindow", "Ctrl+F", None))
 

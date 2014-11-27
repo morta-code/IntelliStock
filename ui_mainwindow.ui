@@ -235,6 +235,9 @@
    <property name="text">
     <string>&amp;Eszköztár</string>
    </property>
+   <property name="statusTip">
+    <string>Eszköztár megjelenítése/eltejtése.</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+E, T</string>
    </property>
@@ -249,6 +252,9 @@
    <property name="text">
     <string>&amp;Állapotsor</string>
    </property>
+   <property name="statusTip">
+    <string>Állapotsáv megjelenítése/elrejtése.</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+E, S</string>
    </property>
@@ -256,6 +262,9 @@
   <action name="action_fullscreen">
    <property name="text">
     <string>&amp;Teljes képernyő</string>
+   </property>
+   <property name="statusTip">
+    <string>Ablak teljes képernyőre váltása.</string>
    </property>
    <property name="shortcut">
     <string>F11</string>
@@ -284,8 +293,17 @@
    </property>
   </action>
   <action name="action_favorite">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>&amp;Kedvenc</string>
+   </property>
+   <property name="statusTip">
+    <string>Kijelölt részvény hozzáadása/eltávolitása a kedvencek közül.</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
  </widget>

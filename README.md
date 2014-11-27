@@ -15,8 +15,6 @@ Gui component of IntelliStock. Must be created and managed by the "main" compone
 ### construction
     window = MainWindow(initial_stocks, get_stock_datas_cb)
 
-Where
-
 - *initial_stock* is a dict with all stocks and last values.
 - *get_stock_datas_cb* is a callback for request datas for a specified stock and date. `get_stock_datas_cb(stock, 
 date)`
