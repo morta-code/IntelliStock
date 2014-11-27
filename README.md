@@ -1,6 +1,7 @@
 IntelliStock
 ============
 
+A Python software to view and predict Budapest Stock Exchange stocks.
 A Python software to view and predict „Budapesti Értéktőzsde” stocks.
 
 ## Requirements
