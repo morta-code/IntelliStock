@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Fri Nov 21 11:07:24 2014
+# Created: Thu Nov 27 16:15:07 2014
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -42,6 +42,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lineEdit_search.sizePolicy().hasHeightForWidth())
         self.lineEdit_search.setSizePolicy(sizePolicy)
+        self.lineEdit_search.setMinimumSize(QtCore.QSize(120, 0))
         self.lineEdit_search.setMaximumSize(QtCore.QSize(200, 16777215))
         self.lineEdit_search.setObjectName(_fromUtf8("lineEdit_search"))
         self.navigationLayout.addWidget(self.lineEdit_search)
@@ -51,6 +52,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.listWidget_stocks.sizePolicy().hasHeightForWidth())
         self.listWidget_stocks.setSizePolicy(sizePolicy)
+        self.listWidget_stocks.setMinimumSize(QtCore.QSize(120, 0))
         self.listWidget_stocks.setMaximumSize(QtCore.QSize(200, 16777215))
         self.listWidget_stocks.setObjectName(_fromUtf8("listWidget_stocks"))
         self.navigationLayout.addWidget(self.listWidget_stocks)
@@ -60,6 +62,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.progressBar_load.sizePolicy().hasHeightForWidth())
         self.progressBar_load.setSizePolicy(sizePolicy)
+        self.progressBar_load.setMinimumSize(QtCore.QSize(120, 0))
         self.progressBar_load.setMaximumSize(QtCore.QSize(200, 16777215))
         self.progressBar_load.setVisible(False)
         self.progressBar_load.setTextVisible(False)
@@ -136,10 +139,14 @@ class Ui_MainWindow(object):
         self.action_menubar.setCheckable(True)
         self.action_menubar.setChecked(True)
         self.action_menubar.setObjectName(_fromUtf8("action_menubar"))
+        self.action_favorite = QtGui.QAction(MainWindow)
+        self.action_favorite.setEnabled(False)
+        self.action_favorite.setObjectName(_fromUtf8("action_favorite"))
         self.menuStock.addAction(self.action_exit)
         self.menuView.addAction(self.action_showToolbar)
         self.menuView.addAction(self.action_showStatusbar)
         self.menuView.addAction(self.action_fullscreen)
+        self.menuTools.addAction(self.action_favorite)
         self.menuHelp.addAction(self.action_aboutStock)
         self.menubar.addAction(self.menuStock.menuAction())
         self.menubar.addAction(self.menuView.menuAction())
@@ -165,13 +172,19 @@ class Ui_MainWindow(object):
         self.toolBar.setWindowTitle(_translate("MainWindow", "Eszköztár", None))
         self.action_aboutStock.setText(_translate("MainWindow", "A &Stock névjegye", None))
         self.action_showToolbar.setText(_translate("MainWindow", "&Eszköztár", None))
+        self.action_showToolbar.setStatusTip(_translate("MainWindow", "Eszköztár megjelenítése/eltejtése.", None))
         self.action_showToolbar.setShortcut(_translate("MainWindow", "Ctrl+E, T", None))
         self.action_showStatusbar.setText(_translate("MainWindow", "&Állapotsor", None))
+        self.action_showStatusbar.setStatusTip(_translate("MainWindow", "Állapotsáv megjelenítése/elrejtése.", None))
         self.action_showStatusbar.setShortcut(_translate("MainWindow", "Ctrl+E, S", None))
         self.action_fullscreen.setText(_translate("MainWindow", "&Teljes képernyő", None))
+        self.action_fullscreen.setStatusTip(_translate("MainWindow", "Ablak teljes képernyőre váltása.", None))
         self.action_fullscreen.setShortcut(_translate("MainWindow", "F11", None))
         self.action_exit.setText(_translate("MainWindow", "&Kilépés", None))
         self.action_exit.setShortcut(_translate("MainWindow", "Ctrl+Q", None))
         self.action_menubar.setText(_translate("MainWindow", "Menüsor", None))
         self.action_menubar.setShortcut(_translate("MainWindow", "Ctrl+E, M", None))
+        self.action_favorite.setText(_translate("MainWindow", "&Kedvenc", None))
+        self.action_favorite.setStatusTip(_translate("MainWindow", "Kijelölt részvény hozzáadása/eltávolitása a kedvencek közül.", None))
+        self.action_favorite.setShortcut(_translate("MainWindow", "Ctrl+F", None))
 
