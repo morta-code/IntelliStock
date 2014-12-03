@@ -8,11 +8,10 @@ from datetime import datetime
 class Application:
     
     def __init__(self):
-        self.qApp = QApplication(sys.argv)
+        self.q_application = QApplication(sys.argv)
         self.window = mainwindow.MainWindow(self)
         
-        self.window.update_ui({"OTP": 3500, "MOL": 13400, "RICHTER": 3700, "DAX": 9950, "RÁBA": 1100, "UPDATE1": 990, "ELMŰ": 13900}, 
-                            lambda n: w.stock_values(n, [(datetime(2014, 11, 27, 9, 32), 12400, 2), (datetime(2014, 11, 27, 9, 35), 12350, 5)]))
+        self.window.initialize({"OTP": 3500, "MOL": 13400, "RICHTER": 3700, "DAX": 9950, "RÁBA": 1100, "UPDATE1": 990, "ELMŰ": 13900})
     
     def load(self):
         splash = QSplashScreen(QPixmap("main_icon.png"))
@@ -25,7 +24,11 @@ class Application:
         
     def exec(self):
         self.window.show()
-        self.qApp.exec()
+        self.q_application.exec()
+        
+    def request_stock_values():
+        """ STUB """
+        self.window.stock_values(n, [(datetime(2014, 11, 27, 9, 32), 12400, 2), (datetime(2014, 11, 27, 9, 35), 12350, 5)])
 
 if __name__ == '__main__':
     application = Application()

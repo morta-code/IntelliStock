@@ -32,13 +32,11 @@ class MainWindow(QMainWindow):
         self.ui.statusbar.addWidget(QLabel("Hello statusbar!"))
         self.ui.statusbar.addWidget(QLabel("Szia Állapotsor!"))
 
-    def update_ui(self, initial_stocks: dict, get_stock_datas_cb: callable):
+    def initialize(self, initial_stocks: dict):
         # Initialize members and settings
         self._datas = initial_stocks
         self._settings = QSettings("IntelliStock", "IntelliStock")
         self._favorites = self._settings.value("favorites", ["OTP"])
-        self._get_stock_datas_cb = get_stock_datas_cb
-
 
         keys = list(self._datas.keys())
         keys.sort(key=favsorter(self._favorites))
