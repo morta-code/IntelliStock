@@ -6,7 +6,7 @@ Created on Thu Nov 27 14:23:08 2014
 """
 
 class DataManager:
-"""Entry point for access all data related methods. Singleton."""
+    """Entry point for access all data related methods. Singleton."""
     
     def getTrades(begin, end):
         """Returns the trades between dates begin and end."""

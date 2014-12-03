@@ -1,13 +1,11 @@
-import sys
-from PyQt4.QtGui import QMainWindow, QApplication, QListWidgetItem, QLabel, \
+
+from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, \
     QIcon, QCloseEvent, QColor, QSplashScreen, QPixmap
 from PyQt4.QtCore import QSettings
 from PyQt4.Qt import Qt
-from ui_mainwindow import Ui_MainWindow
+from ui.ui_mainwindow import Ui_MainWindow
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-import time
-from datetime import datetime
 
 class favsorter():
     def __init__(self, favs: list):
@@ -21,7 +19,9 @@ class favsorter():
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, initial_stocks: dict, get_stock_datas_cb: callable):
+    def __init__(self, application):
+        self.application = application        
+        
         # Initialize from Designer created
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
@@ -32,12 +32,11 @@ class MainWindow(QMainWindow):
         self.ui.statusbar.addWidget(QLabel("Hello statusbar!"))
         self.ui.statusbar.addWidget(QLabel("Szia Állapotsor!"))
 
+    def initialize(self, initial_stocks: dict):
         # Initialize members and settings
         self._datas = initial_stocks
         self._settings = QSettings("IntelliStock", "IntelliStock")
         self._favorites = self._settings.value("favorites", ["OTP"])
-        self._get_stock_datas_cb = get_stock_datas_cb
-
 
         keys = list(self._datas.keys())
         keys.sort(key=favsorter(self._favorites))
@@ -48,6 +47,7 @@ class MainWindow(QMainWindow):
                 wi.setIcon(QIcon("resources/star.png"))
             wi.setToolTip(str(self._datas[k]))
             self.ui.listWidget_stocks.addItem(wi)
+        
 
     def on_action_favorite_triggered(self, *b):
         if not b:
@@ -105,19 +105,3 @@ class MainWindow(QMainWindow):
         settings.setValue("favorites", self._favorites)
         event.accept()
 
-
-if __name__ == '__main__':
-    qApp = QApplication(sys.argv)
-    splash = QSplashScreen(QPixmap("resources/main_icon.png"))
-    splash.show()
-    splash.showMessage("Loading modules", Qt.AlignBottom)
-    time.sleep(1)
-    splash.showMessage("Loading data", Qt.AlignBottom)
-    time.sleep(2)
-    w = MainWindow({"OTP": 3500, "MOL": 13400, "RICHTER": 3700, "DAX": 9950, "RÁBA": 1100, "UPDATE1": 990,
-                    "ELMŰ": 13900},
-                   lambda n: w.stock_values(n, [(datetime(2014, 11, 27, 9, 32), 12400, 2), (datetime(2014, 11, 27, 9,
-                                                                                                  35), 12350, 5)]))
-    w.show()
-    splash.finish(w)
-    qApp.exec()
