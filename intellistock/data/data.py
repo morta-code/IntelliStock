@@ -22,3 +22,4 @@ class DataManager:
         
     def updateStocks():
         """This will call the mediator to update the gui with new data."""
+

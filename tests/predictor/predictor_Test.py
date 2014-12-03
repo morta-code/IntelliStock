@@ -1,9 +1,9 @@
 
 # TODO - ezt lehetne egy kicsit ugyesebben is megoldani : relative import
 import sys
-sys.path.append("../../")
 
-import predictor as pred
+
+from intellistock.predictor import predictor as pred
 import numpy as np
 
 import random

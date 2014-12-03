@@ -3,7 +3,7 @@ from PyQt4.QtGui import QMainWindow, QApplication, QListWidgetItem, QLabel, \
     QIcon, QCloseEvent, QColor, QSplashScreen, QPixmap
 from PyQt4.QtCore import QSettings
 from PyQt4.Qt import Qt
-from ui_mainwinow import Ui_MainWindow
+from ui_mainwindow import Ui_MainWindow
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 import time
@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         # Initialize extras (not automateable by Designer)
-        self.setWindowIcon(QIcon("main_icon.png"))
+        self.setWindowIcon(QIcon("resources/main_icon.png"))
         self.ui.statusbar.addWidget(QLabel("Hello statusbar!"))
         self.ui.statusbar.addWidget(QLabel("Szia Állapotsor!"))
 
@@ -45,7 +45,7 @@ class MainWindow(QMainWindow):
         for k in keys:
             wi = QListWidgetItem(k)
             if k in self._favorites:
-                wi.setIcon(QIcon("star.png"))
+                wi.setIcon(QIcon("resources/star.png"))
             wi.setToolTip(str(self._datas[k]))
             self.ui.listWidget_stocks.addItem(wi)
 
@@ -58,7 +58,7 @@ class MainWindow(QMainWindow):
             item.setIcon(QIcon())
         else:
             self._favorites.append(item.text())
-            item.setIcon(QIcon("star.png"))
+            item.setIcon(QIcon("resources/star.png"))
 
     def on_lineEdit_search_textEdited(self, s: str):
         print("Text Edited: {}".format(s))
@@ -108,7 +108,7 @@ class MainWindow(QMainWindow):
 
 if __name__ == '__main__':
     qApp = QApplication(sys.argv)
-    splash = QSplashScreen(QPixmap("main_icon.png"))
+    splash = QSplashScreen(QPixmap("resources/main_icon.png"))
     splash.show()
     splash.showMessage("Loading modules", Qt.AlignBottom)
     time.sleep(1)
