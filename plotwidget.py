@@ -34,7 +34,7 @@ class PlotWidget(FigureCanvas):
         
     def eraseLine(self, plotH = None, plotNr = None):
         """
-            @arg plotNr - int
+            @arg axisNr : int {1, 2, ...}
             @arg plotH - refference to a plot object (i.e. "plot handle")
             @return None if error occured
         """
@@ -46,7 +46,7 @@ class PlotWidget(FigureCanvas):
                 
     def hideLine(self, plotH = None, plotNr = None, hide = True):
         """
-            @arg plotNr - int
+            @arg axisNr : int {1, 2, ...}
             @arg plotH - refference to a plot object (i.e. "plot handle")
             @return None if error occured
         """
@@ -57,34 +57,30 @@ class PlotWidget(FigureCanvas):
         return plotH
                 
         
-    def subplot(self, axisNr = 0, rows = None, cols = None):
+    def subplot(self, axisNr = 1, rows = None, cols = None):
         """
-            @arg axisNr - index of subplot
+            @arg axisNr : int {1, 2, ...}
             @return None if error occured
         """
-        # if rows and cols are not None and are greater zero
+        # if rows and cols are not None and are greater zero - resplit the figure
         if rows and cols and rows > 0 and cols > 0:
+            self.fig.clear()
             self.rows = rows;
             self.cols = cols;
-            self.axes = [];
-            self.axes = [self.fig.add_subplot(rows, cols, rows * i + j) 
+            self.axes = [ self.fig.add_subplot(rows, cols, cols * i + j + 1)
                 for i in range(rows) 
                 for j in range(cols)]
-            self.axis = self.axes[axisNr]
+            self.axis = self.axes[axisNr-1]
             return self.axis
 
+        # just switch subplot
         if (axisNr < self.rows + self.cols):
-            print(axisNr)
-            print(self.axes)
-            print([self.axis])
-            self.axis = self.axes[axisNr]
-            print([self.axis])
+            self.axis = self.axes[axisNr-1]
             return self.axis
         
     def plot(self, *args, **kargs):
         """
-            @arg index - int
-            @arg args - matplotlib-like
+            @arg args - matplotlib-like arguments
             @return refference to the plot objects 
         """
         return self.axis.plot(*args, **kargs)
@@ -101,7 +97,7 @@ class PlotWidget(FigureCanvas):
 #        self.draw()
 
 
-def main():
+def main_test():
     # Qt keretrendszer elinditasa (enelkul nem lehet widgeteket letrehozni)
     app = QApplication(sys.argv)
 
@@ -112,7 +108,7 @@ def main():
     t2 = np.linspace(0.4, 1.5, 20)
     x = np.sin(t * 13)
 
-    if not w.subplot(1,2,1):
+    if not w.subplot(2, rows = 2, cols = 1):
         print("Assertion error: subplot - resplit figure")
 
     # test plot()
@@ -133,11 +129,12 @@ def main():
     # test hideLine()
     if not w.hideLine(plotH = q):
         print("Assertion error: eraseLine by plotH")
-    if not w.hideLine(plotNr = 0, hide = False):
+    if not w.hideLine(plotNr = 1, hide = False):
         print("Assertion error: eraseLine by plotNr, set visible")
+    w.plot(t, 0.5*x+0.5, 'b')
     w.draw()
     
-    if not w.subplot(0):
+    if not w.subplot(1):
         print("Assertion error: subplot - switch subplot")        
         
     w.plot(t,x)    
@@ -159,4 +156,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main_test()
