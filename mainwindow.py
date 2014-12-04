@@ -9,16 +9,28 @@ from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 import time
 from datetime import datetime
 
+# Polcz itt belenyult
+from navigatorplotwidget import NavigatorPlotWidget
+import logging
+FORMAT = '%(levelname)s Proc[%(process)s] at %(pathname)s:%(lineno)d - %(message)s'
+logging.basicConfig(format=FORMAT)
+plogger = logging.getLogger('polcz')
+
 class favsorter():
     def __init__(self, favs: list):
         self.favs = favs
 
     def __call__(self, a: str):
-        if a in self.favs:
-            return str(1)+a
-        else:
-            return a
-
+        try:
+            if a in self.favs:
+                return str(1)+a
+            else:
+                return a
+        except NameError as e:
+            plogger.error("Tamas, ez vajon miert tortenik")
+        except TypeError as e:
+            plogger.error("Tamas, ez vajon miert tortenik")
+        return a
 
 class MainWindow(QMainWindow):
     def __init__(self, initial_stocks: dict, get_stock_datas_cb: callable):
@@ -48,6 +60,12 @@ class MainWindow(QMainWindow):
                 wi.setIcon(QIcon("star.png"))
             wi.setToolTip(str(self._datas[k]))
             self.ui.listWidget_stocks.addItem(wi)
+
+    # Polcz itt megint belepofazott, a fene vigye el
+    def setupPlotWidget(self):
+        self.ui.plotWidget = NavigatorPlotWidget(cols = 2, rows = 1)
+        self.ui.tabWidget.addWidget(self.ui.plotWidget)
+        self.ui.tabWidget.setCurrentIndex(0)
 
     def on_action_favorite_triggered(self, *b):
         if not b:
