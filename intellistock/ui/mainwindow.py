@@ -31,8 +31,8 @@ class IconBank:
 
     @staticmethod
     def load_icons():
-        IconBank.star = QIcon("../resources/star.png")
-        IconBank.main = QIcon("../resources/main_icon.png")
+        IconBank.star = QIcon("resources/star.png")
+        IconBank.main = QIcon("resources/main_icon.png")
 
 
 

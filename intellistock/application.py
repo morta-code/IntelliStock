@@ -16,7 +16,7 @@ class Application:
             {"OTP": 3500, "MOL": 13400, "RICHTER": 3700, "DAX": 9950, "RÁBA": 1100, "UPDATE1": 990, "ELMŰ": 13900})
 
     def load(self):
-        splash = QSplashScreen(QPixmap("../resources/main_icon.png"))
+        splash = QSplashScreen(QPixmap("resources/main_icon.png"))
         splash.show()
         splash.showMessage("Loading modules", Qt.AlignBottom)
         #time.sleep(1)
