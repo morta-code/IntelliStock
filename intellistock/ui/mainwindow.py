@@ -36,9 +36,6 @@ class IconBank:
         IconBank.exit = QIcon("resources/exit.png")
 
 
-
-
-
 class MainWindow(QMainWindow):
     def __init__(self, application):
         self.application = application        
@@ -90,7 +87,7 @@ class MainWindow(QMainWindow):
     def on_action_simulation_triggered(self, *b):
         if not b:
             return
-        self.application.start_simulation()
+        self.application.start_simulation(self.ui.listWidget_stocks.selectedItems()[0].text())
 
     def on_lineEdit_search_textEdited(self, s: str):
         print("Text Edited: {}".format(s))
