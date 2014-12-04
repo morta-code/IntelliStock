@@ -1,6 +1,5 @@
 import sys
 import time
-from simulation.simulation import Simulation
 
 from ui import mainwindow
 from PyQt4.QtGui import QApplication, QSplashScreen, QPixmap
