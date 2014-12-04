@@ -13,7 +13,7 @@ from .navigatorplotwidget import NavigatorPlotWidget
 # plogger = logging.getLogger('polcz')
 
 
-class favsorter():
+class FavSorter():
     def __init__(self, favs: list):
         self.favs = favs
 
@@ -30,8 +30,8 @@ class IconBank:
 
     @staticmethod
     def load_icons():
-        IconBank.star = QIcon("../resources/star.png")
-        IconBank.main = QIcon("../resources/main_icon.png")
+        IconBank.star = QIcon("resources/star.png")
+        IconBank.main = QIcon("resources/main_icon.png")
 
 
 
@@ -63,7 +63,7 @@ class MainWindow(QMainWindow):
         self._datas = initial_stocks
 
         keys = list(self._datas.keys())
-        keys.sort(key=favsorter(self._favorites))
+        keys.sort(key=FavSorter(self._favorites))
 
         for k in keys:
             wi = QListWidgetItem(k)
