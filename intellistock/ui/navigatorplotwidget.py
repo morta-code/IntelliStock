@@ -57,7 +57,7 @@ def main_test():
     t2 = np.linspace(0.4, 1.5, 20)
     x = np.sin(t * 13)
 
-    if not w.subplot(2, rows = 2, cols = 1):
+    if not w.subplot(2, rows = 2, cols = 2):
         print("Assertion error: subplot - resplit figure")
 
     # test plot()
@@ -88,6 +88,11 @@ def main_test():
         
     w.plot(t,x)    
     w.draw()
+
+    w.subplot(3)
+    t = np.linspace(0, 10, 1000)
+    x = np.sin(t) + np.cos(t * 10) * 0.5 + np.cos(t * 10 + 0.2) * 0.5 + np.cos(t * 11 + 0.2) * 0.5 + np.random.rand(x.shape[0])
+    w.plot(t,x)
 
     # Qt keretrendszer futtatasa (main loop)
     app.exec_()
