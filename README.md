@@ -1,7 +1,8 @@
 IntelliStock
 ============
 
-A Python software to view and predict Budapest Stock Exchange stocks.
+A Python software to view and predict Budapest Stock Exchange stocks.<br>
+This is a collaborative assignment project of PPCU's [Scientific Python course](http://users.itk.ppke.hu/~oroszgy/?scipy-2014) in 2014/2015 autumn.
 
 ## Requirements
 - PyQt4
@@ -11,13 +12,14 @@ A Python software to view and predict Budapest Stock Exchange stocks.
 # Reference
 
 ## MainWindow (class)
-Gui component of IntelliStock. Must be created and managed by the "main" component of the program.
+Gui component of IntelliStock. It is created and managed by the application class.
 ### construction
-    window = MainWindow(initial_stocks, get_stock_datas_cb)
+    window = MainWindow(application)
+- *application* is the application of the currently running instance.
 
+### initialization
+    window.initialize(initial_stocks)
 - *initial_stock* is a dict with all stocks and last values.
-- *get_stock_datas_cb* is a callback for request datas for a specified stock and date. `get_stock_datas_cb(stock, 
-date)`
  
 ### methods
     update_stocks(updated_stock: dict) -> None
@@ -26,9 +28,3 @@ Call it when new trades arrived. *updated_stocks* is a names (str) keyed price v
     stock_values(stock: str, datas: list)
 Call it to show a time serie for the given stock. *name* is the name of stock, *datas* is a list of the following 
 tuples: *(date: datetime, price: int, amount: int)*
-
-### using
-    app = QApplication(sys.argv)
-    window = MainWindow(initial_stocks, get_stock_datas_cb)
-    window.show()
-    app.exec()
