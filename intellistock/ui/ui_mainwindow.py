@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'intellistock\ui\ui_mainwindow.ui'
 #
-# Created: Thu Dec  4 03:09:27 2014
-#      by: PyQt4 UI code generator 4.11.3
+# Created: Thu Dec  4 10:59:52 2014
+#      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -142,9 +142,9 @@ class Ui_MainWindow(object):
         self.action_favorite = QtGui.QAction(MainWindow)
         self.action_favorite.setEnabled(False)
         self.action_favorite.setObjectName(_fromUtf8("action_favorite"))
-        self.actionSimulation = QtGui.QAction(MainWindow)
-        self.actionSimulation.setObjectName(_fromUtf8("actionSimulation"))
-        self.menuStock.addAction(self.actionSimulation)
+        self.action_simulation = QtGui.QAction(MainWindow)
+        self.action_simulation.setObjectName(_fromUtf8("action_simulation"))
+        self.menuStock.addAction(self.action_simulation)
         self.menuStock.addAction(self.action_exit)
         self.menuView.addAction(self.action_showToolbar)
         self.menuView.addAction(self.action_showStatusbar)
@@ -190,5 +190,5 @@ class Ui_MainWindow(object):
         self.action_favorite.setText(_translate("MainWindow", "&Kedvenc", None))
         self.action_favorite.setStatusTip(_translate("MainWindow", "Kijelölt részvény hozzáadása/eltávolitása a kedvencek közül.", None))
         self.action_favorite.setShortcut(_translate("MainWindow", "Ctrl+F", None))
-        self.actionSimulation.setText(_translate("MainWindow", "Szimuláció", None))
+        self.action_simulation.setText(_translate("MainWindow", "Szimuláció", None))
 
