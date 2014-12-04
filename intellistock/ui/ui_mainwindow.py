@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'intellistock\ui\ui_mainwindow.ui'
 #
-# Created: Thu Dec  4 10:59:52 2014
+# Created: Thu Dec  4 12:54:16 2014
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -143,6 +143,7 @@ class Ui_MainWindow(object):
         self.action_favorite.setEnabled(False)
         self.action_favorite.setObjectName(_fromUtf8("action_favorite"))
         self.action_simulation = QtGui.QAction(MainWindow)
+        self.action_simulation.setEnabled(False)
         self.action_simulation.setObjectName(_fromUtf8("action_simulation"))
         self.menuStock.addAction(self.action_simulation)
         self.menuStock.addAction(self.action_exit)
