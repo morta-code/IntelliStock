@@ -3,16 +3,16 @@ from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, \
     QIcon, QCloseEvent, QColor
 from PyQt4.QtCore import QSettings
 from PyQt4.Qt import Qt
-from ui.ui_mainwindow import Ui_MainWindow
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+from .ui_mainwindow import Ui_MainWindow
+from .navigatorplotwidget import NavigatorPlotWidget
 
 # Polcz itt belenyult
-from ui.navigatorplotwidget import NavigatorPlotWidget
+# from .navigatorplotwidget import NavigatorPlotWidget
 # import logging
 # FORMAT = '%(levelname)s Proc[%(process)s] at %(pathname)s:%(lineno)d - %(message)s'
 # logging.basicConfig(format=FORMAT)
 # plogger = logging.getLogger('polcz')
+
 
 class favsorter():
     def __init__(self, favs: list):
@@ -24,6 +24,7 @@ class favsorter():
         else:
             return a
 
+
 class MainWindow(QMainWindow):
     def __init__(self, application):
         self.application = application        
@@ -31,21 +32,24 @@ class MainWindow(QMainWindow):
         # Initialize from Designer created
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
-        # self.ui.setupUi(self)
+        self.ui.setupUi(self)
 
         # Polcz fele pofazas
-        self.setupPlotWidget()
+        # self.setupPlotWidget()
 
         # Initialize extras (not automateable by Designer)
         self.setWindowIcon(QIcon("resources/main_icon.png"))
-        self.run_result = QLabel("Kész.")
+        self.run_result = QLabel("Kész.")  # todo: ui memberbe
         self.ui.statusbar.addWidget(self.run_result)
 
-    def initialize(self, initial_stocks: dict):
         # Initialize members and settings
-        self._datas = initial_stocks
         self._settings = QSettings("IntelliStock", "IntelliStock")
         self._favorites = self._settings.value("favorites", ["OTP"])
+        self._plotters = {}
+        self._datas = None
+
+    def initialize(self, initial_stocks: dict):
+        self._datas = initial_stocks
 
         keys = list(self._datas.keys())
         keys.sort(key=favsorter(self._favorites))
@@ -56,7 +60,6 @@ class MainWindow(QMainWindow):
                 wi.setIcon(QIcon("resources/star.png"))
             wi.setToolTip(str(self._datas[k]))
             self.ui.listWidget_stocks.addItem(wi)
-        
 
     # Polcz itt megint belepofazott, a fene vigye el
     # def setupPlotWidget(self):
@@ -73,18 +76,31 @@ class MainWindow(QMainWindow):
             item.setIcon(QIcon())
         else:
             self._favorites.append(item.text())
-            item.setIcon(QIcon("resources/star.png"))
+            item.setIcon(QIcon("../resources/star.png"))
 
-    def on_actionSimulation_triggered(self, *b):
+    def on_action_simulation_triggered(self, *b):
+        if not b:
+            return
         self.application.start_simulation()
 
     def on_lineEdit_search_textEdited(self, s: str):
         print("Text Edited: {}".format(s))
-        self.update_stocks({"OTP": 5000})
-        pass
+        # self.update_stocks({"OTP": 5000})
+        # todo: lista szűrő.
 
     def on_listWidget_stocks_itemActivated(self, item: QListWidgetItem):
-        self._get_stock_datas_cb(item.text())
+        # todo: ezt sort törölni:
+        self.application.request_stock_values(item.text())
+
+        if item.text() in self._plotters.keys():
+            self.ui.tabWidget.setCurrentWidget(self._plotters[item.text()])
+        else:
+            npw = NavigatorPlotWidget(self)
+            self._plotters[item.text()] = npw
+            self.ui.tabWidget.setCurrentIndex(self.ui.tabWidget.addTab(npw, item.text()))
+
+        # todo: MINDENKINEK: Nem névszerinti kérést küld, hanem legyárt egy plottert, amit átad szerkesztésre.
+        # Ezáltal elválasztjuk az adatot a GUI-tól.
 
     def on_listWidget_stocks_itemSelectionChanged(self):
         if self.ui.listWidget_stocks.selectedItems():
@@ -120,10 +136,14 @@ class MainWindow(QMainWindow):
         """
         print(name)
         # TODO: implement
+        # Ha nincs megnyitva, nyit egy lapot, ha meg van nyitva, azt frissíti.
+        pass
+
+    def create_plotter(self, name: str):
+        # todo: build a plotter widget
         pass
 
     def closeEvent(self, event: QCloseEvent):
         settings = QSettings("IntelliStock", "IntelliStock")
         settings.setValue("favorites", self._favorites)
         event.accept()
-
