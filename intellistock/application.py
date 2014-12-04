@@ -1,12 +1,12 @@
 import sys
 import time
-from simulation.simulation import Simulation
-from ui import mainwindow
-from data import data
+from intellistock.simulation.simulation import Simulation
+from intellistock.ui import mainwindow
+from intellistock.data import data
 from PyQt4.QtGui import QApplication, QSplashScreen, QPixmap
 from PyQt4.Qt import Qt
 from datetime import datetime
-from predictor.predictor import PredictorTestSimulation, NaivePredictor
+from intellistock.predictor.predictor import PredictorTestSimulation, NaivePredictor
 
 
 class Application:
@@ -67,8 +67,11 @@ class Application:
         self.window.update_simulation_results(simulation_result)
         pass
 
-if __name__ == '__main__':
+def main():
     application = Application()
     application.load()
     application.exec()
+
+if __name__ == '__main__':
+    main()
     

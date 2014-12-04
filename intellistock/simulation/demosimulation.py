@@ -5,7 +5,7 @@ Created on Thu Dec  4 10:48:52 2014
 @author: polpe
 """
 
-from .simulation import Simulation
+from intellistock.simulation import Simulation
 
 """
 OA: other approach

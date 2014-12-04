@@ -3,8 +3,8 @@ from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, \
     QIcon, QCloseEvent, QColor, QWidget
 from PyQt4.QtCore import QSettings
 from PyQt4.Qt import Qt
-from ui.ui_mainwindow import Ui_MainWindow
-from ui.navigatorplotwidget import NavigatorPlotWidget
+from intellistock.ui.ui_mainwindow import Ui_MainWindow
+from intellistock.ui.navigatorplotwidget import NavigatorPlotWidget
 
 
 class FavSorter():

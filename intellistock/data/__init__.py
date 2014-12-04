@@ -3,7 +3,7 @@ import sqlite3
 from urllib.request import urlopen
 import csv
 import io
-from data import data
+from intellistock.data import data
 
 ARCHIVE_BASE_URL = "http://hunyadym.hu/stock"
 ARCHIVE_LIST = "list.php"
