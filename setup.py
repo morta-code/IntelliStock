@@ -23,7 +23,7 @@ setup(
     url='https://github.com/morta-code/IntelliStock',
 
     # Author details
-    author='Kozák Csaba',
+    author='Kozak Csaba',
     author_email='kozcs@digitus.itk.ppke.hu',
 
     # Choose your license
@@ -60,7 +60,7 @@ setup(
     # project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/technical.html#install-requires-vs-requirements-files
-    install_requires=['PyQt4', 'matplotlib',],
+    install_requires=['matplotlib',],
 
     # List additional groups of dependencies here (e.g. development dependencies).
     # You can install these using the following syntax, for example:
@@ -88,7 +88,7 @@ setup(
     # pip to create the appropriate form of executable for the target platform.
     entry_points={
         'console_scripts': [
-            'forecast=forecast.forecast:is_raining',
+            'intellistock=intellistock.application:main',
         ],
     },
 )
