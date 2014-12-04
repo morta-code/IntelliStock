@@ -60,7 +60,7 @@ setup(
     # project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/technical.html#install-requires-vs-requirements-files
-    install_requires=['matplotlib',],
+    install_requires=['matplotlib', 'numpy'], # do not add PyQt4, it is not possible here!
 
     # List additional groups of dependencies here (e.g. development dependencies).
     # You can install these using the following syntax, for example:
