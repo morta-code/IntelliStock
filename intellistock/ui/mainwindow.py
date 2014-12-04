@@ -3,14 +3,8 @@ from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, \
     QIcon, QCloseEvent, QColor, QWidget
 from PyQt4.QtCore import QSettings
 from PyQt4.Qt import Qt
-from .ui_mainwindow import Ui_MainWindow
-from .navigatorplotwidget import NavigatorPlotWidget
-
-# Polcz itt belenyult
-# import logging
-# FORMAT = '%(levelname)s Proc[%(process)s] at %(pathname)s:%(lineno)d - %(message)s'
-# logging.basicConfig(format=FORMAT)
-# plogger = logging.getLogger('polcz')
+from ui.ui_mainwindow import Ui_MainWindow
+from ui.navigatorplotwidget import NavigatorPlotWidget
 
 
 class FavSorter():
