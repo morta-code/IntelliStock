@@ -67,7 +67,10 @@ class Application:
         self.window.update_simulation_results(simulation_result)
         pass
 
+application = None
+
 def main():
+    global application
     application = Application()
     application.load()
     application.exec()
