@@ -7,7 +7,6 @@ from .ui_mainwindow import Ui_MainWindow
 from .navigatorplotwidget import NavigatorPlotWidget
 
 # Polcz itt belenyult
-# from .navigatorplotwidget import NavigatorPlotWidget
 # import logging
 # FORMAT = '%(levelname)s Proc[%(process)s] at %(pathname)s:%(lineno)d - %(message)s'
 # logging.basicConfig(format=FORMAT)
@@ -57,12 +56,6 @@ class MainWindow(QMainWindow):
                 wi.setIcon(QIcon("resources/star.png"))
             wi.setToolTip(str(self._datas[k]))
             self.ui.listWidget_stocks.addItem(wi)
-
-    # Polcz itt megint belepofazott, a fene vigye el
-    # def setupPlotWidget(self):
-    #     self.ui.plotWidget = NavigatorPlotWidget(cols = 2, rows = 1)
-    #     self.ui.tabWidget.addTab(self.ui.plotWidget, "Polcz plot")
-    #     self.ui.tabWidget.setCurrentIndex(0)
 
     def on_action_favorite_triggered(self, *b):
         if not b:
