@@ -5,6 +5,7 @@ from ui import mainwindow
 from PyQt4.QtGui import QApplication, QSplashScreen, QPixmap
 from PyQt4.Qt import Qt
 from datetime import datetime
+from predictor.predictor import PredictorTestSimulation, NaivePredictor
 
 
 class Application:
@@ -44,7 +45,11 @@ class Application:
             plot_candles()
             draw()
         """
-        # todo: implement, connect with managers
+
+        simulation = PredictorTestSimulation(application)
+        simulation.setFigure(plotter)
+        simulation.start_simulation()
+
         pass
 
     def kill_plotter(self, name: str):
@@ -55,7 +60,7 @@ class Application:
         # todo: implement.
         pass
 
-    def start_simulation(self):
+    def start_simulation(self, name: str):
         simulation = Simulation(self)
         simulation.start_simulation()
 
