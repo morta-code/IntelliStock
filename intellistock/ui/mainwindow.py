@@ -25,17 +25,31 @@ class favsorter():
             return a
 
 
+class IconBank:
+    star = None
+    main = None
+
+    @staticmethod
+    def load_icons():
+        IconBank.star = QIcon("../resources/star.png")
+        IconBank.main = QIcon("../resources/main_icon.png")
+
+
+
+
+
 class MainWindow(QMainWindow):
     def __init__(self, application):
         self.application = application        
-        
+        IconBank.load_icons()
+
         # Initialize from Designer created
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
         # Initialize extras (not automateable by Designer)
-        self.setWindowIcon(QIcon("resources/main_icon.png"))
+        self.setWindowIcon(IconBank.main)
         self.run_result = QLabel("Kész.")  # todo: ui memberbe
         self.ui.statusbar.addWidget(self.run_result)
         self.ui.tabWidget.tabCloseRequested.connect(self.kill_plotter)
@@ -55,7 +69,7 @@ class MainWindow(QMainWindow):
         for k in keys:
             wi = QListWidgetItem(k)
             if k in self._favorites:
-                wi.setIcon(QIcon("resources/star.png"))
+                wi.setIcon(IconBank.star)
             wi.setToolTip(str(self._datas[k]))
             self.ui.listWidget_stocks.addItem(wi)
 
@@ -68,7 +82,7 @@ class MainWindow(QMainWindow):
             item.setIcon(QIcon())
         else:
             self._favorites.append(item.text())
-            item.setIcon(QIcon("../resources/star.png"))
+            item.setIcon(IconBank.star)
 
     def on_action_simulation_triggered(self, *b):
         if not b:
@@ -113,17 +127,6 @@ class MainWindow(QMainWindow):
 
     def update_simulation_results(self, updated_simulation_results: dict):
         self.run_result.setText("Szimuláció kész.")
-        pass
-
-    def stock_values(self, name: str, datas):
-        """Call it to show a time serie for the given stock.
-        :param name: name of
-        :param datas:
-        :return:
-        """
-        print(name)
-        # TODO: remove, this method is not needed
-        # Ha nincs megnyitva, nyit egy lapot, ha meg van nyitva, azt frissíti.
         pass
 
     def create_plotter(self, name: str):
