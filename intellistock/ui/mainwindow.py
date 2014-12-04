@@ -21,11 +21,13 @@ class FavSorter():
 class IconBank:
     star = None
     main = None
+    exit = None
 
     @staticmethod
     def load_icons():
         IconBank.star = QIcon("resources/star.png")
         IconBank.main = QIcon("resources/main_icon.png")
+        IconBank.exit = QIcon("resources/exit.png")
 
 
 class MainWindow(QMainWindow):
@@ -43,6 +45,8 @@ class MainWindow(QMainWindow):
         self.run_result = QLabel("Kész.")  # todo: ui memberbe
         self.ui.statusbar.addWidget(self.run_result)
         self.ui.tabWidget.tabCloseRequested.connect(self.kill_plotter)
+        self.ui.action_favorite.setIcon(IconBank.star)
+        self.ui.action_exit.setIcon(IconBank.exit)
 
         # Initialize members and settings
         self._settings = QSettings("IntelliStock", "IntelliStock")

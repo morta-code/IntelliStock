@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'intellistock\ui\ui_mainwindow.ui'
 #
-# Created: Thu Dec  4 12:54:16 2014
+# Created: Thu Dec  4 15:15:19 2014
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
