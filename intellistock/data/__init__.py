@@ -3,7 +3,7 @@ import sqlite3
 from urllib.request import urlopen
 import csv
 import io
-import data
+from data import data
 
 ARCHIVE_BASE_URL = "http://hunyadym.hu/stock"
 ARCHIVE_LIST = "list.php"
@@ -37,6 +37,7 @@ def initialize_database():
 
     for f in files:
         load_from_csv(f)
+        return
         
 def load_from_csv(csv_path):
     global stocks    

@@ -2,6 +2,7 @@ import sys
 import time
 from simulation.simulation import Simulation
 from ui import mainwindow
+from data import data
 from PyQt4.QtGui import QApplication, QSplashScreen, QPixmap
 from PyQt4.Qt import Qt
 from datetime import datetime
@@ -13,8 +14,9 @@ class Application:
         self.q_application = QApplication(sys.argv)
         self.window = mainwindow.MainWindow(self)
 
-        self.window.initialize(
-            {"OTP": 3500, "MOL": 13400, "RICHTER": 3700, "DAX": 9950, "RÁBA": 1100, "UPDATE1": 990, "ELMŰ": 13900})
+        # self.window.initialize(
+        #     {"OTP": 3500, "MOL": 13400, "RICHTER": 3700, "DAX": 9950, "RÁBA": 1100, "UPDATE1": 990, "ELMŰ": 13900})
+        self.window.initialize(dict(data.get_stocks_with_last_close()))
 
     def load(self):
         splash = QSplashScreen(QPixmap("resources/main_icon.png"))
