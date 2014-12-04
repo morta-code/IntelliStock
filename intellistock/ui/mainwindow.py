@@ -3,14 +3,8 @@ from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, \
     QIcon, QCloseEvent, QColor, QWidget
 from PyQt4.QtCore import QSettings
 from PyQt4.Qt import Qt
-from .ui_mainwindow import Ui_MainWindow
-from .navigatorplotwidget import NavigatorPlotWidget
-
-# Polcz itt belenyult
-# import logging
-# FORMAT = '%(levelname)s Proc[%(process)s] at %(pathname)s:%(lineno)d - %(message)s'
-# logging.basicConfig(format=FORMAT)
-# plogger = logging.getLogger('polcz')
+from intellistock.ui.ui_mainwindow import Ui_MainWindow
+from intellistock.ui.navigatorplotwidget import NavigatorPlotWidget
 
 
 class FavSorter():
@@ -34,9 +28,6 @@ class IconBank:
         IconBank.star = QIcon("resources/star.png")
         IconBank.main = QIcon("resources/main_icon.png")
         IconBank.exit = QIcon("resources/exit.png")
-
-
-
 
 
 class MainWindow(QMainWindow):
@@ -90,7 +81,7 @@ class MainWindow(QMainWindow):
     def on_action_simulation_triggered(self, *b):
         if not b:
             return
-        self.application.start_simulation("")
+        self.application.start_simulation(self.ui.listWidget_stocks.selectedItems()[0].text())
 
     def on_lineEdit_search_textEdited(self, s: str):
         if s:

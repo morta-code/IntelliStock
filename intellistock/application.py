@@ -1,21 +1,18 @@
 import sys
 import time
-from simulation.simulation import Simulation
-from ui import mainwindow
-from data import data
+from intellistock.simulation.simulation import Simulation
+from intellistock.ui import mainwindow
+from intellistock.data import data
 from PyQt4.QtGui import QApplication, QSplashScreen, QPixmap
 from PyQt4.Qt import Qt
 from datetime import datetime
-from predictor.predictor import PredictorTestSimulation, NaivePredictor
+from intellistock.predictor.predictor import PredictorTestSimulation, NaivePredictor
 
 
 class Application:
     def __init__(self):
         self.q_application = QApplication(sys.argv)
         self.window = mainwindow.MainWindow(self)
-
-        # self.window.initialize(
-        #     {"OTP": 3500, "MOL": 13400, "RICHTER": 3700, "DAX": 9950, "RÁBA": 1100, "UPDATE1": 990, "ELMŰ": 13900})
         self.window.initialize(dict(data.get_stocks_with_last_close()))
 
     def load(self):
@@ -70,8 +67,14 @@ class Application:
         self.window.update_simulation_results(simulation_result)
         pass
 
-if __name__ == '__main__':
+application = None
+
+def main():
+    global application
     application = Application()
     application.load()
     application.exec()
+
+if __name__ == '__main__':
+    main()
     
