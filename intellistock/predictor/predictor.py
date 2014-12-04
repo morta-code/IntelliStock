@@ -45,7 +45,7 @@ class PredictorTestSimulation:
         self.figure = None
         self.predictor = None
         self.stepNr = 0
-        self.stepMax = 10
+        self.stepMax = 1000
         self.futureMax = 10
 
     def setPredictor(self, predictor):
@@ -56,8 +56,8 @@ class PredictorTestSimulation:
 
     def start_simulation(self):
         self.t = np.linspace(0, 10 * (self.stepMax + self.futureMax) / self.stepMax, self.stepMax + self.futureMax)
-        self.x = np.sin(self.t)*0.2 + np.cos(self.t * 10) * 0.02 + np.cos(self.t * 10 + 0.2) * 0.01 + np.cos(self.t * 11 + 0.2) * 0.01 + np.random.rand(self.t.shape[0])
-        self.x = np.convolve(self.x, np.ones(3), 'same')
+        self.x = np.sin(self.t)*0.2 + np.cos(self.t * 10) * 0.02 + np.cos(self.t * 10 + 0.2) * 0.01 + np.cos(self.t * 11 + 0.2) * 0.01 + np.random.randn(self.t.shape[0]) * 5
+        self.x = np.convolve(self.x, np.ones(100), 'same') + 200 + np.random.randn(self.t.shape[0])
         self.step_simulation()
 
     def step_simulation(self):
@@ -66,8 +66,8 @@ class PredictorTestSimulation:
 
         if self.figure:
             self.figure.clear()
-            print(self.t.shape)
-            print(self.x.shape)
+            #print(self.t.shape)
+            #print(self.x.shape)
             self.figure.plot(self.t, self.x, 'b')
             self.figure.draw()
 
@@ -88,7 +88,7 @@ class PredictorTestSimulation:
         #         self.figure.draw()
 
         self.stepNr += 1
-        return self.step_simulation()
+        #return self.step_simulation()
 
 if __name__ == "__main__":
     np = NaivePredictor()

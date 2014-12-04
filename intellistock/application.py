@@ -24,7 +24,7 @@ class Application:
         splash.showMessage("Loading modules", Qt.AlignBottom)
         #time.sleep(1)
         splash.showMessage("Loading data", Qt.AlignBottom)
-        #time.sleep(2)
+        time.sleep(2)
         splash.finish(self.window)
 
     def exec(self):

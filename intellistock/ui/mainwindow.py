@@ -90,7 +90,7 @@ class MainWindow(QMainWindow):
     def on_action_simulation_triggered(self, *b):
         if not b:
             return
-        self.application.start_simulation()
+        self.application.start_simulation("")
 
     def on_lineEdit_search_textEdited(self, s: str):
         print("Text Edited: {}".format(s))
