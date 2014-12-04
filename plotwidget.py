@@ -13,8 +13,10 @@ from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
 from matplotlib.figure import Figure
 
-class PlotWidget(FigureCanvas):
-    def __init__(self, rows = 1, cols = 1):
+class PlotWidget(QWidget):
+    def __init__(self, parent = None, rows = 1, cols = 1):
+        QWidget.__init__(self, parent)        
+        
         self.fig = Figure(
             figsize = (4.0, 4.0),
             dpi = 100,
@@ -24,19 +26,27 @@ class PlotWidget(FigureCanvas):
             frameon = True,
             subplotpars = None,
             tight_layout = None)
-
-        FigureCanvas.__init__(self, self.fig)
-
+        self.canvas = FigureCanvas(self.fig)
+        self.canvas.setParent(self)
         self.subplot(0, rows, cols)
+        self.setupUi()
+
+    def setupUi(self):
+        """
+        Override me
+        """
+        l = QVBoxLayout()
+        l.addWidget(self.canvas)
+        self.setLayout(l)
 
     def clear(self):
         self.axis.clear()
         
     def eraseLine(self, plotH = None, plotNr = None):
         """
-            @arg axisNr : int {1, 2, ...}
-            @arg plotH - refference to a plot object (i.e. "plot handle")
-            @return None if error occured
+        @arg axisNr : int {1, 2, ...}
+        @arg plotH - refference to a plot object (i.e. "plot handle")
+        @return None if error occured
         """
         if plotNr is not None and plotNr < len(self.axis.lines):
             return self.axis.lines.pop(plotNr)
@@ -46,9 +56,9 @@ class PlotWidget(FigureCanvas):
                 
     def hideLine(self, plotH = None, plotNr = None, hide = True):
         """
-            @arg axisNr : int {1, 2, ...}
-            @arg plotH - refference to a plot object (i.e. "plot handle")
-            @return None if error occured
+        @arg axisNr : int {1, 2, ...}
+        @arg plotH - refference to a plot object (i.e. "plot handle")
+        @return None if error occured
         """
         if plotNr is not None and plotNr < len(self.axis.lines):
             plotH = self.axis.lines[plotNr]
@@ -59,8 +69,8 @@ class PlotWidget(FigureCanvas):
         
     def subplot(self, axisNr = 1, rows = None, cols = None):
         """
-            @arg axisNr : int {1, 2, ...}
-            @return None if error occured
+        @arg axisNr : int {1, 2, ...}
+        @return None if error occured
         """
         # if rows and cols are not None and are greater zero - resplit the figure
         if rows and cols and rows > 0 and cols > 0:
@@ -80,16 +90,16 @@ class PlotWidget(FigureCanvas):
         
     def plot(self, *args, **kargs):
         """
-            @arg args - matplotlib-like arguments
-            @return refference to the plot objects 
+        @arg args - matplotlib-like arguments
+        @return refference to the plot objects 
         """
         return self.axis.plot(*args, **kargs)
     
     def draw(self):
         """
-            just like a `flush() method`
+        just like a `flush() method`
         """
-        FigureCanvas.draw(self)
+        FigureCanvas.draw(self.canvas)
         
         
 #    @pyqtSlot()
