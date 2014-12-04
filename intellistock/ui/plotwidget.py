@@ -151,15 +151,16 @@ def main_test():
     w.draw()
         
     
-#    d = p[0].__dict__
-#    for (k,v) in d.iteritems():
-#        print(k)
-#
-#    print("---------------------")
-#
-#    for (k,v) in w.axis.__dict__.iteritems():
-#        print(k)
-#    print(w.axis.lines)
+    d = p.__dict__
+    for (k,v) in d.iteritems():
+        print(k)
+    print(p.__dict__)
+
+    print("---------------------")
+
+    for (k,v) in w.axis.__dict__.iteritems():
+        print(k)
+    print(w.axis.lines)
 
     # Qt keretrendszer futtatasa (main loop)
     app.exec_()

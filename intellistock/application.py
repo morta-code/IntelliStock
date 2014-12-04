@@ -6,6 +6,7 @@ from PyQt4.QtGui import QApplication, QSplashScreen, QPixmap
 from PyQt4.Qt import Qt
 from datetime import datetime
 
+from predictor.predictor import PredictorTestSimulation, NaivePredictor
 
 class Application:
     def __init__(self):
@@ -16,13 +17,14 @@ class Application:
             {"OTP": 3500, "MOL": 13400, "RICHTER": 3700, "DAX": 9950, "RÁBA": 1100, "UPDATE1": 990, "ELMŰ": 13900})
 
     def load(self):
-        splash = QSplashScreen(QPixmap("../resources/main_icon.png"))
-        splash.show()
-        splash.showMessage("Loading modules", Qt.AlignBottom)
-        #time.sleep(1)
-        splash.showMessage("Loading data", Qt.AlignBottom)
-        #time.sleep(2)
-        splash.finish(self.window)
+        # splash = QSplashScreen(QPixmap("../resources/main_icon.png"))
+        # splash.show()
+        # splash.showMessage("Loading modules", Qt.AlignBottom)
+        # #time.sleep(1)
+        # splash.showMessage("Loading data", Qt.AlignBottom)
+        # #time.sleep(2)
+        # splash.finish(self.window)
+        pass
 
     def exec(self):
         self.window.show()
@@ -44,7 +46,11 @@ class Application:
             plot_candles()
             draw()
         """
-        # todo: implement, connect with managers
+
+        simulation = PredictorTestSimulation(application)
+        simulation.setFigure(plotter)
+        simulation.start_simulation()
+
         pass
 
     def kill_plotter(self, name: str):
@@ -55,7 +61,7 @@ class Application:
         # todo: implement.
         pass
 
-    def start_simulation(self):
+    def start_simulation(self, name: str):
         simulation = Simulation(self)
         simulation.start_simulation()
 

@@ -56,8 +56,8 @@ class PredictorTestSimulation:
 
     def start_simulation(self):
         self.t = np.linspace(0, 10 * (self.stepMax + self.futureMax) / self.stepMax, self.stepMax + self.futureMax)
-        self.x = np.sin(t)*0.2 + np.cos(t * 10) * 0.02 + np.cos(t * 10 + 0.2) * 0.01 + np.cos(t * 11 + 0.2) * 0.01 + np.random.rand(t.shape[0])
-        self.x = np.convolve(x, np.ones(40), 'same')
+        self.x = np.sin(self.t)*0.2 + np.cos(self.t * 10) * 0.02 + np.cos(self.t * 10 + 0.2) * 0.01 + np.cos(self.t * 11 + 0.2) * 0.01 + np.random.rand(self.t.shape[0])
+        self.x = np.convolve(self.x, np.ones(3), 'same')
         self.step_simulation()
 
     def step_simulation(self):
@@ -66,24 +66,26 @@ class PredictorTestSimulation:
 
         if self.figure:
             self.figure.clear()
-            self.figure.plot(t, x, 'b')
+            print(self.t.shape)
+            print(self.x.shape)
+            self.figure.plot(self.t, self.x, 'b')
             self.figure.draw()
 
-        if self.predictor:
-            t1 = self.t[self.stepNr]
-            t2 = self.t[self.stepNr + self.futureMax]
+        # if self.predictor:
+        #     t1 = self.t[self.stepNr]
+        #     t2 = self.t[self.stepNr + self.futureMax]
             
-            prediction = self.predictor.newInput(self.x[t1]).getPrediction(self.futureMax)
-            t_pred = self.t[self.stepNr:(self.stepNr + self.futureMax)]
+        #     prediction = self.predictor.newInput(self.x[t1]).getPrediction(self.futureMax)
+        #     t_pred = self.t[self.stepNr:(self.stepNr + self.futureMax)]
             
-            pred = np.zeros(t_pred.shape[0])
+        #     pred = np.zeros(t_pred.shape[0])
             
-            for k,p,mi,ma in prediction:
-                pred[k-1] = p
+        #     for k,p,mi,ma in prediction:
+        #         pred[k-1] = p
                 
-            if self.figure:
-                self.figure.plot(t_pred, pred, 'r')
-                self.figure.draw()
+        #     if self.figure:
+        #         self.figure.plot(t_pred, pred, 'r')
+        #         self.figure.draw()
 
         self.stepNr += 1
         return self.step_simulation()
