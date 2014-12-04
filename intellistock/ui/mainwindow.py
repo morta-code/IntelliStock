@@ -3,7 +3,7 @@ from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, \
     QIcon, QCloseEvent, QColor
 from PyQt4.QtCore import QSettings
 from PyQt4.Qt import Qt
-from ui.ui_mainwindow import Ui_MainWindow
+from .ui_mainwindow import Ui_MainWindow
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 
@@ -31,13 +31,13 @@ class MainWindow(QMainWindow):
         # Initialize from Designer created
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
-        # self.ui.setupUi(self)
+        self.ui.setupUi(self)
 
         # Polcz fele pofazas
-        self.setupPlotWidget()
+        # self.setupPlotWidget()
 
         # Initialize extras (not automateable by Designer)
-        self.setWindowIcon(QIcon("resources/main_icon.png"))
+        self.setWindowIcon(QIcon("../resources/main_icon.png"))
         self.run_result = QLabel("Kész.")
         self.ui.statusbar.addWidget(self.run_result)
 
