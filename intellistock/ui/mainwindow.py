@@ -1,6 +1,6 @@
 
 from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, \
-    QIcon, QCloseEvent, QColor, QSplashScreen, QPixmap
+    QIcon, QCloseEvent, QColor
 from PyQt4.QtCore import QSettings
 from PyQt4.Qt import Qt
 from ui.ui_mainwindow import Ui_MainWindow
