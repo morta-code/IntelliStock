@@ -29,8 +29,8 @@ class MainWindow(QMainWindow):
 
         # Initialize extras (not automateable by Designer)
         self.setWindowIcon(QIcon("resources/main_icon.png"))
-        self.ui.statusbar.addWidget(QLabel("Hello statusbar!"))
-        self.ui.statusbar.addWidget(QLabel("Szia Állapotsor!"))
+        self.run_result = QLabel("Kész.")
+        self.ui.statusbar.addWidget(self.run_result)
 
     def initialize(self, initial_stocks: dict):
         # Initialize members and settings
@@ -59,6 +59,9 @@ class MainWindow(QMainWindow):
         else:
             self._favorites.append(item.text())
             item.setIcon(QIcon("resources/star.png"))
+
+    def on_actionSimulation_triggered(self, *b):
+        self.application.start_simulation()
 
     def on_lineEdit_search_textEdited(self, s: str):
         print("Text Edited: {}".format(s))
@@ -89,6 +92,10 @@ class MainWindow(QMainWindow):
             else:
                 it.setBackgroundColor(QColor(255, 255, 255))
         # TODO: multi level coloring and represent datas divided from the widget
+
+    def update_simulation_results(self, updated_simulation_results: dict):
+        self.run_result.setText("Szimuláció kész.")
+        pass
 
     def stock_values(self, name: str, datas):
         """Call it to show a time serie for the given stock.
