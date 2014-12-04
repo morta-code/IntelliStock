@@ -15,7 +15,9 @@ This is a collaborative assignment project of PPCU's [Scientific Python course](
 Gui component of IntelliStock. It is created and managed by the application class.
 ### construction
     window = MainWindow(application)
-- *application* is the application of the currently running instance.
+- *application* is the application of the currently running instance. It must have the following methods:
+`new_plotter`, `kill_plotter` and `start_simulation`
+
 
 ### initialization
     window.initialize(initial_stocks)
@@ -24,7 +26,3 @@ Gui component of IntelliStock. It is created and managed by the application clas
 ### methods
     update_stocks(updated_stock: dict) -> None
 Call it when new trades arrived. *updated_stocks* is a names (str) keyed price values.
-    
-    stock_values(stock: str, datas: list)
-Call it to show a time serie for the given stock. *name* is the name of stock, *datas* is a list of the following 
-tuples: *(date: datetime, price: int, amount: int)*

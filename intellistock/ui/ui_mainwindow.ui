@@ -308,6 +308,9 @@
    </property>
   </action>
   <action name="action_simulation">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Szimuláció</string>
    </property>
