@@ -6,13 +6,6 @@ from PyQt4.Qt import Qt
 from .ui_mainwindow import Ui_MainWindow
 from .navigatorplotwidget import NavigatorPlotWidget
 
-# Polcz itt belenyult
-# from .navigatorplotwidget import NavigatorPlotWidget
-# import logging
-# FORMAT = '%(levelname)s Proc[%(process)s] at %(pathname)s:%(lineno)d - %(message)s'
-# logging.basicConfig(format=FORMAT)
-# plogger = logging.getLogger('polcz')
-
 
 class FavSorter():
     def __init__(self, favs: list):
@@ -33,9 +26,6 @@ class IconBank:
     def load_icons():
         IconBank.star = QIcon("resources/star.png")
         IconBank.main = QIcon("resources/main_icon.png")
-
-
-
 
 
 class MainWindow(QMainWindow):
@@ -140,7 +130,6 @@ class MainWindow(QMainWindow):
         self.ui.tabWidget.removeTab(index)
         del self._plotters[name]
         self.application.kill_plotter(name)
-
 
     def closeEvent(self, event: QCloseEvent):
         settings = QSettings("IntelliStock", "IntelliStock")
