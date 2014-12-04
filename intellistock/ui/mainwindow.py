@@ -39,9 +39,7 @@ class MainWindow(QMainWindow):
         self.run_result = QLabel("Kész.")  # todo: ui memberbe
         self.ui.statusbar.addWidget(self.run_result)
 
-    def initialize(self, initial_stocks: dict):
         # Initialize members and settings
-        self._datas = initial_stocks
         self._settings = QSettings("IntelliStock", "IntelliStock")
         self._favorites = self._settings.value("favorites", ["OTP"])
         self._plotters = {}
@@ -59,7 +57,6 @@ class MainWindow(QMainWindow):
                 wi.setIcon(QIcon("resources/star.png"))
             wi.setToolTip(str(self._datas[k]))
             self.ui.listWidget_stocks.addItem(wi)
-        
 
     # Polcz itt megint belepofazott, a fene vigye el
     # def setupPlotWidget(self):
@@ -147,4 +144,3 @@ class MainWindow(QMainWindow):
         settings = QSettings("IntelliStock", "IntelliStock")
         settings.setValue("favorites", self._favorites)
         event.accept()
-
