@@ -8,27 +8,21 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 
 # Polcz itt belenyult
-from navigatorplotwidget import NavigatorPlotWidget
-import logging
-FORMAT = '%(levelname)s Proc[%(process)s] at %(pathname)s:%(lineno)d - %(message)s'
-logging.basicConfig(format=FORMAT)
-plogger = logging.getLogger('polcz')
+from ui.navigatorplotwidget import NavigatorPlotWidget
+# import logging
+# FORMAT = '%(levelname)s Proc[%(process)s] at %(pathname)s:%(lineno)d - %(message)s'
+# logging.basicConfig(format=FORMAT)
+# plogger = logging.getLogger('polcz')
 
 class favsorter():
     def __init__(self, favs: list):
         self.favs = favs
 
     def __call__(self, a: str):
-        try:
-            if a in self.favs:
-                return str(1)+a
-            else:
-                return a
-        except NameError as e:
-            plogger.error("Tamas, ez vajon miert tortenik")
-        except TypeError as e:
-            plogger.error("Tamas, ez vajon miert tortenik")
-        return a
+        if a in self.favs:
+            return str(1)+a
+        else:
+            return a
 
 class MainWindow(QMainWindow):
     def __init__(self, application):
@@ -37,7 +31,10 @@ class MainWindow(QMainWindow):
         # Initialize from Designer created
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
+        # self.ui.setupUi(self)
+
+        # Polcz fele pofazas
+        self.setupPlotWidget()
 
         # Initialize extras (not automateable by Designer)
         self.setWindowIcon(QIcon("resources/main_icon.png"))
@@ -62,10 +59,10 @@ class MainWindow(QMainWindow):
         
 
     # Polcz itt megint belepofazott, a fene vigye el
-    def setupPlotWidget(self):
-        self.ui.plotWidget = NavigatorPlotWidget(cols = 2, rows = 1)
-        self.ui.tabWidget.addWidget(self.ui.plotWidget)
-        self.ui.tabWidget.setCurrentIndex(0)
+    # def setupPlotWidget(self):
+    #     self.ui.plotWidget = NavigatorPlotWidget(cols = 2, rows = 1)
+    #     self.ui.tabWidget.addTab(self.ui.plotWidget, "Polcz plot")
+    #     self.ui.tabWidget.setCurrentIndex(0)
 
     def on_action_favorite_triggered(self, *b):
         if not b:
