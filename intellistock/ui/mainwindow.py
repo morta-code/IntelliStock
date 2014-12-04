@@ -1,6 +1,6 @@
 
 from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, \
-    QIcon, QCloseEvent, QColor
+    QIcon, QCloseEvent, QColor, QWidget
 from PyQt4.QtCore import QSettings
 from PyQt4.Qt import Qt
 from .ui_mainwindow import Ui_MainWindow
@@ -38,6 +38,7 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon("resources/main_icon.png"))
         self.run_result = QLabel("Kész.")  # todo: ui memberbe
         self.ui.statusbar.addWidget(self.run_result)
+        self.ui.tabWidget.tabCloseRequested.connect(self.kill_plotter)
 
         # Initialize members and settings
         self._settings = QSettings("IntelliStock", "IntelliStock")
@@ -58,12 +59,6 @@ class MainWindow(QMainWindow):
             wi.setToolTip(str(self._datas[k]))
             self.ui.listWidget_stocks.addItem(wi)
 
-    # Polcz itt megint belepofazott, a fene vigye el
-    # def setupPlotWidget(self):
-    #     self.ui.plotWidget = NavigatorPlotWidget(cols = 2, rows = 1)
-    #     self.ui.tabWidget.addTab(self.ui.plotWidget, "Polcz plot")
-    #     self.ui.tabWidget.setCurrentIndex(0)
-
     def on_action_favorite_triggered(self, *b):
         if not b:
             return
@@ -82,28 +77,23 @@ class MainWindow(QMainWindow):
 
     def on_lineEdit_search_textEdited(self, s: str):
         print("Text Edited: {}".format(s))
-        # self.update_stocks({"OTP": 5000})
         # todo: lista szűrő.
 
     def on_listWidget_stocks_itemActivated(self, item: QListWidgetItem):
-        # todo: ezt sort törölni:
-        self.application.request_stock_values(item.text())
-
         if item.text() in self._plotters.keys():
             self.ui.tabWidget.setCurrentWidget(self._plotters[item.text()])
         else:
-            npw = NavigatorPlotWidget(self)
-            self._plotters[item.text()] = npw
-            self.ui.tabWidget.setCurrentIndex(self.ui.tabWidget.addTab(npw, item.text()))
-
-        # todo: MINDENKINEK: Nem névszerinti kérést küld, hanem legyárt egy plottert, amit átad szerkesztésre.
+            self.create_plotter(item.text())
+        # MINDENKINEK: Nem névszerinti kérést küld, hanem legyárt egy plottert, amit átad szerkesztésre.
         # Ezáltal elválasztjuk az adatot a GUI-tól.
 
     def on_listWidget_stocks_itemSelectionChanged(self):
         if self.ui.listWidget_stocks.selectedItems():
             self.ui.action_favorite.setEnabled(True)
+            self.ui.action_simulation.setEnabled(True)
         else:
             self.ui.action_favorite.setEnabled(False)
+            self.ui.action_simulation.setEnabled(False)
 
     def update_stocks(self, updated_stocks: dict):
         """Call it when new trades arrived.
@@ -132,13 +122,22 @@ class MainWindow(QMainWindow):
         :return:
         """
         print(name)
-        # TODO: implement
+        # TODO: remove, this method is not needed
         # Ha nincs megnyitva, nyit egy lapot, ha meg van nyitva, azt frissíti.
         pass
 
     def create_plotter(self, name: str):
-        # todo: build a plotter widget
-        pass
+        npw = NavigatorPlotWidget(self)
+        self._plotters[name] = npw
+        self.ui.tabWidget.setCurrentIndex(self.ui.tabWidget.addTab(npw, name))
+        self.application.new_plotter(name, npw)
+
+    def kill_plotter(self, index: int):
+        name = self.ui.tabWidget.tabText(index)
+        self.ui.tabWidget.removeTab(index)
+        del self._plotters[name]
+        self.application.kill_plotter(name)
+
 
     def closeEvent(self, event: QCloseEvent):
         settings = QSettings("IntelliStock", "IntelliStock")

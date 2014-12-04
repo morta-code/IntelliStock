@@ -34,6 +34,28 @@ class Application:
         self.window.stock_values("OTP",
                                  [(datetime(2014, 11, 27, 9, 32), 12400, 2), (datetime(2014, 11, 27, 9, 35), 12350, 5)])
 
+    def new_plotter(self, name: str, plotter):
+        """Add new plotter (from the GUI) to the application.
+        The given plotter is needed for the data manager and the predictors.
+
+        :param name: is the Stock's name
+        :param plotter: is an object to draw the datas. It must have the following methods:
+            subplot()
+            plot()
+            plot_candles()
+            draw()
+        """
+        # todo: implement, connect with managers
+        pass
+
+    def kill_plotter(self, name: str):
+        """Destroys the managers and predictors to the given Stock
+        :param name: the stock's name
+        :return:
+        """
+        # todo: implement.
+        pass
+
     def start_simulation(self):
         simulation = Simulation(self)
         simulation.start_simulation()
