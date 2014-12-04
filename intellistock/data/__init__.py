@@ -1,34 +1,34 @@
 import os
 import sqlite3
 from urllib.request import urlopen
-import urllib.parse
-import urllib.request
 import csv
 import io
-import datetime
+import data
 
-DB_PATH = "IntelliStock.sqlite"
 ARCHIVE_BASE_URL = "http://hunyadym.hu/stock"
 ARCHIVE_LIST = "list.php"
 
-conn = None
-
 def setup_database():
-    if os.path.isfile(DB_PATH):
+    if os.path.isfile(data.DB_PATH):
         return
     
     global conn
-    conn = sqlite3.connect(DB_PATH)
-    conn.execute('''CREATE TABLE StockData (
+    data.conn = sqlite3.connect(data.DB_PATH)
+    data.conn.execute('''CREATE TABLE StockData (
+                    id INTEGER PRIMARY KEY,
                     paper_name TEXT,
-                    date INTEGER,
-                    time INTEGER,
+                    datetime INTEGER,
                     close REAL,
                     volume INTEGER);''')
-    conn.commit()
+                    
+    data.conn.execute('''CREATE TABLE Stocks (
+                    paper_name TEXT);''')
+    data.conn.commit()
     initialize_database()
     
-    conn.commit()
+    persist_stocks()
+    
+    data.conn.commit()
 
 def initialize_database():
     urlpath = urlopen(ARCHIVE_BASE_URL + "/" + ARCHIVE_LIST)
@@ -39,8 +39,9 @@ def initialize_database():
         load_from_csv(f)
         
 def load_from_csv(csv_path):
+    global stocks    
+    
     urlpath = urlopen(ARCHIVE_BASE_URL + "/" + csv_path)
-    print(csv_path)
     
     file = urlpath.read().decode('utf-8')
     
@@ -55,10 +56,17 @@ def load_from_csv(csv_path):
             close = float(row[4])
             volume = int(row[5])
             
-            conn.execute("INSERT INTO StockData VALUES (?, ?, ?, ?, ?)",
-                     (paper_name, date, time, close, volume))
+            data.conn.execute("INSERT INTO StockData VALUES (?, ?, ?, ?, ?)",
+                     (None, paper_name, date * 1000000 + time, close, volume))
+                     
+            if paper_name not in data.stocks:
+                data.stocks.add(paper_name)
+                
         except ValueError:
             continue
 
+def persist_stocks():
+    for stock in data.stocks:
+        data.conn.execute("INSERT INTO Stocks VALUES (?)", [stock])
 
 setup_database()
