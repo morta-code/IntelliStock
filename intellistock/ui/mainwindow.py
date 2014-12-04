@@ -34,9 +34,6 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        # Polcz fele pofazas
-        # self.setupPlotWidget()
-
         # Initialize extras (not automateable by Designer)
         self.setWindowIcon(QIcon("resources/main_icon.png"))
         self.run_result = QLabel("Kész.")  # todo: ui memberbe
