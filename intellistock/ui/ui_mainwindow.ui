@@ -172,6 +172,7 @@
     <property name="title">
      <string>&amp;Stock</string>
     </property>
+    <addaction name="actionSimulation"/>
     <addaction name="action_exit"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -304,6 +305,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionSimulation">
+   <property name="text">
+    <string>Szimuláció</string>
    </property>
   </action>
  </widget>

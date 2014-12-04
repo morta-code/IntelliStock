@@ -1,5 +1,6 @@
 import sys
 import time
+from simulation.simulation import Simulation
 
 from ui import mainwindow
 from PyQt4.QtGui import QApplication, QSplashScreen, QPixmap
@@ -33,6 +34,13 @@ class Application:
         self.window.stock_values("OTP",
                                  [(datetime(2014, 11, 27, 9, 32), 12400, 2), (datetime(2014, 11, 27, 9, 35), 12350, 5)])
 
+    def start_simulation(self):
+        simulation = Simulation(self)
+        simulation.start_simulation()
+
+    def receive_simulation_result(self, simulation: Simulation, simulation_result):
+        self.window.update_simulation_results(simulation_result)
+        pass
 
 if __name__ == '__main__':
     application = Application()
