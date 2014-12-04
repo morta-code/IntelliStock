@@ -93,8 +93,18 @@ class MainWindow(QMainWindow):
         self.application.start_simulation("")
 
     def on_lineEdit_search_textEdited(self, s: str):
-        print("Text Edited: {}".format(s))
-        # todo: lista szűrő.
+        if s:
+            founds = self.ui.listWidget_stocks.findItems(s, Qt.MatchStartsWith)
+            for item in self.ui.listWidget_stocks.findItems("", Qt.MatchStartsWith):
+                if item in founds:
+                    self.ui.listWidget_stocks.setItemHidden(item, False)
+                else:
+                    self.ui.listWidget_stocks.setItemHidden(item, True)
+        else:
+            for item in self.ui.listWidget_stocks.findItems("", Qt.MatchStartsWith):
+                self.ui.listWidget_stocks.setItemHidden(item, False)
+
+
 
     def on_listWidget_stocks_itemActivated(self, item: QListWidgetItem):
         if item.text() in self._plotters.keys():
@@ -143,7 +153,6 @@ class MainWindow(QMainWindow):
         self.ui.tabWidget.removeTab(index)
         del self._plotters[name]
         self.application.kill_plotter(name)
-
 
     def closeEvent(self, event: QCloseEvent):
         settings = QSettings("IntelliStock", "IntelliStock")
