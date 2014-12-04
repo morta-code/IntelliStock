@@ -13,7 +13,7 @@ from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
 from matplotlib.figure import Figure
 
-from ui.plotwidget import PlotWidget
+from .plotwidget import PlotWidget
 
 class NavigatorPlotWidget(PlotWidget):
     def __init__(self, parent = None, cols = 1, rows = 1):
