@@ -31,10 +31,10 @@ class MainWindow(QMainWindow):
         # Initialize from Designer created
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
-        # self.ui.setupUi(self)
+        self.ui.setupUi(self)
 
         # Polcz fele pofazas
-        self.setupPlotWidget()
+        #self.setupPlotWidget()
 
         # Initialize extras (not automateable by Designer)
         self.setWindowIcon(QIcon("resources/main_icon.png"))
