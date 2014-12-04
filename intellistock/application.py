@@ -5,6 +5,7 @@ from ui import mainwindow
 from PyQt4.QtGui import QApplication, QSplashScreen, QPixmap
 from PyQt4.Qt import Qt
 from datetime import datetime
+from predictor.predictor import PredictorTestSimulation, NaivePredictor
 
 
 class Application:
