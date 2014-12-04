@@ -21,48 +21,14 @@ class NavigatorPlotWidget(PlotWidget):
         
     def setupUi(self):            
         # Bind the 'pick' event for clicking on one of the bars
-        #
         self.canvas.mpl_connect('pick_event', self.pcz_onPick)
         
         # Create the navigation toolbar, tied to the canvas
-        #
         self.mpl_toolbar = NavigationToolbar(self.canvas, self)
-        
-#        # Other GUI controls
-#        # 
-#        self.textbox = QLineEdit()
-#        self.textbox.setMinimumWidth(200)
-#        self.connect(self.textbox, SIGNAL('editingFinished()'), self.pcz_onDraw)
-#        
-#        self.draw_button = QPushButton("&Draw")
-#        self.connect(self.draw_button, SIGNAL('clicked()'), self.pcz_onDraw)
-#        
-#        self.grid_cb = QCheckBox("Show &Grid")
-#        self.grid_cb.setChecked(False)
-#        self.connect(self.grid_cb, SIGNAL('stateChanged(int)'), self.pcz_onDraw)
-#        
-#        slider_label = QLabel('Bar width (%):')
-#        self.slider = QSlider(Qt.Horizontal)
-#        self.slider.setRange(1, 100)
-#        self.slider.setValue(20)
-#        self.slider.setTracking(True)
-#        self.slider.setTickPosition(QSlider.TicksBothSides)
-#        self.connect(self.slider, SIGNAL('valueChanged(int)'), self.pcz_onDraw)
-        
-        #
-        # Layout with box sizers
-        # 
-#        hbox = QHBoxLayout()
-#        
-#        for w in [self.textbox, self.draw_button, self.grid_cb, slider_label, self.slider]:
-#            hbox.addWidget(w)
-#            hbox.setAlignment(w, Qt.AlignVCenter)
         
         vbox = QVBoxLayout()
         vbox.addWidget(self.canvas)
         vbox.addWidget(self.mpl_toolbar)
-#        vbox.addLayout(hbox)
-        
         self.setLayout(vbox)
 
     def pcz_onPick(self, event):
@@ -78,46 +44,6 @@ class NavigatorPlotWidget(PlotWidget):
         QMessageBox.information(self, "Click!", msg)
 
     def pcz_onDraw(self):
-#        """ Redraws the figure
-#        """
-#        # python3 vs python2
-#        try:
-#            s = str(self.textbox.text())
-#        except:
-#            s = unicode(self.textbox.text())
-#        
-#        self.data = map(int, s.split())
-#
-#        # python3 vs python2
-#        if ispy3(): self.data = list(self.data)
-#        
-#        x = range(len(self.data))
-#
-#        # clear the ax_bars and redraw the plot anew
-#        #
-#        self.ax_bars.clear()        
-#        self.ax_bars.grid(self.grid_cb.isChecked())
-#        self.ax_bars.bar(
-#            left = x, 
-#            height = self.data, 
-#            width = self.slider.value() / 100.0, 
-#            align = 'center', 
-#            alpha = 0.44,
-#            picker = 0)
-#
-#        n = 1000
-#        t0 = 0
-#        t1 = 3*3.1415
-#        f = lambda x : math.sin(x * self.slider.value())
-#        t = map(lambda k: t0 + (k * (t1-t0)) / n, range(n))
-#        if (ispy3()): t = list(t)
-#        x = map(f, t)
-#        if (ispy3()): 
-#            x = list(x)
-#
-#        self.ax_plot.clear()
-#        self.ax_plot.plot(t,x)
-
         self.canvas.draw()
 
 def main_test():
