@@ -10,6 +10,7 @@ ARCHIVE_LIST = "list.php"
 
 def setup_database():
     if os.path.isfile(data.DB_PATH):
+        data.conn = sqlite3.connect(data.DB_PATH)
         return
     
     global conn
