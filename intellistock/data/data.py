@@ -5,6 +5,8 @@ Created on Thu Nov 27 14:23:08 2014
 @author: wondercsabo
 """
 
+import datetime
+
 """Entry point for access all data related methods."""
 
 DB_PATH = "IntelliStock.sqlite"
@@ -33,3 +35,15 @@ def stop_polling():
         
 def update_stocks():
     """This will call the mediator to update the gui with new data."""
+
+def strdate_to_day(d: str, beginning: str = None):
+    class state:
+        format = '%Y%m%d%H%M%S'
+        beg = datetime.strptime('20000101000000', format)
+    if beginning:
+        state.beg = datetime.strptime(beginning, state.format)
+    dt = datetime.strptime(d, state.format) - state.beg
+    return dt.days + dt.seconds / 86400
+
+def get_trades_PCZ_DEMO(begin: tuple, end: tuple):
+    """"""
