@@ -7,6 +7,10 @@ Created on Thu Nov 27 14:23:08 2014
 
 from datetime import datetime
 
+from inspect import currentframe
+from intellistock.predictor.pczdebug import pczdebug
+
+
 """Entry point for access all data related methods."""
 
 sql_date_format = '%Y%m%d%H%M%S'
@@ -42,8 +46,19 @@ def update_stocks():
 # -------- time conversions ---------- #
 
 def date2year(d: datetime):
-    beg = datetime.strptime('20000101000000', format)
+    beg = datetime.strptime('20000101000000', sql_date_format)
     return d.year + (d.timetuple().tm_yday + (d - beg).seconds / 86400) / (365 + int(d.year % 4 == 0) + 1)
+
+def int2year(d: int):
+    # print(d)
+    # print(int(d // 1e10))
+    # print(int(d // 1e8 % 100))
+    # print(int(d // 1e6 % 100))
+    # print(int(d // 1e4 % 100))
+    # print(int(d // 1e2 % 100))
+    # print(int(d % 100))
+    d = datetime(int(d // 1e10), int(d // 1e8 % 100), int(d // 1e6 % 100), int(d // 1e4 % 100), int(d // 1e2 % 100), int(d % 100))
+    return date2year(d)
 
 def strdate2year(d: str):
     d = datetime.strptime(d, sql_date_format)
@@ -57,7 +72,7 @@ def year2date(d: float):
 
 def get_trades_PCZ_DEMO(begin: int, end: int, paper_name: str = None):
     """
-    example: select * from StockData where paper_name = 'OTP' and datetime between 20100104100000 and 20100104110000 group by datetime;
+    example: select paper_name, datetime, close from StockData where paper_name = 'OTP' and datetime between 20100104100000 and 20100104110000 group by datetime;
     """
     cols = " paper_name, datetime, close from StockData "
     filter_by_paper_name = " paper_name = '" + paper_name + "' "
@@ -67,6 +82,6 @@ def get_trades_PCZ_DEMO(begin: int, end: int, paper_name: str = None):
         sql = "select" + cols + "where" + filter_by_paper_name + "and" + filter_by_date + group_by_date
     else:
         sql = "select" + cols + "where" + filter_by_date + group_by_date
-    print("TEST: sql = " + sql)
+    pczdebug(currentframe(), "TEST: sql = " + sql)
     cur = conn.execute(sql)
     return cur.fetchall()

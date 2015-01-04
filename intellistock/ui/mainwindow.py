@@ -1,11 +1,14 @@
 
-from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, \
-    QIcon, QCloseEvent, QColor, QWidget
+from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, QIcon, QCloseEvent, QColor, QWidget
 from PyQt4.QtCore import QSettings
 from PyQt4.Qt import Qt
 from intellistock.ui.ui_mainwindow import Ui_MainWindow
 from intellistock.ui.navigatorplotwidget import NavigatorPlotWidget
 
+from intellistock.data import data
+
+from inspect import currentframe
+from intellistock.predictor.pczdebug import pczdebug
 
 class FavSorter():
     def __init__(self, favs: list):
@@ -101,6 +104,7 @@ class MainWindow(QMainWindow):
         if item.text() in self._plotters.keys():
             self.ui.tabWidget.setCurrentWidget(self._plotters[item.text()])
         else:
+            pczdebug(currentframe(), "item.text() = " + item.text())
             self.create_plotter(item.text())
         # MINDENKINEK: Nem névszerinti kérést küld, hanem legyárt egy plottert, amit átad szerkesztésre.
         # Ezáltal elválasztjuk az adatot a GUI-tól.
@@ -137,7 +141,7 @@ class MainWindow(QMainWindow):
         npw = NavigatorPlotWidget(self)
         self._plotters[name] = npw
         self.ui.tabWidget.setCurrentIndex(self.ui.tabWidget.addTab(npw, name))
-        self.application.new_plotter(name, npw)
+        self.application.launch_data_processor(name, npw)
 
     def kill_plotter(self, index: int):
         name = self.ui.tabWidget.tabText(index)

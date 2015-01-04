@@ -6,24 +6,30 @@ from intellistock.data import data
 from PyQt4.QtGui import QApplication, QSplashScreen, QPixmap
 from PyQt4.Qt import Qt
 from datetime import datetime
-from intellistock.predictor.predictor import PredictorTestSimulation, NaivePredictor
+from intellistock.predictor.predictor import PredictorTestSimulation, NaivePredictor, EnsemblePredictor, DataProcessor
 
+from inspect import currentframe
+from intellistock.predictor.pczdebug import pczdebug
 
 class Application:
     def __init__(self):
         self.q_application = QApplication(sys.argv)
         self.window = mainwindow.MainWindow(self)
         self.window.initialize(dict(data.get_stocks_with_last_close()))
-        print(data.get_trades_PCZ_DEMO(20100104100000, 20100104110000, 'OTP'))
+        self.predictor_cls = EnsemblePredictor
+        # list of actually running data processors, which should be notified on every changes of the data stream
+        self.data_processors = {}
+        pczdebug(currentframe(), data.get_trades_PCZ_DEMO(20100104100000, 20100104110000, 'OTP'))
 
     def load(self):
-        splash = QSplashScreen(QPixmap("resources/main_icon.png"))
-        splash.show()
-        splash.showMessage("Loading modules", Qt.AlignBottom)
+        # splash = QSplashScreen(QPixmap("resources/main_icon.png"))
+        # splash.show()
+        # splash.showMessage("Loading modules", Qt.AlignBottom)
         #time.sleep(1)
-        splash.showMessage("Loading data", Qt.AlignBottom)
-        time.sleep(2)
-        splash.finish(self.window)
+        # splash.showMessage("Loading data", Qt.AlignBottom)
+        # time.sleep(2)
+        # splash.finish(self.window)
+        pass
 
     def exec(self):
         self.window.show()
@@ -34,7 +40,7 @@ class Application:
         self.window.stock_values("OTP",
                                  [(datetime(2014, 11, 27, 9, 32), 12400, 2), (datetime(2014, 11, 27, 9, 35), 12350, 5)])
 
-    def new_plotter(self, name: str, plotter):
+    def launch_data_processor(self, name: str, plotter):
         """Add new plotter (from the GUI) to the application.
         The given plotter is needed for the data manager and the predictors.
 
@@ -45,10 +51,17 @@ class Application:
             plot_candles()
             draw()
         """
+        processor = DataProcessor(predictor=self.predictor_cls())
+        if name in self.data_processors:
+            raise AssertionError()
+        self.data_processors[name] = processor
+        processor.set_data(raw_data=data.get_trades_PCZ_DEMO(20100104100000, 20100104110000, name))
+        processor.set_figure(plotter)
+        processor.process()
 
-        simulation = PredictorTestSimulation(application)
-        simulation.setFigure(plotter)
-        simulation.start_simulation()
+        # simulation = PredictorTestSimulation(application)
+        # simulation.setFigure(plotter)
+        # simulation.start_simulation()
 
         pass
 

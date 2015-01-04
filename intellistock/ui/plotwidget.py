@@ -5,20 +5,32 @@ Created on Wed Dec  3 19:04:58 2014
 @author: Polcz Péter <ppolcz@gmail.com>
 """
 
-from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-
-import matplotlib
+import matplotlib as mpl
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
 from matplotlib.figure import Figure
 
+# from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
+
+import sys
+import numpy as np
+from inspect import currentframe
+
+from intellistock.predictor.pczdebug import pczdebug
+from intellistock.data.data import int2year
+
+
 class PlotWidget(QWidget):
-    def __init__(self, parent = None, rows = 1, cols = 1):
+    def __init__(self, parent=None, rows=1, cols=1):
         QWidget.__init__(self, parent)        
-        
+        if parent:
+            self.predictor = parent.application.predictor_cls(parent.application)
+
+        # declare further attributes
+        self.ts_t = self.ts_x = self.rows = self.cols = self.axes_list = self.axes = None
+
         self.fig = Figure(
-            figsize = (4.0, 4.0),
+            figsize=(4.0, 4.0),
             dpi = 100,
             facecolor = None,
             edgecolor = None,
@@ -29,71 +41,83 @@ class PlotWidget(QWidget):
         self.canvas = FigureCanvas(self.fig)
         self.canvas.setParent(self)
         self.subplot(0, rows, cols)
-        self.setupUi()
+        self.setup_ui()
 
-    def setupUi(self):
+    def setup_ui(self):
         """
         Override me
         """
-        l = QVBoxLayout()
-        l.addWidget(self.canvas)
-        self.setLayout(l)
+        layout = QVBoxLayout()
+        layout.addWidget(self.canvas)
+        self.setLayout(layout)
 
     def clear(self):
-        self.axis.clear()
+        self.axes.clear()
         
-    def eraseLine(self, plotH = None, plotNr = None):
+    def erase_line(self, ploth=None, plotnr=None):
         """
-        @arg axisNr : int {1, 2, ...}
-        @arg plotH - refference to a plot object (i.e. "plot handle")
-        @return None if error occured
+        @arg plotnr : int {1, 2, ...}
+        @arg ploth - reference to a plot object (i.e. "plot handle")
+        @return None if error occurred
         """
-        if plotNr is not None and plotNr < len(self.axis.lines):
-            return self.axis.lines.pop(plotNr)
-        elif plotH and self.axis.lines.count(plotH) > 0:
-            self.axis.lines.remove(plotH)
+        if plotnr is not None and plotnr < len(self.axes.lines):
+            return self.axes.lines.pop(plotnr)
+        elif ploth and self.axes.lines.count(ploth) > 0:
+            self.axes.lines.remove(ploth)
             return True
                 
-    def hideLine(self, plotH = None, plotNr = None, hide = True):
+    def hide_line(self, ploth=None, plotnr=None, hide=True):
         """
-        @arg axisNr : int {1, 2, ...}
-        @arg plotH - refference to a plot object (i.e. "plot handle")
-        @return None if error occured
+        @arg plotnr : int {1, 2, ...}
+        @arg ploth - reference to a plot object (i.e. "plot handle")
+        @return None if error occurred
         """
-        if plotNr is not None and plotNr < len(self.axis.lines):
-            plotH = self.axis.lines[plotNr]
-        if plotH:
-            plotH._visible = not hide
-        return plotH
-                
-        
-    def subplot(self, axisNr = 1, rows = None, cols = None):
+        if plotnr is not None and plotnr < len(self.axes.lines):
+            ploth = self.axes.lines[plotnr]
+        if ploth:
+            ploth._visible = not hide
+        return ploth
+
+    def subplot(self, plotnr=1, rows=None, cols=None):
         """
-        @arg axisNr : int {1, 2, ...}
-        @return None if error occured
+        @arg plotnr : int {1, 2, ...}
+        @return None if error occurred
         """
         # if rows and cols are not None and are greater zero - resplit the figure
         if rows and cols and rows > 0 and cols > 0:
             self.fig.clear()
-            self.rows = rows;
-            self.cols = cols;
-            self.axes = [ self.fig.add_subplot(rows, cols, cols * i + j + 1)
-                for i in range(rows) 
-                for j in range(cols)]
-            self.axis = self.axes[axisNr-1]
-            return self.axis
+            self.rows = rows
+            self.cols = cols
+            self.axes_list = [self.fig.add_subplot(rows, cols, cols * i + j + 1)
+                              for i in range(rows)
+                              for j in range(cols)]
+            self.axes = self.axes_list[plotnr-1]
+            return self.axes
 
         # just switch subplot
-        if (axisNr < self.rows + self.cols):
-            self.axis = self.axes[axisNr-1]
-            return self.axis
-        
+        if plotnr < self.rows + self.cols:
+            self.axes = self.axes_list[plotnr-1]
+            return self.axes
+
+    def set_axis_offset(self, value: bool=False):
+        axis_formatter = mpl.ticker.ScalarFormatter(useOffset=value)
+        self.axes.yaxis.set_major_formatter(axis_formatter)
+        self.axes.xaxis.set_major_formatter(axis_formatter)
+
+    def set_axes_labels(self, xlabel: str="", ylabel: str=""):
+        self.axes.set_xlabel(xlabel)
+        self.axes.set_ylabel(ylabel)
+        self.draw()
+
+    def get_axes(self):
+        return self.axes
+
     def plot(self, *args, **kargs):
         """
         @arg args - matplotlib-like arguments
         @return refference to the plot objects 
         """
-        return self.axis.plot(*args, **kargs)
+        return self.axes.plot(*args, **kargs)
     
     def draw(self):
         """
@@ -107,6 +131,11 @@ class PlotWidget(QWidget):
 #        self.draw()
 
 
+# -------------------------------------------------------------------------------------------------------------------- #
+# -- TEST ------------------------------------------------------------------------------------------------------------ #
+# -------------------------------------------------------------------------------------------------------------------- #
+
+
 def main_test():
     # Qt keretrendszer elinditasa (enelkul nem lehet widgeteket letrehozni)
     app = QApplication(sys.argv)
@@ -118,7 +147,7 @@ def main_test():
     t2 = np.linspace(0.4, 1.5, 20)
     x = np.sin(t * 13)
 
-    if not w.subplot(2, rows = 2, cols = 1):
+    if not w.subplot(2, rows=2, cols=1):
         print("Assertion error: subplot - resplit figure")
 
     # test plot()
@@ -126,41 +155,40 @@ def main_test():
     p = w.plot(t, x)[0]
     w.plot(t, x*2)
     w.plot(t, x*2, 'g')
-    q = w.plot(t2,np.ones_like(t2) * 0.5)[0]
+    q = w.plot(t2, np.ones_like(t2) * 0.5)[0]
     w.draw()
     
-    # test eraseLine()
-    if not w.eraseLine(plotH = p):
-        print("Assertion error: eraseLine by plotH")
-    if not w.eraseLine(plotNr = 0):
-        print("Assertion error: eraseLine by plotNr")
+    # test erase_line()
+    if not w.erase_line(ploth=p):
+        print("Assertion error: erase_line by ploth")
+    if not w.erase_line(plotnr=0):
+        print("Assertion error: erase_line by plotnr")
     w.draw()            
     
-    # test hideLine()
-    if not w.hideLine(plotH = q):
-        print("Assertion error: eraseLine by plotH")
-    if not w.hideLine(plotNr = 1, hide = False):
-        print("Assertion error: eraseLine by plotNr, set visible")
+    # test hide_line()
+    if not w.hide_line(ploth=q):
+        print("Assertion error: erase_line by ploth")
+    if not w.hide_line(plotnr=1, hide=False):
+        print("Assertion error: erase_line by plotnr, set visible")
     w.plot(t, 0.5*x+0.5, 'b')
     w.draw()
     
     if not w.subplot(1):
         print("Assertion error: subplot - switch subplot")        
         
-    w.plot(t,x)    
+    w.plot(t, x)
     w.draw()
-        
-    
+
     d = p.__dict__
-    for (k,v) in d.iteritems():
+    for (k, v) in d.items():
         print(k)
     print(p.__dict__)
 
     print("---------------------")
 
-    for (k,v) in w.axis.__dict__.iteritems():
+    for (k, v) in w.axes.__dict__.items():
         print(k)
-    print(w.axis.lines)
+    print(w.axes.lines)
 
     # Qt keretrendszer futtatasa (main loop)
     app.exec_()
