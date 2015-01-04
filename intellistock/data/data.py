@@ -53,7 +53,7 @@ def strdate2date(d: str):
     return datetime.strptime(d, sql_date_format)
 
 def year2date(d: float):
-
+    pass
 
 def get_trades_PCZ_DEMO(begin: float, end: float):
     """"""
