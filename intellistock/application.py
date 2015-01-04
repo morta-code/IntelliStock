@@ -14,6 +14,7 @@ class Application:
         self.q_application = QApplication(sys.argv)
         self.window = mainwindow.MainWindow(self)
         self.window.initialize(dict(data.get_stocks_with_last_close()))
+        print(data.get_trades_PCZ_DEMO(20100104100000, 20100104110000, 'OTP'))
 
     def load(self):
         splash = QSplashScreen(QPixmap("resources/main_icon.png"))

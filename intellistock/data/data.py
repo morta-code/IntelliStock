@@ -53,7 +53,20 @@ def strdate2date(d: str):
     return datetime.strptime(d, sql_date_format)
 
 def year2date(d: float):
-    pass
-
-def get_trades_PCZ_DEMO(begin: float, end: float):
     """"""
+
+def get_trades_PCZ_DEMO(begin: int, end: int, paper_name: str = None):
+    """
+    example: select * from StockData where paper_name = 'OTP' and datetime between 20100104100000 and 20100104110000 group by datetime;
+    """
+    cols = " paper_name, datetime, close from StockData "
+    filter_by_paper_name = " paper_name = '" + paper_name + "' "
+    filter_by_date = " datetime between " + str(begin) + " and " + str(end) + " "
+    group_by_date = " group by datetime "
+    if paper_name:
+        sql = "select" + cols + "where" + filter_by_paper_name + "and" + filter_by_date + group_by_date
+    else:
+        sql = "select" + cols + "where" + filter_by_date + group_by_date
+    print("TEST: sql = " + sql)
+    cur = conn.execute(sql)
+    return cur.fetchall()
