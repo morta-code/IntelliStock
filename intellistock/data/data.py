@@ -5,9 +5,11 @@ Created on Thu Nov 27 14:23:08 2014
 @author: wondercsabo
 """
 
-import datetime
+from datetime import datetime
 
 """Entry point for access all data related methods."""
+
+sql_date_format = '%Y%m%d%H%M%S'
 
 DB_PATH = "IntelliStock.sqlite"
 conn = None
@@ -36,14 +38,22 @@ def stop_polling():
 def update_stocks():
     """This will call the mediator to update the gui with new data."""
 
-def strdate_to_day(d: str, beginning: str = None):
-    class state:
-        format = '%Y%m%d%H%M%S'
-        beg = datetime.strptime('20000101000000', format)
-    if beginning:
-        state.beg = datetime.strptime(beginning, state.format)
-    dt = datetime.strptime(d, state.format) - state.beg
-    return dt.days + dt.seconds / 86400
 
-def get_trades_PCZ_DEMO(begin: tuple, end: tuple):
+# -------- time conversions ---------- #
+
+def date2year(d: datetime):
+    beg = datetime.strptime('20000101000000', format)
+    return d.year + (d.timetuple().tm_yday + (d - beg).seconds / 86400) / (365 + int(d.year % 4 == 0) + 1)
+
+def strdate2year(d: str):
+    d = datetime.strptime(d, sql_date_format)
+    return date2year(d)
+
+def strdate2date(d: str):
+    return datetime.strptime(d, sql_date_format)
+
+def year2date(d: float):
+
+
+def get_trades_PCZ_DEMO(begin: float, end: float):
     """"""
