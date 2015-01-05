@@ -104,7 +104,6 @@ class MainWindow(QMainWindow):
         if item.text() in self._plotters.keys():
             self.ui.tabWidget.setCurrentWidget(self._plotters[item.text()])
         else:
-            pczdebug(currentframe(), "item.text() = " + item.text())
             self.create_plotter(item.text())
         # MINDENKINEK: Nem névszerinti kérést küld, hanem legyárt egy plottert, amit átad szerkesztésre.
         # Ezáltal elválasztjuk az adatot a GUI-tól.

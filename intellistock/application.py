@@ -19,7 +19,6 @@ class Application:
         self.predictor_cls = EnsemblePredictor
         # list of actually running data processors, which should be notified on every changes of the data stream
         self.data_processors = {}
-        pczdebug(currentframe(), data.get_trades_PCZ_DEMO(20100104100000, 20100104110000, 'OTP'))
 
     def load(self):
         # splash = QSplashScreen(QPixmap("resources/main_icon.png"))

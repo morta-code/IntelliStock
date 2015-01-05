@@ -14,15 +14,32 @@ from matplotlib.figure import Figure
 
 import sys
 import numpy as np
+from threading import Lock
 from inspect import currentframe
 
 from intellistock.predictor.pczdebug import pczdebug
 from intellistock.data.data import int2year
 
 
+plot_widget_lock = Lock()
+
+
+def synchronized(lock):
+    """Synchronization decorator."""
+    def wrap(f):
+        def new_function(*args, **kw):
+            lock.acquire()
+            try:
+                return f(*args, **kw)
+            finally:
+                lock.release()
+        return new_function
+    return wrap
+
+
 class PlotWidget(QWidget):
     def __init__(self, parent=None, rows=1, cols=1):
-        QWidget.__init__(self, parent)        
+        QWidget.__init__(self, parent)
         if parent:
             self.predictor = parent.application.predictor_cls(parent.application)
 
@@ -51,9 +68,11 @@ class PlotWidget(QWidget):
         layout.addWidget(self.canvas)
         self.setLayout(layout)
 
+    @synchronized(plot_widget_lock)
     def clear(self):
         self.axes.clear()
-        
+
+    @synchronized(plot_widget_lock)
     def erase_line(self, ploth=None, plotnr=None):
         """
         @arg plotnr : int {1, 2, ...}
@@ -65,7 +84,8 @@ class PlotWidget(QWidget):
         elif ploth and self.axes.lines.count(ploth) > 0:
             self.axes.lines.remove(ploth)
             return True
-                
+
+    @synchronized(plot_widget_lock)
     def hide_line(self, ploth=None, plotnr=None, hide=True):
         """
         @arg plotnr : int {1, 2, ...}
@@ -78,6 +98,7 @@ class PlotWidget(QWidget):
             ploth._visible = not hide
         return ploth
 
+    @synchronized(plot_widget_lock)
     def subplot(self, plotnr=1, rows=None, cols=None):
         """
         @arg plotnr : int {1, 2, ...}
@@ -99,33 +120,51 @@ class PlotWidget(QWidget):
             self.axes = self.axes_list[plotnr-1]
             return self.axes
 
+    @synchronized(plot_widget_lock)
     def set_axis_offset(self, value: bool=False):
         axis_formatter = mpl.ticker.ScalarFormatter(useOffset=value)
         self.axes.yaxis.set_major_formatter(axis_formatter)
         self.axes.xaxis.set_major_formatter(axis_formatter)
 
+    @synchronized(plot_widget_lock)
     def set_axes_labels(self, xlabel: str="", ylabel: str=""):
         self.axes.set_xlabel(xlabel)
         self.axes.set_ylabel(ylabel)
-        self.draw()
 
-    def get_axes(self):
-        return self.axes
-
+    @synchronized(plot_widget_lock)
     def plot(self, *args, **kargs):
         """
         @arg args - matplotlib-like arguments
-        @return refference to the plot objects 
+        @return refference to the plot objects
         """
         return self.axes.plot(*args, **kargs)
-    
+
+    @synchronized(plot_widget_lock)
+    def fill(self, *args, **kargs):
+        """
+        @arg args - matplotlib-like arguments
+        @return refference to the plot objects
+        """
+        return self.axes.fill(*args, **kargs)
+
+    @synchronized(plot_widget_lock)
+    def legend(self, *args, **kwargs):
+        self.axes.legend(*args, **kwargs)
+
+    @synchronized(plot_widget_lock)
     def draw(self):
         """
         just like a `flush() method`
         """
         FigureCanvas.draw(self.canvas)
-        
-        
+
+    # @synchronized(plot_widget_lock)
+    # def get_axes(self):
+    #     """BE AWARE! This is not thread-safe!"""
+    #     return self.axes
+
+
+
 #    @pyqtSlot()
 #    def redraw(self):
 #        self.draw()

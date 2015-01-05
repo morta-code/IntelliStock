@@ -88,8 +88,6 @@ class PredictorTestSimulation:
 
         if self.figure:
             self.figure.clear()
-            #print(self.t.shape)
-            #print(self.x.shape)
             self.figure.plot(self.t, self.x, 'b')
             self.figure.draw()
 
@@ -144,6 +142,7 @@ class EnsemblePredictor(Predictor):
 
         # declare other attributes
         self.indices = self.nr_data = None
+        self.t_begin = self.t_end = self.t_far_past = self.t_near_past = self.t_max_prediction = None
 
     def set_figure(self, figure: PlotWidget=None):
         self.figure = figure
@@ -154,47 +153,103 @@ class EnsemblePredictor(Predictor):
 
         self.nr_data = ts_t.shape[0]
         self.indices = np.arange(0, self.nr_data, 1)
-        pczdebug(currentframe(), self.nr_data, self.indices)
 
-    def run(self):
-        xx, y, _ = create_training_set(np.array([self.ts_t, self.ts_x]), 20, 6, 1)
-        print(xx)
-        print(y)
+    def _multidimensional_gaussian(self):
+        nr_training_samples = min(20, self.ts_t.size)
+        xx, y, t = create_training_set(np.array([self.ts_t, self.ts_x]), nr_training_samples, 6, 1)
 
         # Instantiate a Gaussian Process model
         gp = GaussianProcess(corr='cubic', theta0=1e-2, thetaL=1e-4, thetaU=1e-1,
                              random_start=100)
-
         gp.fit(xx, y)
 
         # time values
-        t_begin = self.ts_t[0]
-        t_end = self.ts_t[self.nr_data-1]
-        t_far_past = t_end - make_far_prediction_from_time
-        t_near_past = t_end - make_near_prediction_from_time
-        t_max_prediction = t_end + max_prediction_time
+        self.t_begin = self.ts_t[0]
+        self.t_end = self.ts_t[self.nr_data-1]
+        self.t_far_past = max(self.t_end - make_far_prediction_from_time, self.t_begin)
+        self.t_near_past = max(self.t_end - make_near_prediction_from_time, self.t_begin)
+        self.t_max_prediction = min(self.t_end + max_prediction_time, 2 * self.t_end - self.t_begin)
+
+        prediction_ticks = 20
 
         # Make the prediction on the meshed x-axis (ask for MSE as well)
         query = xx[len(xx)-1, :]
         query[0] = y[len(xx)-1]
         query = np.roll(query,shift=-1)
+        step = (t[len(xx)-1] - t[0]) / prediction_ticks
 
-        t_tick = [t_end]
+        t_tick = [self.t_end]
         v_tick = [y[len(xx)-1]]
-        step = 0.01 / 365
-        for i in range(20):
-            # print(query)
+        # step = 0.01 / 365
+        for i in range(prediction_ticks):
             y_pred, MSE = gp.predict(query, eval_MSE=True)
-            print(y_pred, np.sqrt(MSE))
             query[0] = y_pred
             query = np.roll(query,shift=-1)
             t_tick.append(t_tick[len(t_tick)-1] + step)
             v_tick.append(y_pred)
-        self.figure.plot(t_tick, v_tick, 'y-', label='multidim pred', linewidth=3)
-        self.figure.get_axes().legend(loc='upper left')
-        self.figure.draw()
-        pass
 
+        # modifying UI on a background thread! Ohh! In fact self.figure is thread-safe :)
+        self.figure.plot(t_tick, v_tick, 'y-', label='multidim pred', linewidth=3)
+        self.figure.legend(loc='upper left')
+        self.figure.draw()
+
+    def _linear_regression(self):
+        near_past_index = int(np.interp(self.t_near_past, self.ts_t, self.indices))
+        t_linear = np.atleast_2d(self.ts_t[near_past_index:]).T
+        x_linear = np.atleast_2d(self.ts_x[near_past_index:]).T
+        t_linear_future = np.atleast_2d(np.linspace(self.t_near_past, self.t_max_prediction, 1000)).T
+
+        regr = linear_model.LinearRegression()
+        regr.fit(t_linear, x_linear)
+
+        self.figure.plot(t_linear_future, regr.predict(t_linear_future), color='green', label='expected tendency (linear regression)',
+                         linewidth=3)
+        self.figure.legend(loc='upper left')
+        self.figure.draw()
+
+    def _gradient_boosting_regressor(self):
+        far_past_index = int(np.interp(self.t_far_past, self.ts_t, self.indices))
+        t_ensemble = np.atleast_2d(self.ts_t[far_past_index:]).T
+        x_ensemble = np.atleast_2d(self.ts_x[far_past_index:]).T.ravel()
+        t_ensemble_future = np.atleast_2d(np.linspace(self.t_far_past, self.t_max_prediction, 10000)).T
+
+        alpha = 0.95
+        clf = GradientBoostingRegressor(loss='quantile', alpha=alpha,
+                                        n_estimators=250, max_depth=3,
+                                        learning_rate=.1, min_samples_leaf=9,
+                                        min_samples_split=20)
+        clf.fit(t_ensemble, x_ensemble)
+
+        # Make the prediction on the meshed x-axis
+        y_upper = clf.predict(t_ensemble_future)
+
+        clf.set_params(alpha=1.0 - alpha)
+        clf.fit(t_ensemble, x_ensemble)
+
+        # Make the prediction on the meshed x-axis
+        y_lower = clf.predict(t_ensemble_future)
+
+        clf.set_params(loss='ls')
+        clf.fit(t_ensemble, x_ensemble)
+
+        # Make the prediction on the meshed x-axis
+        y_prediction = clf.predict(t_ensemble_future)
+
+        self.figure.plot(t_ensemble_future, y_prediction, 'r-', label=u'Prediction')
+        self.figure.plot(t_ensemble_future, y_upper, 'k-')
+        self.figure.plot(t_ensemble_future, y_lower, 'k-')
+        self.figure.fill(np.concatenate([t_ensemble_future, t_ensemble_future[::-1]]),
+                         np.concatenate([y_upper, y_lower[::-1]]),
+                         alpha=.5, fc='b', ec='None', label='90% prediction interval')
+        self.figure.legend(loc='upper left')
+        self.figure.draw()
+
+    def run(self):
+        if self.ts_t.size < 10:
+            return
+        self._multidimensional_gaussian()
+        self._linear_regression()
+        self._gradient_boosting_regressor()
 
 class DataProcessor:
     def __init__(self, figure: PlotWidget=None, predictor: Predictor=None):
@@ -216,7 +271,6 @@ class DataProcessor:
         if raw_data:
             self.ts_t = np.asarray(list(map(lambda t: int2year(t[1]), raw_data)), dtype=float)
             self.ts_x = np.asarray(list(map(lambda t: t[2], raw_data)), dtype=float)
-            pczdebug(currentframe(), self.ts_t, self.ts_x, sep="\n")
 
         if time_series:
             pass
@@ -236,12 +290,11 @@ class DataProcessor:
             self.predictor.start()
 
     def _plot_observations(self):
-        axes = self.figure.get_axes()
-        axes.plot(self.ts_t, self.ts_x, 'b.-', markersize=10, label='Observations')
+        self.figure.plot(self.ts_t, self.ts_x, 'b.-', markersize=10, label='Observations')
         self.figure.set_axes_labels("time [year]", "stock price [Ft]")
         self.figure.set_axis_offset()
+        self.figure.legend(loc='upper left')
         self.figure.draw()
-        axes.legend(loc='upper left')
 
 if __name__ == "__main__":
     np = NaivePredictor()

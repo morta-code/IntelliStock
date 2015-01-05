@@ -82,6 +82,5 @@ def get_trades_PCZ_DEMO(begin: int, end: int, paper_name: str = None):
         sql = "select" + cols + "where" + filter_by_paper_name + "and" + filter_by_date + group_by_date
     else:
         sql = "select" + cols + "where" + filter_by_date + group_by_date
-    pczdebug(currentframe(), "TEST: sql = " + sql)
     cur = conn.execute(sql)
     return cur.fetchall()

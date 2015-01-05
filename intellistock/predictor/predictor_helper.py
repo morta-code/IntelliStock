@@ -66,6 +66,9 @@ def create_training_set(ts: np.array, nr_samples: int=100, nr_features: int=4, n
         for it in range(nr_steps_between):
             target.add(tclip)
             while tclip in target:
-                clip = next(gen)[0]
-                tclip = tuple(clip[1, :nr_features])
+                try:
+                    clip = next(gen)[0]
+                    tclip = tuple(clip[1, :nr_features])
+                except StopIteration:
+                    return xx[i::-1, :], y[i::-1], t[i::-1]
     return xx[::-1, :], y[::-1], t[::-1]
