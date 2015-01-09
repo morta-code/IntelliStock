@@ -35,7 +35,7 @@ class IconBank:
 
 class MainWindow(QMainWindow):
     def __init__(self, application):
-        self.application = application        
+        self.application = application
         IconBank.load_icons()
 
         # Initialize from Designer created
@@ -69,6 +69,23 @@ class MainWindow(QMainWindow):
                 wi.setIcon(IconBank.star)
             wi.setToolTip(str(self._datas[k]))
             self.ui.listWidget_stocks.addItem(wi)
+        self.init_sliders()
+
+    def init_sliders(self):
+        self.ui.spin_near_future.setValue(self.ui.slider_near_future.value())
+        self.ui.spin_far_future.setValue(self.ui.slider_far_future.value())
+        self.ui.spin_near_past.setValue(self.ui.slider_near_past.value())
+        self.ui.spin_far_past.setValue(self.ui.slider_far_past.value())
+        self.ui.spin_near_future.setRange(self.ui.slider_near_future.minimum(), self.ui.slider_near_future.maximum())
+        self.ui.spin_far_future.setRange(self.ui.slider_far_future.minimum(), self.ui.slider_far_future.maximum())
+        self.ui.spin_near_past.setRange(self.ui.slider_near_past.minimum(), self.ui.slider_near_past.maximum())
+        self.ui.spin_far_past.setRange(self.ui.slider_far_past.minimum(), self.ui.slider_far_past.maximum())
+
+    def on_btn_default_params_pressed(self):
+        self.ui.slider_near_future.setValue(self.ui.slider_near_future.tickInterval())
+        self.ui.slider_far_future.setValue(self.ui.slider_far_future.tickInterval())
+        self.ui.slider_near_past.setValue(self.ui.slider_near_past.tickInterval())
+        self.ui.slider_far_past.setValue(self.ui.slider_far_past.tickInterval())
 
     def on_action_favorite_triggered(self, *b):
         if not b:
@@ -105,8 +122,8 @@ class MainWindow(QMainWindow):
             self.ui.tabWidget.setCurrentWidget(self._plotters[item.text()])
         else:
             self.create_plotter(item.text())
-        # MINDENKINEK: Nem névszerinti kérést küld, hanem legyárt egy plottert, amit átad szerkesztésre.
-        # Ezáltal elválasztjuk az adatot a GUI-tól.
+            # MINDENKINEK: Nem névszerinti kérést küld, hanem legyárt egy plottert, amit átad szerkesztésre.
+            # Ezáltal elválasztjuk az adatot a GUI-tól.
 
     def on_listWidget_stocks_itemSelectionChanged(self):
         if self.ui.listWidget_stocks.selectedItems():
@@ -130,7 +147,7 @@ class MainWindow(QMainWindow):
                 it.setToolTip(str(v))
             else:
                 it.setBackgroundColor(QColor(255, 255, 255))
-        # TODO: multi level coloring and represent datas divided from the widget
+                # TODO: multi level coloring and represent datas divided from the widget
 
     def update_simulation_results(self, updated_simulation_results: dict):
         self.run_result.setText("Szimuláció kész.")

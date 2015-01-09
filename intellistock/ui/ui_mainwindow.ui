@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>641</width>
-    <height>480</height>
+    <width>683</width>
+    <height>493</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -116,41 +116,199 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox_view">
+       <widget class="QGroupBox" name="groupBox_time">
         <property name="title">
-         <string>Nézet</string>
+         <string>Predikciós időparaméterek</string>
         </property>
-        <layout class="QFormLayout" name="formLayout">
-         <property name="fieldGrowthPolicy">
-          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-         </property>
+        <layout class="QGridLayout" name="gridLayout">
          <item row="0" column="0">
-          <widget class="QLabel" name="label_zoom">
+          <widget class="QLabel" name="label_near_past">
            <property name="text">
-            <string>Nagyítás</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QSlider" name="slider_zoom">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_time">
-           <property name="text">
-            <string>Idő</string>
+            <string>Predikciós közelmúlt [óra]</string>
            </property>
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QSlider" name="slider_time">
+          <widget class="QSlider" name="slider_near_future">
+           <property name="minimum">
+            <number>0</number>
+           </property>
+           <property name="maximum">
+            <number>72</number>
+           </property>
+           <property name="value">
+            <number>24</number>
+           </property>
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
+           <property name="tickPosition">
+            <enum>QSlider::TicksBelow</enum>
+           </property>
+           <property name="tickInterval">
+            <number>24</number>
+           </property>
           </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_far_past_2">
+           <property name="text">
+            <string>Predikálandó távoljövő [nap]</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSlider" name="slider_far_past">
+           <property name="minimum">
+            <number>0</number>
+           </property>
+           <property name="maximum">
+            <number>90</number>
+           </property>
+           <property name="value">
+            <number>15</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="tickPosition">
+            <enum>QSlider::TicksBelow</enum>
+           </property>
+           <property name="tickInterval">
+            <number>15</number>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QSlider" name="slider_far_future">
+           <property name="minimum">
+            <number>0</number>
+           </property>
+           <property name="maximum">
+            <number>90</number>
+           </property>
+           <property name="value">
+            <number>15</number>
+           </property>
+           <property name="sliderPosition">
+            <number>15</number>
+           </property>
+           <property name="tracking">
+            <bool>true</bool>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="invertedAppearance">
+            <bool>false</bool>
+           </property>
+           <property name="invertedControls">
+            <bool>true</bool>
+           </property>
+           <property name="tickPosition">
+            <enum>QSlider::TicksBelow</enum>
+           </property>
+           <property name="tickInterval">
+            <number>15</number>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_far_past">
+           <property name="text">
+            <string>Predikciós távolmúlt [nap]</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_near_future">
+           <property name="text">
+            <string>Predikálandó közeljövő [óra]</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QSpinBox" name="spin_near_past"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QSpinBox" name="spin_far_past"/>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSlider" name="slider_near_past">
+           <property name="minimum">
+            <number>0</number>
+           </property>
+           <property name="maximum">
+            <number>240</number>
+           </property>
+           <property name="singleStep">
+            <number>1</number>
+           </property>
+           <property name="value">
+            <number>24</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="tickPosition">
+            <enum>QSlider::TicksBelow</enum>
+           </property>
+           <property name="tickInterval">
+            <number>24</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QSpinBox" name="spin_near_future"/>
+         </item>
+         <item row="3" column="2">
+          <widget class="QSpinBox" name="spin_far_future"/>
+         </item>
+         <item row="5" column="0" colspan="3">
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <property name="spacing">
+            <number>5</number>
+           </property>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btn_default_params">
+             <property name="text">
+              <string>Alapértelmezett</string>
+             </property>
+             <property name="default">
+              <bool>false</bool>
+             </property>
+             <property name="flat">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btn_update_all">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="mouseTracking">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Frissítés</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
@@ -164,8 +322,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>641</width>
-     <height>21</height>
+     <width>683</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuStock">
@@ -330,7 +488,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>320</x>
-     <y>469</y>
+     <y>482</y>
     </hint>
    </hints>
   </connection>
@@ -363,6 +521,198 @@
     <hint type="destinationlabel">
      <x>320</x>
      <y>239</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slider_near_past</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>spin_near_past</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>540</x>
+     <y>301</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>300</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_near_past</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slider_near_past</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>644</x>
+     <y>296</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>572</x>
+     <y>308</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slider_far_past</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>spin_far_past</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>572</x>
+     <y>340</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>635</x>
+     <y>338</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_far_past</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slider_far_past</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>644</x>
+     <y>328</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>466</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slider_near_future</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>spin_near_future</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>502</x>
+     <y>366</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>638</x>
+     <y>366</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_near_future</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slider_near_future</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>623</x>
+     <y>375</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>457</x>
+     <y>364</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slider_far_future</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>spin_far_future</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>572</x>
+     <y>404</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>636</x>
+     <y>400</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_far_future</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>slider_far_future</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>623</x>
+     <y>407</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>389</x>
+     <y>398</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slider_near_past</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_near_past</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>470</x>
+     <y>306</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>638</x>
+     <y>308</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slider_far_past</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_far_past</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>440</x>
+     <y>344</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>644</x>
+     <y>350</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slider_near_future</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_near_future</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>382</x>
+     <y>370</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>384</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slider_far_future</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_far_future</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>401</x>
+     <y>401</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>652</x>
+     <y>412</y>
     </hint>
    </hints>
   </connection>

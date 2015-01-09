@@ -54,7 +54,7 @@ class Application:
         if name in self.data_processors:
             raise AssertionError()
         self.data_processors[name] = processor
-        processor.set_data(raw_data=data.get_trades_PCZ_DEMO(20100104100000, 20100104110000, name))
+        processor.set_data(raw_data=data.get_trades_PCZ_DEMO(20090104100000, 20150104110000, name))
         processor.set_figure(plotter)
         processor.process()
 
