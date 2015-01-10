@@ -61,8 +61,12 @@ class Application:
         # simulation = PredictorTestSimulation(application)
         # simulation.setFigure(plotter)
         # simulation.start_simulation()
-
         pass
+
+    def update_data_processor(self, name: str):
+        if name not in self.data_processors:
+            raise AssertionError()
+        self.data_processors[name].update()
 
     def kill_plotter(self, name: str):
         """Destroys the managers and predictors to the given Stock
@@ -81,6 +85,7 @@ class Application:
         pass
 
 application = None
+
 
 def main():
     global application

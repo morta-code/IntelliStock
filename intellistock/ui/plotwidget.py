@@ -149,7 +149,7 @@ class PlotWidget(QWidget):
 
     @synchronized(plot_widget_lock)
     def legend(self, *args, **kwargs):
-        self.axes.legend(*args, **kwargs)
+        self.axes.legend(prop={'size': 6}, *args, **kwargs)
 
     @synchronized(plot_widget_lock)
     def draw(self):

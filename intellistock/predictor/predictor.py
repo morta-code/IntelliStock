@@ -131,6 +131,7 @@ make_near_prediction_from_time = make_near_prediction_from_time_in_days / 365
 make_far_prediction_from_time_in_days = 60
 make_far_prediction_from_time = make_far_prediction_from_time_in_days / 365
 
+
 class EnsemblePredictor(Predictor):
     """"""
     def __init__(self, figure=None, *_, __ts_t: np.ndarray=None, __ts_x: np.ndarray=None):
@@ -251,6 +252,7 @@ class EnsemblePredictor(Predictor):
         self._linear_regression()
         self._gradient_boosting_regressor()
 
+
 class DataProcessor:
     def __init__(self, figure: PlotWidget=None, predictor: Predictor=None):
         """"""
@@ -262,7 +264,7 @@ class DataProcessor:
     def set_predictor(self, predictor):
         self.predictor = predictor
 
-    def set_data(self, raw_data: map=None, time_series: np.array=None):
+    def set_data(self, raw_data: map=None, time_series: np.array=None, append = False):
         """
         :param raw_data:
         :param time_series:
@@ -288,6 +290,11 @@ class DataProcessor:
         self._plot_observations()
         if self.predictor:
             self.predictor.start()
+
+    def update(self):
+        print("DataProcessor::update - not implemented yet")
+        self.figure.clear()
+        self.figure.draw()
 
     def _plot_observations(self):
         self.figure.plot(self.ts_t, self.ts_x, 'b.-', markersize=10, label='Observations')

@@ -87,6 +87,10 @@ class MainWindow(QMainWindow):
         self.ui.slider_near_past.setValue(self.ui.slider_near_past.tickInterval())
         self.ui.slider_far_past.setValue(self.ui.slider_far_past.tickInterval())
 
+    def on_btn_update_all_pressed(self):
+        """"""
+        self.application.update_data_processor(self.ui.listWidget_stocks.currentItem().text())
+
     def on_action_favorite_triggered(self, *b):
         if not b:
             return
