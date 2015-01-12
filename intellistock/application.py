@@ -21,6 +21,7 @@ class Application:
         self.data_processors = {}
 
     def load(self):
+        # todo: az importok és a gui betöltés átszervezésésvel gyorsítható az indítás. Majd a végén.
         # splash = QSplashScreen(QPixmap("resources/main_icon.png"))
         # splash.show()
         # splash.showMessage("Loading modules", Qt.AlignBottom)

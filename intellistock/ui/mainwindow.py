@@ -1,5 +1,5 @@
 
-from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, QIcon, QCloseEvent, QColor, QWidget
+from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, QIcon, QCloseEvent, QColor, QSystemTrayIcon
 from PyQt4.QtCore import QSettings
 from PyQt4.Qt import Qt
 from intellistock.ui.ui_mainwindow import Ui_MainWindow
@@ -50,6 +50,8 @@ class MainWindow(QMainWindow):
         self.ui.tabWidget.tabCloseRequested.connect(self.kill_plotter)
         self.ui.action_favorite.setIcon(IconBank.star)
         self.ui.action_exit.setIcon(IconBank.exit)
+        self.init_sliders()
+        self.init_systray()
 
         # Initialize members and settings
         self._settings = QSettings("IntelliStock", "IntelliStock")
@@ -57,7 +59,27 @@ class MainWindow(QMainWindow):
         self._plotters = {}
         self._datas = None
 
+    def init_sliders(self):
+        self.ui.spin_near_future.setValue(self.ui.slider_near_future.value())
+        self.ui.spin_far_future.setValue(self.ui.slider_far_future.value())
+        self.ui.spin_near_past.setValue(self.ui.slider_near_past.value())
+        self.ui.spin_far_past.setValue(self.ui.slider_far_past.value())
+        self.ui.spin_near_future.setRange(self.ui.slider_near_future.minimum(), self.ui.slider_near_future.maximum())
+        self.ui.spin_far_future.setRange(self.ui.slider_far_future.minimum(), self.ui.slider_far_future.maximum())
+        self.ui.spin_near_past.setRange(self.ui.slider_near_past.minimum(), self.ui.slider_near_past.maximum())
+        self.ui.spin_far_past.setRange(self.ui.slider_far_past.minimum(), self.ui.slider_far_past.maximum())
+
+    def init_systray(self):
+        self.ui.systray = QSystemTrayIcon(IconBank.main)
+        self.ui.systray.setToolTip("IntelliStock")
+        self.ui.systray.show()
+
     def initialize(self, initial_stocks: dict):
+        """ Initialize datas only for opening window.
+        It sorts by name for GUI and handles the favorite stocks, too.
+
+        :param initial_stocks: dict of the most current values by stock names
+        """
         self._datas = initial_stocks
 
         keys = list(self._datas.keys())
@@ -69,17 +91,6 @@ class MainWindow(QMainWindow):
                 wi.setIcon(IconBank.star)
             wi.setToolTip(str(self._datas[k]))
             self.ui.listWidget_stocks.addItem(wi)
-        self.init_sliders()
-
-    def init_sliders(self):
-        self.ui.spin_near_future.setValue(self.ui.slider_near_future.value())
-        self.ui.spin_far_future.setValue(self.ui.slider_far_future.value())
-        self.ui.spin_near_past.setValue(self.ui.slider_near_past.value())
-        self.ui.spin_far_past.setValue(self.ui.slider_far_past.value())
-        self.ui.spin_near_future.setRange(self.ui.slider_near_future.minimum(), self.ui.slider_near_future.maximum())
-        self.ui.spin_far_future.setRange(self.ui.slider_far_future.minimum(), self.ui.slider_far_future.maximum())
-        self.ui.spin_near_past.setRange(self.ui.slider_near_past.minimum(), self.ui.slider_near_past.maximum())
-        self.ui.spin_far_past.setRange(self.ui.slider_far_past.minimum(), self.ui.slider_far_past.maximum())
 
     def on_btn_default_params_pressed(self):
         self.ui.slider_near_future.setValue(self.ui.slider_near_future.tickInterval())
@@ -101,6 +112,7 @@ class MainWindow(QMainWindow):
         else:
             self._favorites.append(item.text())
             item.setIcon(IconBank.star)
+
 
     def on_action_simulation_triggered(self, *b):
         if not b:
@@ -146,9 +158,13 @@ class MainWindow(QMainWindow):
             if int(it.toolTip()) < v:
                 it.setBackgroundColor(QColor(0, 255, 0))
                 it.setToolTip(str(v))
+                if k in self._favorites:
+                    self.ui.systray.showMessage(k, str(v))
             elif int(it.toolTip()) > v:
                 it.setBackgroundColor(QColor(210, 0, 0))
                 it.setToolTip(str(v))
+                if k in self._favorites:
+                    self.ui.systray.showMessage(k, str(v))
             else:
                 it.setBackgroundColor(QColor(255, 255, 255))
                 # TODO: multi level coloring and represent datas divided from the widget
