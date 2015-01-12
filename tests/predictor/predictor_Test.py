@@ -1,13 +1,7 @@
 
-# TODO - ezt lehetne egy kicsit ugyesebben is megoldani : relative import
-import sys
-
-
 from intellistock.predictor import predictor as pred
-import numpy as np
-
-import random
 import unittest
+
 
 class NaivePredictor_Test(unittest.TestCase):
 
@@ -21,16 +15,16 @@ class NaivePredictor_Test(unittest.TestCase):
     def test_newInput(self):
         self.pcz_checkPredictorState(0, 0)
 
-        self.predictor.newInput(1.0)
+        self.predictor.new_input(1.0)
         self.pcz_checkPredictorState(1, 0)
 
-        self.predictor.newInput(2.0)
+        self.predictor.new_input(2.0)
         self.pcz_checkPredictorState(2, 1)
 
     def test_getPrediction(self):
         self.test_newInput()
 
-        pred = self.predictor.getPrediction(5)
+        pred = self.predictor.get_prediction(5)
         self.assertEqual(next(pred), (1, 3, 2, 4))
         self.assertEqual(next(pred), (2, 4, 2, 6))
         self.assertEqual(next(pred), (3, 5, 2, 8))

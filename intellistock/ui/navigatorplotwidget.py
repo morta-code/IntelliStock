@@ -7,18 +7,11 @@ Created on Thu Dec  4 00:18:49 2014
 
 import sys
 import numpy as np
-from inspect import currentframe
 
 from PyQt4.QtGui import QVBoxLayout, QMessageBox, QApplication
-
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
-
-from intellistock.data.data import int2year
-from intellistock.predictor.pczdebug import pczdebug
 from intellistock.ui.plotwidget import PlotWidget
 
-
-# from PyQt4.QtCore import *
 
 class NavigatorPlotWidget(PlotWidget):
     def __init__(self, parent=None, cols=1, rows=1):
