@@ -401,6 +401,7 @@
      <string>&amp;Eszközök</string>
     </property>
     <addaction name="action_favorite"/>
+    <addaction name="action_prediction"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -543,6 +544,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="action_prediction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Predikció</string>
    </property>
   </action>
  </widget>

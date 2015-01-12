@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Mon Jan 12 17:36:30 2015
+# Created: Mon Jan 12 19:03:48 2015
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -244,6 +244,9 @@ class Ui_MainWindow(object):
         self.action_showPrediction.setCheckable(True)
         self.action_showPrediction.setChecked(True)
         self.action_showPrediction.setObjectName(_fromUtf8("action_showPrediction"))
+        self.action_prediction = QtGui.QAction(MainWindow)
+        self.action_prediction.setCheckable(True)
+        self.action_prediction.setObjectName(_fromUtf8("action_prediction"))
         self.menuStock.addAction(self.action_simulation)
         self.menuStock.addAction(self.action_exit)
         self.menuView.addAction(self.action_showToolbar)
@@ -251,6 +254,7 @@ class Ui_MainWindow(object):
         self.menuView.addAction(self.action_fullscreen)
         self.menuView.addAction(self.action_showPrediction)
         self.menuTools.addAction(self.action_favorite)
+        self.menuTools.addAction(self.action_prediction)
         self.menuHelp.addAction(self.action_aboutStock)
         self.menubar.addAction(self.menuStock.menuAction())
         self.menubar.addAction(self.menuView.menuAction())
@@ -317,4 +321,5 @@ class Ui_MainWindow(object):
         self.action_showPrediction.setText(_translate("MainWindow", "&Predikciós eszközök", None))
         self.action_showPrediction.setStatusTip(_translate("MainWindow", "Predikciós beállítások megjelenítése/elrejtése", None))
         self.action_showPrediction.setShortcut(_translate("MainWindow", "Ctrl+P", None))
+        self.action_prediction.setText(_translate("MainWindow", "Predikció", None))
 
