@@ -10,16 +10,9 @@ import matplotlib as mpl
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-# from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
-
 import sys
 import numpy as np
 from threading import Lock
-from inspect import currentframe
-
-from intellistock.predictor.pczdebug import pczdebug
-from intellistock.data.data import int2year
-
 
 plot_widget_lock = Lock()
 
@@ -40,8 +33,6 @@ def synchronized(lock):
 class PlotWidget(QWidget):
     def __init__(self, parent=None, rows=1, cols=1):
         QWidget.__init__(self, parent)
-        if parent:
-            self.predictor = parent.application.predictor_cls(parent.application)
 
         # declare further attributes
         self.ts_t = self.ts_x = self.rows = self.cols = self.axes_list = self.axes = None
@@ -79,10 +70,23 @@ class PlotWidget(QWidget):
         @arg ploth - reference to a plot object (i.e. "plot handle")
         @return None if error occurred
         """
+        # for k, v in self.axes.__dict__.items():
+        #     print(k, v)
+        #
+        # print(dir(self.axes))
+        # for d in dir(self.axes):
+        #     print(d, getattr(self.axes, d), sep=" --- ")
         if plotnr is not None and plotnr < len(self.axes.lines):
             return self.axes.lines.pop(plotnr)
         elif ploth and self.axes.lines.count(ploth) > 0:
             self.axes.lines.remove(ploth)
+            return True
+        elif type(ploth) == list:
+            for pl in ploth:
+                if self.axes.lines.count(pl) > 0:
+                    self.axes.lines.remove(pl)
+                if self.axes.patches.count(pl) > 0:
+                    self.axes.patches.remove(pl)
             return True
 
     @synchronized(plot_widget_lock)
@@ -95,7 +99,11 @@ class PlotWidget(QWidget):
         if plotnr is not None and plotnr < len(self.axes.lines):
             ploth = self.axes.lines[plotnr]
         if ploth:
-            ploth._visible = not hide
+            if type(ploth) == list:
+                for plh in ploth:
+                    plh._visible = not hide
+            else:
+                ploth._visible = not hide
         return ploth
 
     @synchronized(plot_widget_lock)

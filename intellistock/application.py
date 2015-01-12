@@ -35,12 +35,16 @@ class Application:
         self.window.show()
         self.q_application.exec()
 
+    def halt(self):
+        for name, dp in self.data_processors.items():
+            dp.interrupt()
+
     def request_stock_values(self, name: str):
         """ TODO: STUB """
         self.window.stock_values("OTP",
                                  [(datetime(2014, 11, 27, 9, 32), 12400, 2), (datetime(2014, 11, 27, 9, 35), 12350, 5)])
 
-    def launch_data_processor(self, name: str, plotter):
+    def launch_data_processor(self, name: str, plotter, **kwargs):
         """Add new plotter (from the GUI) to the application.
         The given plotter is needed for the data manager and the predictors.
 
@@ -57,17 +61,21 @@ class Application:
         self.data_processors[name] = processor
         processor.set_data(raw_data=data.get_trades_PCZ_DEMO(20090104100000, 20150104110000, name))
         processor.set_figure(plotter)
-        processor.process()
+        processor.process(**kwargs)
 
-        # simulation = PredictorTestSimulation(application)
-        # simulation.setFigure(plotter)
-        # simulation.start_simulation()
-        pass
-
-    def update_data_processor(self, name: str):
+    def update_data_processor(self, name: str, **kwargs):
+        """
+        :param data
+        :param farp=None
+        :param nearp=None
+        :param farf=None
+        :param nearf=None
+        :param maxn=None
+        :param nth=None
+        """
         if name not in self.data_processors:
             raise AssertionError()
-        self.data_processors[name].update()
+        self.data_processors[name].update(**kwargs)
 
     def kill_plotter(self, name: str):
         """Destroys the managers and predictors to the given Stock
@@ -105,7 +113,8 @@ def main():
     application = Application()
     application.load()
     application.exec()
+    application.halt()
 
 if __name__ == '__main__':
     main()
-    
+    exit(0)
