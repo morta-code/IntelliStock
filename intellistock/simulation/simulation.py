@@ -42,28 +42,33 @@ class Simulation:
         print("Starting simulation")
         self.current_time = self.start_time
         while not self.finish:
-            print("Simulation step")
+            print("Simulation step " + str(self.current_time))
             time.sleep(self.interval)
-            print("Simulation step2")
             self.current_time += self.speed*datetime.timedelta(0,self.interval)
-            print("Simulation step3")
-            # TODO: main thread
-            self.application.set_graph_times(self.start_time, self.current_time)
-            print("Simulation step4")
+            self.application.lock.acquire()
+            try:
+                self.application.set_graph_times(self.start_time, self.current_time)
+            finally:
+                self.application.lock.release()
 
     def buy_stock(self, stock_name, amount):
-        # TODO: thread safe
         price = self.application.get_stock_price(stock_name, self.current_time)*amount
         self.money -= price + abs(price) * self.interest
         self.stocks[stock_name] += amount
-        self.update_stock_list()
+        self.application.lock.acquire()
+        try:
+            self.update_stock_list()
+        finally:
+            self.application.lock.release()
 
     def update_stock_list(self):
-        # TODO: thread safe
-        self.application.set_my_stocks(self.stocks)
+        self.application.lock.acquire()
+        try:
+            self.application.set_my_stocks(self.stocks)
+        finally:
+            self.application.lock.release()
 
     def sell_stock(self, stock_name, amount):
-        # TODO: thread safe
         self.buy_stock(stock_name, -amount)
 
     def simulation_done(self, future):

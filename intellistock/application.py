@@ -1,4 +1,5 @@
 import sys
+from threading import Lock
 import time
 from intellistock.simulation.simulation import Simulation
 from intellistock.ui import mainwindow
@@ -20,6 +21,7 @@ class Application:
         # list of actually running data processors, which should be notified on every changes of the data stream
         self.data_processors = {}
         self.simulation = None
+        self.lock = Lock()
 
     def load(self):
         # todo: az importok és a gui betöltés átszervezésésvel gyorsítható az indítás. Majd a végén.
