@@ -115,7 +115,8 @@ class MainWindow(QMainWindow):
 
     def on_btn_update_all_pressed(self):
         """"""
-        self.application.update_data_processor(self._actual_plotter_name,**self.collect_prediction_time_params())
+        if self._actual_plotter_name:
+            self.application.update_data_processor(self._actual_plotter_name,**self.collect_prediction_time_params())
 
     def on_action_favorite_triggered(self, *b):
         if not b:
@@ -183,13 +184,16 @@ class MainWindow(QMainWindow):
             plh=self.application.predictor_cls.PLH_ALL, hide=not b)
 
     def on_checkBox_expTendency_toggled(self, b: bool):
-        self.application.data_processors[self._actual_plotter_name].predictor.hide(plh=self.application.predictor_cls.PLH_LINEAR, hide=not b)
+        if self._actual_plotter_name:
+            self.application.data_processors[self._actual_plotter_name].predictor.hide(plh=self.application.predictor_cls.PLH_LINEAR, hide=not b)
 
     def on_checkBox_gradBoosting_toggled(self, b: bool):
-        self.application.data_processors[self._actual_plotter_name].predictor.hide(plh=self.application.predictor_cls.PLH_GRAD_BOOSTING, hide=not b)
+        if self._actual_plotter_name:
+            self.application.data_processors[self._actual_plotter_name].predictor.hide(plh=self.application.predictor_cls.PLH_GRAD_BOOSTING, hide=not b)
 
     def on_checkBox_multidimPred_toggled(self, b: bool):
-        self.application.data_processors[self._actual_plotter_name].predictor.hide(plh=self.application.predictor_cls.PLH_GAUSSIAN, hide=not b)
+        if self._actual_plotter_name:
+            self.application.data_processors[self._actual_plotter_name].predictor.hide(plh=self.application.predictor_cls.PLH_GAUSSIAN, hide=not b)
 
     # def on_spinBox_eachNthSample_valueChanged(self, i: int):
     #     # DO NOT REMOVE THIS CONDITION! (Signal emitted also with i as a string)
