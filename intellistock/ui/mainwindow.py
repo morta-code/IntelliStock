@@ -149,6 +149,9 @@ class MainWindow(QMainWindow):
             self.ui.action_favorite.setEnabled(False)
             self.ui.action_simulation.setEnabled(False)
 
+    def on_action_showPrediction_toggled(self, b: bool):
+        self.ui.groupBox_time.setVisible(b)
+
     def update_stocks(self, updated_stocks: dict):
         """Call it when new trades arrived.
         :param updated_stocks: is a names (str) keyed prize values.

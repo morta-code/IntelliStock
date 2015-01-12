@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Fri Jan  9 22:43:31 2015
+# Created: Mon Jan 12 15:49:22 2015
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(683, 493)
+        MainWindow.resize(767, 511)
         MainWindow.setWindowTitle(_fromUtf8("Stock"))
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
@@ -167,7 +167,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setStretch(1, 6)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 683, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 767, 21))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuStock = QtGui.QMenu(self.menubar)
         self.menuStock.setObjectName(_fromUtf8("menuStock"))
@@ -211,11 +211,16 @@ class Ui_MainWindow(object):
         self.action_simulation = QtGui.QAction(MainWindow)
         self.action_simulation.setEnabled(False)
         self.action_simulation.setObjectName(_fromUtf8("action_simulation"))
+        self.action_showPrediction = QtGui.QAction(MainWindow)
+        self.action_showPrediction.setCheckable(True)
+        self.action_showPrediction.setChecked(True)
+        self.action_showPrediction.setObjectName(_fromUtf8("action_showPrediction"))
         self.menuStock.addAction(self.action_simulation)
         self.menuStock.addAction(self.action_exit)
         self.menuView.addAction(self.action_showToolbar)
         self.menuView.addAction(self.action_showStatusbar)
         self.menuView.addAction(self.action_fullscreen)
+        self.menuView.addAction(self.action_showPrediction)
         self.menuTools.addAction(self.action_favorite)
         self.menuHelp.addAction(self.action_aboutStock)
         self.menubar.addAction(self.menuStock.menuAction())
@@ -274,4 +279,7 @@ class Ui_MainWindow(object):
         self.action_favorite.setStatusTip(_translate("MainWindow", "Kijelölt részvény hozzáadása/eltávolitása a kedvencek közül.", None))
         self.action_favorite.setShortcut(_translate("MainWindow", "Ctrl+F", None))
         self.action_simulation.setText(_translate("MainWindow", "Szimuláció", None))
+        self.action_showPrediction.setText(_translate("MainWindow", "&Predikciós eszközök", None))
+        self.action_showPrediction.setStatusTip(_translate("MainWindow", "Predikciós beállítások megjelenítése/elrejtése", None))
+        self.action_showPrediction.setShortcut(_translate("MainWindow", "Ctrl+P", None))
 

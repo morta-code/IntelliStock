@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>683</width>
-    <height>493</height>
+    <width>767</width>
+    <height>511</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -322,8 +322,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>683</width>
-     <height>25</height>
+     <width>767</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuStock">
@@ -340,6 +340,7 @@
     <addaction name="action_showToolbar"/>
     <addaction name="action_showStatusbar"/>
     <addaction name="action_fullscreen"/>
+    <addaction name="action_showPrediction"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -471,6 +472,23 @@
    </property>
    <property name="text">
     <string>Szimuláció</string>
+   </property>
+  </action>
+  <action name="action_showPrediction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Predikciós eszközök</string>
+   </property>
+   <property name="statusTip">
+    <string>Predikciós beállítások megjelenítése/elrejtése</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
  </widget>
