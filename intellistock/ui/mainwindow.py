@@ -153,23 +153,16 @@ class MainWindow(QMainWindow):
             self.ui.action_simulation.setEnabled(False)
 
     def on_action_showPrediction_toggled(self, b: bool):
-        self.ui.groupBox_time.setVisible(b)
-        self.ui.groupBox_predChecks.setVisible(b)
+        self.application.data_processors[self.ui.listWidget_stocks.currentItem().text()].predictor.hide(plh=self.application.predictor_cls.PLH_ALL, hide=not b)
 
     def on_checkBox_expTendency_toggled(self, b: bool):
-        # todo
-        print(b)
-        pass
+        self.application.data_processors[self.ui.listWidget_stocks.currentItem().text()].predictor.hide(plh=self.application.predictor_cls.PLH_LINEAR, hide=not b)
 
     def on_checkBox_gradBoosting_toggled(self, b: bool):
-        # todo
-        print(b)
-        pass
+        self.application.data_processors[self.ui.listWidget_stocks.currentItem().text()].predictor.hide(plh=self.application.predictor_cls.PLH_GRAD_BOOSTING, hide=not b)
 
     def on_checkBox_multidimPred_toggled(self, b: bool):
-        # todo
-        print(b)
-        pass
+        self.application.data_processors[self.ui.listWidget_stocks.currentItem().text()].predictor.hide(plh=self.application.predictor_cls.PLH_GAUSSIAN, hide=not b)
 
     def update_stocks(self, updated_stocks: dict):
         """Call it when new trades arrived.
