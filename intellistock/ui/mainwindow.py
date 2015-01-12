@@ -44,7 +44,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         self._sliders = ["near_future", "maxn", "near_past", "dt_samples", "dim"]
-        self._dafault_pred_params = list(map(lambda x: 0, self._sliders))
+        self._default_pred_params = list(map(lambda x: 0, self._sliders))
 
         # Initialize extras (not automateable by Designer)
         self.setWindowIcon(IconBank.main)
@@ -69,19 +69,7 @@ class MainWindow(QMainWindow):
             spin = getattr(self.ui, "spin_" + self._sliders[i])
             spin.setValue(slider.value())
             spin.setRange(slider.minimum(), slider.maximum())
-            self._dafault_pred_params[i] = slider.value()
-
-        # self.ui.spin_near_future.setValue(self.ui.slider_near_future.value())
-        # self.ui.spin_maxn.setValue(self.ui.slider_maxn.value())
-        # self.ui.spin_near_past.setValue(self.ui.slider_near_past.value())
-        # self.ui.spin_dt_samples.setValue(self.ui.slider_dt_samples.value())
-        # self.ui.spin_dim.setValue(self.ui.slider_dim.value())
-        # self.ui.spin_near_future.setRange(self.ui.slider_near_future.minimum(), self.ui.slider_near_future.maximum())
-        # self.ui.spin_maxn.setRange(self.ui.slider_maxn.minimum(), self.ui.slider_far_future.maximum())
-        # self.ui.spin_near_past.setRange(self.ui.slider_near_past.minimum(), self.ui.slider_near_past.maximum())
-        # self.ui.spin_dt_samples.setRange(self.ui.slider_dt_samples.minimum(), self.ui.slider_far_past.maximum())
-        # self.ui.spin_dim.setRange(self.ui.slider_dim.minimum(), self.ui.slider_far_past.maximum())
-
+            self._default_pred_params[i] = slider.value()
 
     def init_systray(self):
         self.ui.systray = QSystemTrayIcon(IconBank.main)
@@ -107,10 +95,8 @@ class MainWindow(QMainWindow):
             self.ui.listWidget_stocks.addItem(wi)
 
     def on_btn_default_params_pressed(self):
-        self.ui.slider_near_future.setValue(self.ui.slider_near_future.tickInterval())
-        self.ui.slider_far_future.setValue(self.ui.slider_far_future.tickInterval())
-        self.ui.slider_near_past.setValue(self.ui.slider_near_past.tickInterval())
-        self.ui.slider_far_past.setValue(self.ui.slider_far_past.tickInterval())
+        for i in range(len(self._sliders)):
+            getattr(self.ui, "slider_" + self._sliders[i]).setValue(self._default_pred_params[i])
 
     def collect_prediction_time_params(self):
         return {"nearp": self.ui.spin_near_past.value(),
