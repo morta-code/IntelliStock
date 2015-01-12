@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Mon Jan 12 19:03:48 2015
+# Created: Mon Jan 12 21:42:35 2015
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -161,7 +161,7 @@ class Ui_MainWindow(object):
         self.slider_near_past.setMinimum(0)
         self.slider_near_past.setMaximum(240)
         self.slider_near_past.setSingleStep(1)
-        self.slider_near_past.setProperty("value", 24)
+        self.slider_near_past.setProperty("value", 2)
         self.slider_near_past.setOrientation(QtCore.Qt.Horizontal)
         self.slider_near_past.setTickPosition(QtGui.QSlider.TicksBelow)
         self.slider_near_past.setTickInterval(24)
@@ -196,7 +196,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setStretch(1, 6)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 734, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 734, 25))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuStock = QtGui.QMenu(self.menubar)
         self.menuStock.setObjectName(_fromUtf8("menuStock"))

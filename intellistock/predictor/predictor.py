@@ -89,17 +89,6 @@ class PredictorTestSimulation:
         self.stepNr += 1
 
 
-# constant values
-max_prediction_time_in_days = 1
-max_prediction_time = max_prediction_time_in_days / 365
-
-make_near_prediction_from_time_in_days = 1
-make_near_prediction_from_time = make_near_prediction_from_time_in_days / 365
-
-make_far_prediction_from_time_in_days = 60
-make_far_prediction_from_time = make_far_prediction_from_time_in_days / 365
-
-
 class EnsemblePredictor(Predictor):
     """
     1.) multidimensional Gaussian prediction
@@ -133,6 +122,29 @@ class EnsemblePredictor(Predictor):
         # flags
         self._interrupted = self._tp_changed = self._data_set_changed = False
 
+        # time parameter values
+        self.near_future = 6 / 24 / 365
+        self.far_future = 1 / 365
+        self.near_past = 1 / 365
+        self.far_past = 60 / 365
+
+        self.maxn = 6
+        self.nth = 1
+
+    def generate_time_params(self):
+        try:
+            self.near_past = self._tp["nearp"] / 24 / 365
+            self.far_past = self._tp["farp"] / 365
+            self.near_future = self._tp["nearf"] / 24 / 365
+            self.far_future = self._tp["farf"] / 365
+
+            if self._tp["maxn"] != 0:
+                self.maxn = self._tp["maxn"]
+            if self._tp["nth"] != 0:
+                self.nth = self._tp["nth"]
+        finally:
+            pass
+
     def set_figure(self, figure: PlotWidget=None):
         self.figure = figure
 
@@ -143,22 +155,22 @@ class EnsemblePredictor(Predictor):
         self.nr_data = ts_t.shape[0]
         self.indices = np.arange(0, self.nr_data, 1)
 
-    def _multidimensional_gaussian(self):
+    def generate_time_values(self):
+        self.t_begin = self.ts_t[0]
+        self.t_end = self.ts_t[self.nr_data-1]
+        self.t_far_past = max(self.t_end - self.far_past, self.t_begin)
+        self.t_near_past = max(self.t_end - self.near_past, self.t_begin)
+        self.t_max_prediction = min(self.t_end + self.far_future, 2 * self.t_end - self.t_begin)
+
+    def _multidimensional_gaussian(self, update=False):
         print(self._tp)
         nr_training_samples = min(20, self.ts_t.size)
-        xx, y, t = create_training_set(np.array([self.ts_t, self.ts_x]), nr_training_samples, 6, 1)
+        xx, y, t = create_training_set(np.array([self.ts_t, self.ts_x]), nr_training_samples, self.maxn, self.nth)
 
         # Instantiate a Gaussian Process model
         gp = GaussianProcess(corr='cubic', theta0=1e-2, thetaL=1e-4, thetaU=1e-1,
                              random_start=100)
         gp.fit(xx, y)
-
-        # time values
-        self.t_begin = self.ts_t[0]
-        self.t_end = self.ts_t[self.nr_data-1]
-        self.t_far_past = max(self.t_end - make_far_prediction_from_time, self.t_begin)
-        self.t_near_past = max(self.t_end - make_near_prediction_from_time, self.t_begin)
-        self.t_max_prediction = min(self.t_end + max_prediction_time, 2 * self.t_end - self.t_begin)
 
         prediction_ticks = 20
 
@@ -180,11 +192,13 @@ class EnsemblePredictor(Predictor):
 
         # modifying UI on a background thread! Ohh! In fact self.figure is thread-safe :)
         self.plh_gauss = self.figure.plot(t_tick, v_tick, 'y-', label='multidim. pred', linewidth=3)
-        self.figure.hide_line(ploth=self.plh_gauss)
         self.figure.legend(loc='upper left')
+        if not self._tp['pl_guass']:
+            self.figure.hide_line(ploth=self.plh_gauss)
         self.figure.draw()
 
     def _linear_regression(self, update=False):
+        print("_linear_regression: ", self.t_near_past)
         near_past_index = int(np.interp(self.t_near_past, self.ts_t, self.indices))
         t_linear = np.atleast_2d(self.ts_t[near_past_index:]).T
         x_linear = np.atleast_2d(self.ts_x[near_past_index:]).T
@@ -194,7 +208,8 @@ class EnsemblePredictor(Predictor):
         regr.fit(t_linear, x_linear)
 
         self.plh_linear = self.figure.plot(t_linear_future, regr.predict(t_linear_future), color='green', label='linear pred', linewidth=3)
-        self.figure.hide_line(ploth=self.plh_linear)
+        if not self._tp['pl_linear']:
+            self.figure.hide_line(ploth=self.plh_linear)
         self.figure.legend(loc='upper left')
         self.figure.draw()
 
@@ -232,7 +247,8 @@ class EnsemblePredictor(Predictor):
         self.plh_gbr.extend(self.figure.fill(
             np.concatenate([t_ensemble_future, t_ensemble_future[::-1]]), np.concatenate([y_upper, y_lower[::-1]]),
             alpha=.5, fc='b', ec='None'))
-        self.figure.hide_line(ploth=self.plh_gbr)
+        if not self._tp['pl_gbr']:
+            self.figure.hide_line(ploth=self.plh_gbr)
         self.figure.legend(loc='upper left')
         self.figure.draw()
 
@@ -240,6 +256,7 @@ class EnsemblePredictor(Predictor):
         if self.ts_t.size < 10:
             return
 
+        update = False
         while not self.interrupted():
             self._event.clear()
             print("predictor:run: waiting for update...")
@@ -249,15 +266,18 @@ class EnsemblePredictor(Predictor):
             if self._data_set_changed:
                 print("Predictor: DATA_SET_CHANGED, but I don't give a damn about it")
             if self._tp_changed:
+                self.clear_all()
+                self.generate_time_values()
                 if self.interrupted():
                     return
-                self._multidimensional_gaussian()
+                self._multidimensional_gaussian(update)
                 if self.interrupted():
                     return
-                self._linear_regression()
+                self._linear_regression(update)
                 if self.interrupted():
                     return
-                self._gradient_boosting_regressor()
+                self._gradient_boosting_regressor(update)
+                update = True
 
     def interrupt(self):
         self._interrupted = True
@@ -278,6 +298,14 @@ class EnsemblePredictor(Predictor):
         self.legend()
         self.figure.draw()
 
+    def clear_all(self):
+        if self.plh_gbr:
+            self.figure.erase_line(ploth=self.plh_gbr)
+        if self.plh_gauss:
+            self.figure.erase_line(ploth=self.plh_gauss)
+        if self.plh_linear:
+            self.figure.erase_line(ploth=self.plh_linear)
+
     def legend(self):
         self.figure.legend(loc='upper left')
 
@@ -292,6 +320,7 @@ class EnsemblePredictor(Predictor):
     def update(self, **kwargs):
         self._tp_changed = True
         self._tp = kwargs
+        self.generate_time_params()
         self._event.set()
 
 
