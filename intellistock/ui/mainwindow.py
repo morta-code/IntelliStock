@@ -171,6 +171,23 @@ class MainWindow(QMainWindow):
         print(b)
         pass
 
+    def on_spinBox_eachNthSample_valueChanged(self, i: int):
+        # DO NOT REMOVE THIS CONDITION! (Signal emitted also with i as a string)
+        if type(i) is not int:
+            return
+        print("each: "+str(i))
+        # todo
+        pass
+
+    def on_spinBox_maxNrSamples_valueChanged(self, i: int):
+        # DO NOT REMOVE THIS CONDITION! (Signal emitted also with i as a string)
+        if type(i) is not int:
+            return
+        print("max: "+str(i))
+        # todo
+        pass
+
+
     def update_stocks(self, updated_stocks: dict):
         """Call it when new trades arrived.
         :param updated_stocks: is a names (str) keyed prize values.
