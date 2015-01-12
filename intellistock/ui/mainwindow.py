@@ -1,8 +1,10 @@
 
-from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, QIcon, QCloseEvent, QColor, QSystemTrayIcon, QMessageBox
+from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, QIcon, QCloseEvent, QColor, QSystemTrayIcon, \
+    QMessageBox, QWidget
 from PyQt4.QtCore import QSettings
 from PyQt4.Qt import Qt
 from intellistock.ui.ui_mainwindow import Ui_MainWindow
+from intellistock.ui.simulationwidget import SimulationWidget
 from intellistock.ui.navigatorplotwidget import NavigatorPlotWidget
 
 from intellistock.data import data
@@ -43,6 +45,9 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        self._sliders = ["near_future", "maxn", "near_past", "dt_samples", "dim"]
+        self._default_pred_params = list(map(lambda x: 0, self._sliders))
+
         # Initialize extras (not automateable by Designer)
         self.setWindowIcon(IconBank.main)
         self.run_result = QLabel("Kész.")  # todo: ui memberbe
@@ -52,6 +57,9 @@ class MainWindow(QMainWindow):
         self.ui.action_exit.setIcon(IconBank.exit)
         self.init_sliders()
         self.init_systray()
+        self.ui.simwidget = SimulationWidget(self)
+        self.ui.simwidget.setVisible(False)
+        self.ui.centralwidget.layout().addWidget(self.ui.simwidget)
 
         # Initialize members and settings
         self._settings = QSettings("IntelliStock", "IntelliStock")
@@ -61,14 +69,12 @@ class MainWindow(QMainWindow):
         self._datas = None
 
     def init_sliders(self):
-        self.ui.spin_near_future.setValue(self.ui.slider_near_future.value())
-        self.ui.spin_far_future.setValue(self.ui.slider_far_future.value())
-        self.ui.spin_near_past.setValue(self.ui.slider_near_past.value())
-        self.ui.spin_far_past.setValue(self.ui.slider_far_past.value())
-        self.ui.spin_near_future.setRange(self.ui.slider_near_future.minimum(), self.ui.slider_near_future.maximum())
-        self.ui.spin_far_future.setRange(self.ui.slider_far_future.minimum(), self.ui.slider_far_future.maximum())
-        self.ui.spin_near_past.setRange(self.ui.slider_near_past.minimum(), self.ui.slider_near_past.maximum())
-        self.ui.spin_far_past.setRange(self.ui.slider_far_past.minimum(), self.ui.slider_far_past.maximum())
+        for i in range(len(self._sliders)):
+            slider = getattr(self.ui, "slider_" + self._sliders[i])
+            spin = getattr(self.ui, "spin_" + self._sliders[i])
+            spin.setValue(slider.value())
+            spin.setRange(slider.minimum(), slider.maximum())
+            self._default_pred_params[i] = slider.value()
 
     def init_systray(self):
         self.ui.systray = QSystemTrayIcon(IconBank.main)
@@ -94,18 +100,15 @@ class MainWindow(QMainWindow):
             self.ui.listWidget_stocks.addItem(wi)
 
     def on_btn_default_params_pressed(self):
-        self.ui.slider_near_future.setValue(self.ui.slider_near_future.tickInterval())
-        self.ui.slider_far_future.setValue(self.ui.slider_far_future.tickInterval())
-        self.ui.slider_near_past.setValue(self.ui.slider_near_past.tickInterval())
-        self.ui.slider_far_past.setValue(self.ui.slider_far_past.tickInterval())
+        for i in range(len(self._sliders)):
+            getattr(self.ui, "slider_" + self._sliders[i]).setValue(self._default_pred_params[i])
 
     def collect_prediction_time_params(self):
-        return {"farp": self.ui.spin_far_past.value(),
-                "nearp": self.ui.spin_near_past.value(),
-                "farf": self.ui.spin_far_future.value(),
+        return {"nearp": self.ui.spin_near_past.value(),
                 "nearf": self.ui.spin_near_future.value(),
-                "maxn": self.ui.spinBox_maxNrSamples.value(),
-                "nth": self.ui.spinBox_eachNthSample.value(),
+                "maxn": self.ui.spin_maxn.value(),
+                "dim": self.ui.spin_dim.value(),
+                "dt": self.ui.spin_dt_samples.value(),
                 "pl_gbr": self.ui.checkBox_gradBoosting.isChecked(),
                 "pl_linear": self.ui.checkBox_expTendency.isChecked(),
                 "pl_guass": self.ui.checkBox_multidimPred.isChecked()}
@@ -125,10 +128,18 @@ class MainWindow(QMainWindow):
             self._favorites.append(item.text())
             item.setIcon(IconBank.star)
 
-    def on_action_simulation_triggered(self, *b):
-        if not b:
-            return
-        self.application.start_simulation(self.ui.listWidget_stocks.selectedItems()[0].text())
+    def on_action_simulation_toggled(self, b: bool):
+        # self.application.start_simulation(self.ui.listWidget_stocks.selectedItems()[0].text())
+        if b:
+            self.ui.mainwidget.setVisible(False)
+            self.ui.simwidget.setVisible(True)
+            self.ui.centralwidget.layout().setStretch(1, 7)
+            pass
+        else:
+            self.ui.mainwidget.setVisible(True)
+            self.ui.simwidget.setVisible(False)
+            self.ui.centralwidget.layout().setStretch(1, 7)
+            pass
 
     def on_lineEdit_search_textEdited(self, s: str):
         if s:
@@ -160,10 +171,8 @@ class MainWindow(QMainWindow):
     def on_listWidget_stocks_itemSelectionChanged(self):
         if self.ui.listWidget_stocks.selectedItems():
             self.ui.action_favorite.setEnabled(True)
-            self.ui.action_simulation.setEnabled(True)
         else:
             self.ui.action_favorite.setEnabled(False)
-            self.ui.action_simulation.setEnabled(False)
 
     def on_action_showPrediction_toggled(self, b: bool):
         self.ui.groupBox_time.setVisible(b)

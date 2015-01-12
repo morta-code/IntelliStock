@@ -72,3 +72,44 @@ def create_training_set(ts: np.array, nr_samples: int=100, nr_features: int=4, n
                 except StopIteration:
                     return xx[i::-1, :], y[i::-1], t[i::-1]
     return xx[::-1, :], y[::-1], t[::-1]
+
+
+def create_training_set_2(ts: np.array, nr_samples: int, nr_features: int, dt_between: float):
+    target = set()
+    gen = last_n_time_data(ts, nr_features+1)
+    xx = np.zeros((nr_samples, nr_features))
+    y = np.zeros(nr_samples)
+    t = np.zeros_like(y)
+    clip = next(gen)[0]
+    tclip = tuple(clip[1, :nr_features])
+    for i in range(nr_samples):
+        xx[i,:] = clip[1, :nr_features]
+        y[i] = clip[1, nr_features]
+        t[i] = clip[0, nr_features]
+        while t[i] - clip[0, nr_features] < dt_between:
+            target.add(tclip)
+            while tclip in target:
+                try:
+                    clip = next(gen)[0]
+                    tclip = tuple(clip[1, :nr_features])
+                except StopIteration:
+                    return xx[i::-1, :], y[i::-1], t[i::-1]
+    return xx[::-1, :], y[::-1], t[::-1]
+
+
+# def create_training_set_2(ts: np.array, nr_samples: int, nr_features: int, dt_between: float):
+#     gen = last_n_time_data(ts, nr_features+1)
+#     xx = np.zeros((nr_samples, nr_features))
+#     y = np.zeros(nr_samples)
+#     t = np.zeros_like(y)
+#     clip = next(gen)[0]
+#     for i in range(nr_samples):
+#         xx[i, :] = clip[1, :nr_features]
+#         y[i] = clip[1, nr_features]
+#         t[i] = clip[0, nr_features]
+#         while t[i] - clip[0, nr_features] < dt_between:
+#             try:
+#                 clip = next(gen)[0]
+#             except StopIteration:
+#                 return xx[i::-1, :], y[i::-1], t[i::-1]
+#     return xx[::-1, :], y[::-1], t[::-1]
