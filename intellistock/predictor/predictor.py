@@ -143,7 +143,7 @@ class EnsemblePredictor(Predictor):
             if self._tp["maxn"] != 0:
                 self.maxn = self._tp["maxn"]
             if self._tp["dim"] != 0:
-                self.nth = self._tp["dim"]
+                self.dim = self._tp["dim"]
             if self._tp["dt"] != 0:
                 self.dt_samples = self._tp["dt"] / 3600 / 24 / 365
         except KeyError as e:
@@ -168,6 +168,7 @@ class EnsemblePredictor(Predictor):
         self.t_min_prediction = min(self.t_present + self.near_future, 2 * self.t_present - self.t_begin)
 
     def _multidimensional_gaussian(self, update=False):
+        print(self.dim)
         # nr_training_samples = min(20, self.ts_t.size)
         # print(sorted(set(myList)))
         # xx, y, t = create_training_set(np.array([self.ts_t, self.ts_x]), nr_training_samples, self.dim, self.nth)

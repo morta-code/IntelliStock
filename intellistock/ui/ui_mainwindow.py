@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Mon Jan 12 23:39:33 2015
+# Created: Tue Jan 13 00:04:01 2015
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(734, 534)
+        MainWindow.resize(1008, 638)
         MainWindow.setWindowTitle(_fromUtf8("Stock"))
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
@@ -69,23 +69,16 @@ class Ui_MainWindow(object):
         self.progressBar_load.setObjectName(_fromUtf8("progressBar_load"))
         self.navigationLayout.addWidget(self.progressBar_load)
         self.horizontalLayout.addLayout(self.navigationLayout)
-        self.mainwidget = QtGui.QWidget(self.centralwidget)
-        self.mainwidget.setObjectName(_fromUtf8("mainwidget"))
-        self.horizontalLayout_3 = QtGui.QHBoxLayout(self.mainwidget)
-        self.horizontalLayout_3.setSpacing(0)
-        self.horizontalLayout_3.setSizeConstraint(QtGui.QLayout.SetMinimumSize)
-        self.horizontalLayout_3.setMargin(0)
-        self.horizontalLayout_3.setObjectName(_fromUtf8("horizontalLayout_3"))
         self.contentLayout = QtGui.QVBoxLayout()
         self.contentLayout.setObjectName(_fromUtf8("contentLayout"))
-        self.tabWidget = QtGui.QTabWidget(self.mainwidget)
+        self.tabWidget = QtGui.QTabWidget(self.centralwidget)
         self.tabWidget.setUsesScrollButtons(True)
         self.tabWidget.setTabsClosable(True)
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.contentLayout.addWidget(self.tabWidget)
         self.horizontalLayout_predictionOptions = QtGui.QHBoxLayout()
         self.horizontalLayout_predictionOptions.setObjectName(_fromUtf8("horizontalLayout_predictionOptions"))
-        self.groupBox_predChecks = QtGui.QGroupBox(self.mainwidget)
+        self.groupBox_predChecks = QtGui.QGroupBox(self.centralwidget)
         self.groupBox_predChecks.setObjectName(_fromUtf8("groupBox_predChecks"))
         self.verticalLayout = QtGui.QVBoxLayout(self.groupBox_predChecks)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
@@ -99,7 +92,7 @@ class Ui_MainWindow(object):
         self.checkBox_gradBoosting.setObjectName(_fromUtf8("checkBox_gradBoosting"))
         self.verticalLayout.addWidget(self.checkBox_gradBoosting)
         self.horizontalLayout_predictionOptions.addWidget(self.groupBox_predChecks)
-        self.groupBox_time = QtGui.QGroupBox(self.mainwidget)
+        self.groupBox_time = QtGui.QGroupBox(self.centralwidget)
         self.groupBox_time.setObjectName(_fromUtf8("groupBox_time"))
         self.gridLayout = QtGui.QGridLayout(self.groupBox_time)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
@@ -188,7 +181,12 @@ class Ui_MainWindow(object):
         self.slider_maxn.setObjectName(_fromUtf8("slider_maxn"))
         self.gridLayout.addWidget(self.slider_maxn, 2, 1, 1, 1)
         self.slider_dim = QtGui.QSlider(self.groupBox_time)
+        self.slider_dim.setMinimum(1)
+        self.slider_dim.setMaximum(20)
+        self.slider_dim.setProperty("value", 6)
         self.slider_dim.setOrientation(QtCore.Qt.Horizontal)
+        self.slider_dim.setTickPosition(QtGui.QSlider.TicksBelow)
+        self.slider_dim.setTickInterval(4)
         self.slider_dim.setObjectName(_fromUtf8("slider_dim"))
         self.gridLayout.addWidget(self.slider_dim, 4, 1, 1, 1)
         self.spin_dt_samples = QtGui.QSpinBox(self.groupBox_time)
@@ -196,10 +194,9 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.spin_dt_samples, 3, 2, 1, 1)
         self.horizontalLayout_predictionOptions.addWidget(self.groupBox_time)
         self.contentLayout.addLayout(self.horizontalLayout_predictionOptions)
-        self.horizontalLayout_3.addLayout(self.contentLayout)
-        self.horizontalLayout.addWidget(self.mainwidget)
+        self.horizontalLayout.addLayout(self.contentLayout)
         self.horizontalLayout.setStretch(0, 1)
-        self.horizontalLayout.setStretch(1, 7)
+        self.horizontalLayout.setStretch(1, 6)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1008, 25))
@@ -244,7 +241,7 @@ class Ui_MainWindow(object):
         self.action_favorite.setEnabled(False)
         self.action_favorite.setObjectName(_fromUtf8("action_favorite"))
         self.action_simulation = QtGui.QAction(MainWindow)
-        self.action_simulation.setCheckable(True)
+        self.action_simulation.setEnabled(False)
         self.action_simulation.setObjectName(_fromUtf8("action_simulation"))
         self.action_showPrediction = QtGui.QAction(MainWindow)
         self.action_showPrediction.setCheckable(True)
