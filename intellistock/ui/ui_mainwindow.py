@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Mon Jan 12 16:54:52 2015
+# Created: Mon Jan 12 17:36:30 2015
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -91,8 +91,18 @@ class Ui_MainWindow(object):
         self.checkBox_gradBoosting = QtGui.QCheckBox(self.groupBox_predChecks)
         self.checkBox_gradBoosting.setObjectName(_fromUtf8("checkBox_gradBoosting"))
         self.verticalLayout.addWidget(self.checkBox_gradBoosting)
-        spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
-        self.verticalLayout.addItem(spacerItem)
+        self.label = QtGui.QLabel(self.groupBox_predChecks)
+        self.label.setObjectName(_fromUtf8("label"))
+        self.verticalLayout.addWidget(self.label)
+        self.spinBox_maxNrSamples = QtGui.QSpinBox(self.groupBox_predChecks)
+        self.spinBox_maxNrSamples.setObjectName(_fromUtf8("spinBox_maxNrSamples"))
+        self.verticalLayout.addWidget(self.spinBox_maxNrSamples)
+        self.label_2 = QtGui.QLabel(self.groupBox_predChecks)
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.verticalLayout.addWidget(self.label_2)
+        self.spinBox_eachNthSample = QtGui.QSpinBox(self.groupBox_predChecks)
+        self.spinBox_eachNthSample.setObjectName(_fromUtf8("spinBox_eachNthSample"))
+        self.verticalLayout.addWidget(self.spinBox_eachNthSample)
         self.horizontalLayout_predictionOptions.addWidget(self.groupBox_predChecks)
         self.groupBox_time = QtGui.QGroupBox(self.centralwidget)
         self.groupBox_time.setObjectName(_fromUtf8("groupBox_time"))
@@ -166,8 +176,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
         self.horizontalLayout_2.setSpacing(5)
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
-        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem1)
+        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem)
         self.btn_default_params = QtGui.QPushButton(self.groupBox_time)
         self.btn_default_params.setDefault(False)
         self.btn_default_params.setFlat(False)
@@ -272,6 +282,8 @@ class Ui_MainWindow(object):
         self.checkBox_expTendency.setText(_translate("MainWindow", "Expected Tendency", None))
         self.checkBox_multidimPred.setText(_translate("MainWindow", "Gaussian Prediction", None))
         self.checkBox_gradBoosting.setText(_translate("MainWindow", "Gradient Boosting", None))
+        self.label.setText(_translate("MainWindow", "Max nr. of samples:", None))
+        self.label_2.setText(_translate("MainWindow", "Each n-th. sample:", None))
         self.groupBox_time.setTitle(_translate("MainWindow", "Predikciós időparaméterek", None))
         self.label_near_past.setText(_translate("MainWindow", "Predikciós közelmúlt [óra]", None))
         self.label_far_past_2.setText(_translate("MainWindow", "Predikálandó távoljövő [nap]", None))
