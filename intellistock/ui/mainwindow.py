@@ -98,9 +98,17 @@ class MainWindow(QMainWindow):
         self.ui.slider_near_past.setValue(self.ui.slider_near_past.tickInterval())
         self.ui.slider_far_past.setValue(self.ui.slider_far_past.tickInterval())
 
+    def collect_prediction_time_params(self):
+        return {"farp": self.ui.spin_far_past.value(),
+                "nearp": self.ui.spin_near_past.value(),
+                "farf": self.ui.spin_far_future.value(),
+                "nearf": self.ui.spin_near_future.value(),
+                "maxn": self.ui.spinBox_maxNrSamples.value(),
+                "nth": self.ui.spinBox_eachNthSample.value()}
+
     def on_btn_update_all_pressed(self):
         """"""
-        self.application.update_data_processor(self.ui.listWidget_stocks.currentItem().text())
+        self.application.update_data_processor(self.ui.listWidget_stocks.currentItem().text(),**self.collect_prediction_time_params())
 
     def on_action_favorite_triggered(self, *b):
         if not b:
@@ -164,22 +172,19 @@ class MainWindow(QMainWindow):
     def on_checkBox_multidimPred_toggled(self, b: bool):
         self.application.data_processors[self.ui.listWidget_stocks.currentItem().text()].predictor.hide(plh=self.application.predictor_cls.PLH_GAUSSIAN, hide=not b)
 
-    def on_spinBox_eachNthSample_valueChanged(self, i: int):
-        # DO NOT REMOVE THIS CONDITION! (Signal emitted also with i as a string)
-        if type(i) is not int:
-            return
-        print("each: "+str(i))
-        # todo
-        pass
-
-    def on_spinBox_maxNrSamples_valueChanged(self, i: int):
-        # DO NOT REMOVE THIS CONDITION! (Signal emitted also with i as a string)
-        if type(i) is not int:
-            return
-        print("max: "+str(i))
-        # todo
-        pass
-
+    # def on_spinBox_eachNthSample_valueChanged(self, i: int):
+    #     # DO NOT REMOVE THIS CONDITION! (Signal emitted also with i as a string)
+    #     if type(i) is not int:
+    #         return
+    #     self._ploter_params[self.ui.listWidget_stocks.currentItem().text()]["nth"] = i
+    #     pass
+    #
+    # def on_spinBox_maxNrSamples_valueChanged(self, i: int):
+    #     # DO NOT REMOVE THIS CONDITION! (Signal emitted also with i as a string)
+    #     if type(i) is not int:
+    #         return
+    #     self._ploter_params[self.ui.listWidget_stocks.currentItem().text()]["maxn"] = i
+    #     pass
 
     def update_stocks(self, updated_stocks: dict):
         """Call it when new trades arrived.
@@ -209,7 +214,7 @@ class MainWindow(QMainWindow):
         npw = NavigatorPlotWidget(self)
         self._plotters[name] = npw
         self.ui.tabWidget.setCurrentIndex(self.ui.tabWidget.addTab(npw, name))
-        self.application.launch_data_processor(name, npw)
+        self.application.launch_data_processor(name, npw, **self.collect_prediction_time_params())
 
     def kill_plotter(self, index: int):
         name = self.ui.tabWidget.tabText(index)
