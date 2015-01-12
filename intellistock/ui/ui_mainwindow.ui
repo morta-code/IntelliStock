@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>767</width>
-    <height>511</height>
+    <width>734</width>
+    <height>534</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -116,202 +116,252 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox_time">
-        <property name="title">
-         <string>Predikciós időparaméterek</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_near_past">
-           <property name="text">
-            <string>Predikciós közelmúlt [óra]</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QSlider" name="slider_near_future">
-           <property name="minimum">
-            <number>0</number>
-           </property>
-           <property name="maximum">
-            <number>72</number>
-           </property>
-           <property name="value">
-            <number>24</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="tickPosition">
-            <enum>QSlider::TicksBelow</enum>
-           </property>
-           <property name="tickInterval">
-            <number>24</number>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_far_past_2">
-           <property name="text">
-            <string>Predikálandó távoljövő [nap]</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QSlider" name="slider_far_past">
-           <property name="minimum">
-            <number>0</number>
-           </property>
-           <property name="maximum">
-            <number>90</number>
-           </property>
-           <property name="value">
-            <number>15</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="tickPosition">
-            <enum>QSlider::TicksBelow</enum>
-           </property>
-           <property name="tickInterval">
-            <number>15</number>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QSlider" name="slider_far_future">
-           <property name="minimum">
-            <number>0</number>
-           </property>
-           <property name="maximum">
-            <number>90</number>
-           </property>
-           <property name="value">
-            <number>15</number>
-           </property>
-           <property name="sliderPosition">
-            <number>15</number>
-           </property>
-           <property name="tracking">
-            <bool>true</bool>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="invertedAppearance">
-            <bool>false</bool>
-           </property>
-           <property name="invertedControls">
-            <bool>true</bool>
-           </property>
-           <property name="tickPosition">
-            <enum>QSlider::TicksBelow</enum>
-           </property>
-           <property name="tickInterval">
-            <number>15</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_far_past">
-           <property name="text">
-            <string>Predikciós távolmúlt [nap]</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_near_future">
-           <property name="text">
-            <string>Predikálandó közeljövő [óra]</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QSpinBox" name="spin_near_past"/>
-         </item>
-         <item row="1" column="2">
-          <widget class="QSpinBox" name="spin_far_past"/>
-         </item>
-         <item row="0" column="1">
-          <widget class="QSlider" name="slider_near_past">
-           <property name="minimum">
-            <number>0</number>
-           </property>
-           <property name="maximum">
-            <number>240</number>
-           </property>
-           <property name="singleStep">
-            <number>1</number>
-           </property>
-           <property name="value">
-            <number>24</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="tickPosition">
-            <enum>QSlider::TicksBelow</enum>
-           </property>
-           <property name="tickInterval">
-            <number>24</number>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="2">
-          <widget class="QSpinBox" name="spin_near_future"/>
-         </item>
-         <item row="3" column="2">
-          <widget class="QSpinBox" name="spin_far_future"/>
-         </item>
-         <item row="5" column="0" colspan="3">
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <property name="spacing">
-            <number>5</number>
-           </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_predictionOptions">
+        <item>
+         <widget class="QGroupBox" name="groupBox_predChecks">
+          <property name="title">
+           <string>Predikciók</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
            <item>
-            <spacer name="horizontalSpacer">
+            <widget class="QCheckBox" name="checkBox_expTendency">
+             <property name="text">
+              <string>Expected Tendency</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="checkBox_multidimPred">
+             <property name="text">
+              <string>Gaussian Prediction</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="checkBox_gradBoosting">
+             <property name="text">
+              <string>Gradient Boosting</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Preferred</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>40</width>
-               <height>20</height>
+               <width>20</width>
+               <height>40</height>
               </size>
              </property>
             </spacer>
            </item>
-           <item>
-            <widget class="QPushButton" name="btn_default_params">
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_time">
+          <property name="title">
+           <string>Predikciós időparaméterek</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_near_past">
              <property name="text">
-              <string>Alapértelmezett</string>
-             </property>
-             <property name="default">
-              <bool>false</bool>
-             </property>
-             <property name="flat">
-              <bool>false</bool>
+              <string>Predikciós közelmúlt [óra]</string>
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QPushButton" name="btn_update_all">
-             <property name="enabled">
+           <item row="2" column="1">
+            <widget class="QSlider" name="slider_near_future">
+             <property name="minimum">
+              <number>0</number>
+             </property>
+             <property name="maximum">
+              <number>72</number>
+             </property>
+             <property name="value">
+              <number>24</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="tickPosition">
+              <enum>QSlider::TicksBelow</enum>
+             </property>
+             <property name="tickInterval">
+              <number>24</number>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_far_past_2">
+             <property name="text">
+              <string>Predikálandó távoljövő [nap]</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QSlider" name="slider_far_past">
+             <property name="minimum">
+              <number>0</number>
+             </property>
+             <property name="maximum">
+              <number>90</number>
+             </property>
+             <property name="value">
+              <number>15</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="tickPosition">
+              <enum>QSlider::TicksBelow</enum>
+             </property>
+             <property name="tickInterval">
+              <number>15</number>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QSlider" name="slider_far_future">
+             <property name="minimum">
+              <number>0</number>
+             </property>
+             <property name="maximum">
+              <number>90</number>
+             </property>
+             <property name="value">
+              <number>15</number>
+             </property>
+             <property name="sliderPosition">
+              <number>15</number>
+             </property>
+             <property name="tracking">
               <bool>true</bool>
              </property>
-             <property name="mouseTracking">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="invertedAppearance">
               <bool>false</bool>
              </property>
-             <property name="text">
-              <string>Frissítés</string>
+             <property name="invertedControls">
+              <bool>true</bool>
+             </property>
+             <property name="tickPosition">
+              <enum>QSlider::TicksBelow</enum>
+             </property>
+             <property name="tickInterval">
+              <number>15</number>
              </property>
             </widget>
            </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_far_past">
+             <property name="text">
+              <string>Predikciós távolmúlt [nap]</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_near_future">
+             <property name="text">
+              <string>Predikálandó közeljövő [óra]</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QSpinBox" name="spin_near_past"/>
+           </item>
+           <item row="1" column="2">
+            <widget class="QSpinBox" name="spin_far_past"/>
+           </item>
+           <item row="0" column="1">
+            <widget class="QSlider" name="slider_near_past">
+             <property name="minimum">
+              <number>0</number>
+             </property>
+             <property name="maximum">
+              <number>240</number>
+             </property>
+             <property name="singleStep">
+              <number>1</number>
+             </property>
+             <property name="value">
+              <number>24</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="tickPosition">
+              <enum>QSlider::TicksBelow</enum>
+             </property>
+             <property name="tickInterval">
+              <number>24</number>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QSpinBox" name="spin_near_future"/>
+           </item>
+           <item row="3" column="2">
+            <widget class="QSpinBox" name="spin_far_future"/>
+           </item>
+           <item row="5" column="0" colspan="3">
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <property name="spacing">
+              <number>5</number>
+             </property>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_default_params">
+               <property name="text">
+                <string>Alapértelmezett</string>
+               </property>
+               <property name="default">
+                <bool>false</bool>
+               </property>
+               <property name="flat">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_update_all">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="mouseTracking">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Frissítés</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
           </layout>
-         </item>
-        </layout>
-       </widget>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -322,7 +372,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>767</width>
+     <width>734</width>
      <height>21</height>
     </rect>
    </property>

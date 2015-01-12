@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Mon Jan 12 15:49:22 2015
+# Created: Mon Jan 12 16:54:52 2015
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(767, 511)
+        MainWindow.resize(734, 534)
         MainWindow.setWindowTitle(_fromUtf8("Stock"))
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
@@ -76,6 +76,24 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabsClosable(True)
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.contentLayout.addWidget(self.tabWidget)
+        self.horizontalLayout_predictionOptions = QtGui.QHBoxLayout()
+        self.horizontalLayout_predictionOptions.setObjectName(_fromUtf8("horizontalLayout_predictionOptions"))
+        self.groupBox_predChecks = QtGui.QGroupBox(self.centralwidget)
+        self.groupBox_predChecks.setObjectName(_fromUtf8("groupBox_predChecks"))
+        self.verticalLayout = QtGui.QVBoxLayout(self.groupBox_predChecks)
+        self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
+        self.checkBox_expTendency = QtGui.QCheckBox(self.groupBox_predChecks)
+        self.checkBox_expTendency.setObjectName(_fromUtf8("checkBox_expTendency"))
+        self.verticalLayout.addWidget(self.checkBox_expTendency)
+        self.checkBox_multidimPred = QtGui.QCheckBox(self.groupBox_predChecks)
+        self.checkBox_multidimPred.setObjectName(_fromUtf8("checkBox_multidimPred"))
+        self.verticalLayout.addWidget(self.checkBox_multidimPred)
+        self.checkBox_gradBoosting = QtGui.QCheckBox(self.groupBox_predChecks)
+        self.checkBox_gradBoosting.setObjectName(_fromUtf8("checkBox_gradBoosting"))
+        self.verticalLayout.addWidget(self.checkBox_gradBoosting)
+        spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
+        self.verticalLayout.addItem(spacerItem)
+        self.horizontalLayout_predictionOptions.addWidget(self.groupBox_predChecks)
         self.groupBox_time = QtGui.QGroupBox(self.centralwidget)
         self.groupBox_time.setObjectName(_fromUtf8("groupBox_time"))
         self.gridLayout = QtGui.QGridLayout(self.groupBox_time)
@@ -148,8 +166,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
         self.horizontalLayout_2.setSpacing(5)
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
-        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem)
+        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem1)
         self.btn_default_params = QtGui.QPushButton(self.groupBox_time)
         self.btn_default_params.setDefault(False)
         self.btn_default_params.setFlat(False)
@@ -161,13 +179,14 @@ class Ui_MainWindow(object):
         self.btn_update_all.setObjectName(_fromUtf8("btn_update_all"))
         self.horizontalLayout_2.addWidget(self.btn_update_all)
         self.gridLayout.addLayout(self.horizontalLayout_2, 5, 0, 1, 3)
-        self.contentLayout.addWidget(self.groupBox_time)
+        self.horizontalLayout_predictionOptions.addWidget(self.groupBox_time)
+        self.contentLayout.addLayout(self.horizontalLayout_predictionOptions)
         self.horizontalLayout.addLayout(self.contentLayout)
         self.horizontalLayout.setStretch(0, 1)
         self.horizontalLayout.setStretch(1, 6)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 767, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 734, 21))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuStock = QtGui.QMenu(self.menubar)
         self.menuStock.setObjectName(_fromUtf8("menuStock"))
@@ -249,6 +268,10 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         self.lineEdit_search.setPlaceholderText(_translate("MainWindow", "gyorskeresés", None))
+        self.groupBox_predChecks.setTitle(_translate("MainWindow", "Predikciók", None))
+        self.checkBox_expTendency.setText(_translate("MainWindow", "Expected Tendency", None))
+        self.checkBox_multidimPred.setText(_translate("MainWindow", "Gaussian Prediction", None))
+        self.checkBox_gradBoosting.setText(_translate("MainWindow", "Gradient Boosting", None))
         self.groupBox_time.setTitle(_translate("MainWindow", "Predikciós időparaméterek", None))
         self.label_near_past.setText(_translate("MainWindow", "Predikciós közelmúlt [óra]", None))
         self.label_far_past_2.setText(_translate("MainWindow", "Predikálandó távoljövő [nap]", None))

@@ -1,5 +1,5 @@
 
-from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, QIcon, QCloseEvent, QColor, QSystemTrayIcon
+from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, QIcon, QCloseEvent, QColor, QSystemTrayIcon, QMessageBox
 from PyQt4.QtCore import QSettings
 from PyQt4.Qt import Qt
 from intellistock.ui.ui_mainwindow import Ui_MainWindow
@@ -113,7 +113,6 @@ class MainWindow(QMainWindow):
             self._favorites.append(item.text())
             item.setIcon(IconBank.star)
 
-
     def on_action_simulation_triggered(self, *b):
         if not b:
             return
@@ -131,7 +130,11 @@ class MainWindow(QMainWindow):
             for item in self.ui.listWidget_stocks.findItems("", Qt.MatchStartsWith):
                 self.ui.listWidget_stocks.setItemHidden(item, False)
 
-
+    def on_action_aboutStock_triggered(self):
+        about = QMessageBox(self)
+        about.setWindowTitle("Az IntelliStock-ról")
+        about.setText("Ez nagyon király!")
+        about.show()
 
     def on_listWidget_stocks_itemActivated(self, item: QListWidgetItem):
         if item.text() in self._plotters.keys():
@@ -151,6 +154,22 @@ class MainWindow(QMainWindow):
 
     def on_action_showPrediction_toggled(self, b: bool):
         self.ui.groupBox_time.setVisible(b)
+        self.ui.groupBox_predChecks.setVisible(b)
+
+    def on_checkBox_expTendency_toggled(self, b: bool):
+        # todo
+        print(b)
+        pass
+
+    def on_checkBox_gradBoosting_toggled(self, b: bool):
+        # todo
+        print(b)
+        pass
+
+    def on_checkBox_multidimPred_toggled(self, b: bool):
+        # todo
+        print(b)
+        pass
 
     def update_stocks(self, updated_stocks: dict):
         """Call it when new trades arrived.
