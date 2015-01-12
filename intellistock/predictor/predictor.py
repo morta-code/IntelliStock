@@ -7,7 +7,7 @@
 
 from intellistock.data.data import int2year
 from intellistock.ui.plotwidget import PlotWidget
-from intellistock.predictor.predictor_helper import create_training_set
+from intellistock.predictor.predictor_helper import create_training_set, create_training_set_2
 
 from threading import Thread, Event
 
@@ -110,7 +110,7 @@ class EnsemblePredictor(Predictor):
 
         # declare other attributes
         self.indices = self.nr_data = None
-        self.t_begin = self.t_end = self.t_far_past = self.t_near_past = self.t_max_prediction = None
+        self.t_begin = self.t_present = self.t_far_past = self.t_near_past = self.t_max_prediction = self.t_min_prediction = None
         self.plh_linear = self.plh_gauss = self.plh_gbr = None
 
         # event object for simulating the wait-notify pattern
@@ -128,22 +128,26 @@ class EnsemblePredictor(Predictor):
         self.near_past = 1 / 365
         self.far_past = 60 / 365
 
-        self.maxn = 6
+        self.maxn = 1000
         self.nth = 1
+        self.dim = 6
+        self.dt_samples = 10 / 3600 / 24 / 365
 
     def generate_time_params(self):
         try:
             self.near_past = self._tp["nearp"] / 24 / 365
-            self.far_past = self._tp["farp"] / 365
+            # self.far_past = self._tp["farp"] / 365
             self.near_future = self._tp["nearf"] / 24 / 365
-            self.far_future = self._tp["farf"] / 365
+            # self.far_future = self._tp["farf"] / 365
 
             if self._tp["maxn"] != 0:
                 self.maxn = self._tp["maxn"]
-            if self._tp["nth"] != 0:
-                self.nth = self._tp["nth"]
-        finally:
-            pass
+            if self._tp["dim"] != 0:
+                self.nth = self._tp["dim"]
+            if self._tp["dt"] != 0:
+                self.dt_samples = self._tp["dt"] / 3600 / 24 / 365
+        except KeyError as e:
+            print('KeyError:', e)
 
     def set_figure(self, figure: PlotWidget=None):
         self.figure = figure
@@ -157,19 +161,21 @@ class EnsemblePredictor(Predictor):
 
     def generate_time_values(self):
         self.t_begin = self.ts_t[0]
-        self.t_end = self.ts_t[self.nr_data-1]
-        self.t_far_past = max(self.t_end - self.far_past, self.t_begin)
-        self.t_near_past = max(self.t_end - self.near_past, self.t_begin)
-        self.t_max_prediction = min(self.t_end + self.far_future, 2 * self.t_end - self.t_begin)
+        self.t_present = self.ts_t[self.nr_data-1]
+        self.t_far_past = max(self.t_present - self.far_past, self.t_begin)
+        self.t_near_past = max(self.t_present - self.near_past, self.t_begin)
+        self.t_max_prediction = min(self.t_present + self.far_future, 2 * self.t_present - self.t_begin)
+        self.t_min_prediction = min(self.t_present + self.near_future, 2 * self.t_present - self.t_begin)
 
     def _multidimensional_gaussian(self, update=False):
-        print(self._tp)
-        nr_training_samples = min(20, self.ts_t.size)
-        xx, y, t = create_training_set(np.array([self.ts_t, self.ts_x]), nr_training_samples, self.maxn, self.nth)
+        print(self._tp, self.dt_samples)
+        # nr_training_samples = min(20, self.ts_t.size)
+        # print(sorted(set(myList)))
+        # xx, y, t = create_training_set(np.array([self.ts_t, self.ts_x]), nr_training_samples, self.dim, self.nth)
+        xx, y, t = create_training_set_2(np.array([self.ts_t, self.ts_x]), self.maxn, self.dim, self.dt_samples)
 
         # Instantiate a Gaussian Process model
-        gp = GaussianProcess(corr='cubic', theta0=1e-2, thetaL=1e-4, thetaU=1e-1,
-                             random_start=100)
+        gp = GaussianProcess(corr='cubic', theta0=1e-2, thetaL=1e-4, thetaU=1e-1, random_start=100)
         gp.fit(xx, y)
 
         prediction_ticks = 20
@@ -180,7 +186,7 @@ class EnsemblePredictor(Predictor):
         query = np.roll(query,shift=-1)
         step = (t[len(xx)-1] - t[0]) / prediction_ticks
 
-        t_tick = [self.t_end]
+        t_tick = [self.t_present]
         v_tick = [y[len(xx)-1]]
         # step = 0.01 / 365
         for i in range(prediction_ticks):
@@ -192,17 +198,18 @@ class EnsemblePredictor(Predictor):
 
         # modifying UI on a background thread! Ohh! In fact self.figure is thread-safe :)
         self.plh_gauss = self.figure.plot(t_tick, v_tick, 'y-', label='multidim. pred', linewidth=3)
+        self.plh_gauss.extend(self.figure.plot(t, y, 'b.', markersize=10, color='red', label='observations'))
         self.figure.legend(loc='upper left')
         if not self._tp['pl_guass']:
             self.figure.hide_line(ploth=self.plh_gauss)
         self.figure.draw()
 
     def _linear_regression(self, update=False):
-        print("_linear_regression: ", self.t_near_past)
+        print("_linear_regression: ", self.t_near_past, self.t_min_prediction)
         near_past_index = int(np.interp(self.t_near_past, self.ts_t, self.indices))
         t_linear = np.atleast_2d(self.ts_t[near_past_index:]).T
         x_linear = np.atleast_2d(self.ts_x[near_past_index:]).T
-        t_linear_future = np.atleast_2d(np.linspace(self.t_near_past, self.t_max_prediction, 1000)).T
+        t_linear_future = np.atleast_2d(np.linspace(self.t_near_past, self.t_min_prediction, 1000)).T
 
         regr = linear_model.LinearRegression()
         regr.fit(t_linear, x_linear)
@@ -217,7 +224,7 @@ class EnsemblePredictor(Predictor):
         far_past_index = int(np.interp(self.t_far_past, self.ts_t, self.indices))
         t_ensemble = np.atleast_2d(self.ts_t[far_past_index:]).T
         x_ensemble = np.atleast_2d(self.ts_x[far_past_index:]).T.ravel()
-        t_ensemble_future = np.atleast_2d(np.linspace(self.t_far_past, self.t_max_prediction, 10000)).T
+        t_ensemble_future = np.atleast_2d(np.linspace(self.t_far_past, self.t_present, 10000)).T
 
         alpha = 0.95
         clf = GradientBoostingRegressor(loss='quantile', alpha=alpha,
@@ -369,7 +376,7 @@ class DataProcessor:
             self.predictor.update(**kwargs)
 
     def _plot_observations(self):
-        self.figure.plot(self.ts_t, self.ts_x, 'b.-', markersize=10, label='observations')
+        self.figure.plot(self.ts_t, self.ts_x, 'b.-', markersize=6, label='observations')
         self.figure.set_axes_labels("time [year]", "stock price [Ft]")
         self.figure.set_axis_offset()
         self.figure.legend(loc='upper left')
