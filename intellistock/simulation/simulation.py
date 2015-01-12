@@ -2,8 +2,9 @@ from concurrent.futures import ThreadPoolExecutor
 import time
 import datetime
 
+
 class Simulation:
-    
+
     def __init__(self, application):
         self.application = application
         self.speed = -1
@@ -11,7 +12,7 @@ class Simulation:
         self.finish = False
         self.start_time = datetime.datetime.now()
         self.money = 0
-        self.stocks = ()
+        self.stocks = {}
         self.current_time = datetime.datetime.now()
         self.interest = 0.003 #Kötési díj
     
@@ -54,7 +55,10 @@ class Simulation:
     def buy_stock(self, stock_name, amount):
         price = self.application.get_stock_price(stock_name, self.current_time)*amount
         self.money -= price + abs(price) * self.interest
-        self.stocks[stock_name] += amount
+        if stock_name in self.stocks:
+            self.stocks[stock_name] += amount
+        else:
+            self.stocks[stock_name] = amount
         self.application.lock.acquire()
         try:
             self.update_stock_list()
