@@ -13,6 +13,7 @@ class Simulation:
         self.money = 0
         self.stocks = ()
         self.current_time = datetime.datetime.now()
+        self.interest = 0.003 #Kötési díj
     
     def set_start_time(self, start_time):
         """ Sets the start time of the simulation """
@@ -25,16 +26,23 @@ class Simulation:
         pass
 
     def set_money(self, money):
-        """ Sets the speed of the simulation. Default (-1) is maximum speed (no game, just calculations)"""
+        """ Sets the starting money of the simulation"""
         self.money = money
+        pass
+
+    def set_interest(self, interest):
+        """ Sets the interest of a transaction"""
+        self.interest = interest
         pass
 
     def do_simulation(self):
         """
         Executes on background thread
         """
+        print("Starting simulation")
         self.current_time = self.start_time
         while not self.finish:
+            print("Simulation step")
             time.sleep(self.interval)
             self.current_time += self.speed*self.interval
             # TODO: main thread
@@ -42,8 +50,14 @@ class Simulation:
 
     def buy_stock(self, stock_name, amount):
         # TODO: thread safe
-        self.money -= self.application.get_stock_price(stock_name, self.current_time)*amount
+        price = self.application.get_stock_price(stock_name, self.current_time)*amount ;
+        self.money -= price + abs(price) * self.interest
         self.stocks[stock_name] += amount
+        self.update_stock_list()
+
+    def update_stock_list(self):
+        # TODO: thread safe
+        self.application.set_my_stocks(self.stocks)
 
     def sell_stock(self, stock_name, amount):
         # TODO: thread safe

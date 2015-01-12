@@ -79,10 +79,22 @@ class Application:
 
     def start_simulation(self, name: str):
         simulation = Simulation(self)
+        simulation.set_money(100000)
+        simulation.set_interest(0.003)
+        simulation.set_speed(100)
+        simulation.set_start_time(datetime(2014, 1, 1))
         simulation.start_simulation()
 
     def receive_simulation_result(self, simulation: Simulation, simulation_result):
         self.window.update_simulation_results(simulation_result)
+        pass
+
+    def set_my_stocks(self, stocks):
+        #TODO
+        pass
+
+    def get_stock_price(self, stock_name, data_time=datetime.now()):
+        #TODO
         pass
 
 application = None
