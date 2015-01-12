@@ -57,9 +57,7 @@ class MainWindow(QMainWindow):
         self.ui.action_exit.setIcon(IconBank.exit)
         self.init_sliders()
         self.init_systray()
-        self.ui.simwidget = SimulationWidget(self)
-        self.ui.simwidget.setVisible(False)
-        self.ui.centralwidget.layout().addWidget(self.ui.simwidget)
+        self.init_simwidget()
 
         # Initialize members and settings
         self._settings = QSettings("IntelliStock", "IntelliStock")
@@ -80,6 +78,16 @@ class MainWindow(QMainWindow):
         self.ui.systray = QSystemTrayIcon(IconBank.main)
         self.ui.systray.setToolTip("IntelliStock")
         self.ui.systray.show()
+
+    def init_simwidget(self):
+        self.ui.simwidget = SimulationWidget(self)
+        sw = self.ui.simwidget
+        sw.setVisible(False)
+        self.ui.centralwidget.layout().addWidget(sw)
+        sw.ui.button_start.pressed.connect(lambda : self.application.start_simulation(sw.ui.spin_cash.value(),
+                                                (sw.ui.dial_transactFee.value())/100, sw.ui.dial_speed.value(),
+                                                sw.start_datetime()))
+        sw.ui.button_stop.pressed.connect(self.application.stop_simulation)
 
     def initialize(self, initial_stocks: dict):
         """ Initialize datas only for opening window.
@@ -129,7 +137,6 @@ class MainWindow(QMainWindow):
             item.setIcon(IconBank.star)
 
     def on_action_simulation_toggled(self, b: bool):
-        # self.application.start_simulation(self.ui.listWidget_stocks.selectedItems()[0].text())
         if b:
             self.ui.mainwidget.setVisible(False)
             self.ui.simwidget.setVisible(True)
