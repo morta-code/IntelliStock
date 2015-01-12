@@ -1,4 +1,5 @@
 import sys
+from threading import Lock
 import time
 from intellistock.simulation.simulation import Simulation
 from intellistock.ui import mainwindow
@@ -19,6 +20,8 @@ class Application:
         self.predictor_cls = EnsemblePredictor
         # list of actually running data processors, which should be notified on every changes of the data stream
         self.data_processors = {}
+        self.simulation = None
+        self.lock = Lock()
 
     def load(self):
         # todo: az importok és a gui betöltés átszervezésésvel gyorsítható az indítás. Majd a végén.
@@ -38,11 +41,8 @@ class Application:
     def halt(self):
         for name, dp in self.data_processors.items():
             dp.interrupt()
-
-    def request_stock_values(self, name: str):
-        """ TODO: STUB """
-        self.window.stock_values("OTP",
-                                 [(datetime(2014, 11, 27, 9, 32), 12400, 2), (datetime(2014, 11, 27, 9, 35), 12350, 5)])
+        if self.simulation:
+            self.simulation.stop_simulation()
 
     def launch_data_processor(self, name: str, plotter, **kwargs):
         """Add new plotter (from the GUI) to the application.
@@ -86,11 +86,27 @@ class Application:
         pass
 
     def start_simulation(self, name: str):
-        simulation = Simulation(self)
-        simulation.start_simulation()
+        self.simulation = Simulation(self)
+        self.simulation.set_money(100000)
+        self.simulation.set_interest(0.003)
+        self.simulation.set_speed(100)
+        self.simulation.set_start_time(datetime(2014, 1, 1))
+        self.simulation.start_simulation()
 
     def receive_simulation_result(self, simulation: Simulation, simulation_result):
         self.window.update_simulation_results(simulation_result)
+        pass
+
+    def set_my_stocks(self, stocks):
+        #TODO
+        pass
+
+    def get_stock_price(self, stock_name, data_time=datetime.now()):
+        #TODO
+        pass
+
+    def set_graph_times(self, begin, end):
+        #TODO
         pass
 
 application = None

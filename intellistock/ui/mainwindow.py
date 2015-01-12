@@ -45,6 +45,9 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        self._sliders = ["near_future", "maxn", "near_past", "dt_samples", "dim"]
+        self._dafault_pred_params = list(map(lambda x: 0, self._sliders))
+
         # Initialize extras (not automateable by Designer)
         self.setWindowIcon(IconBank.main)
         self.run_result = QLabel("Kész.")  # todo: ui memberbe
@@ -62,17 +65,28 @@ class MainWindow(QMainWindow):
         self._settings = QSettings("IntelliStock", "IntelliStock")
         self._favorites = self._settings.value("favorites", ["OTP"])
         self._plotters = {}
+        self._actual_plotter_name = None
         self._datas = None
 
     def init_sliders(self):
-        self.ui.spin_near_future.setValue(self.ui.slider_near_future.value())
-        self.ui.spin_far_future.setValue(self.ui.slider_far_future.value())
-        self.ui.spin_near_past.setValue(self.ui.slider_near_past.value())
-        self.ui.spin_far_past.setValue(self.ui.slider_far_past.value())
-        self.ui.spin_near_future.setRange(self.ui.slider_near_future.minimum(), self.ui.slider_near_future.maximum())
-        self.ui.spin_far_future.setRange(self.ui.slider_far_future.minimum(), self.ui.slider_far_future.maximum())
-        self.ui.spin_near_past.setRange(self.ui.slider_near_past.minimum(), self.ui.slider_near_past.maximum())
-        self.ui.spin_far_past.setRange(self.ui.slider_far_past.minimum(), self.ui.slider_far_past.maximum())
+        for i in range(len(self._sliders)):
+            slider = getattr(self.ui, "slider_" + self._sliders[i])
+            spin = getattr(self.ui, "spin_" + self._sliders[i])
+            spin.setValue(slider.value())
+            spin.setRange(slider.minimum(), slider.maximum())
+            self._dafault_pred_params[i] = slider.value()
+
+        # self.ui.spin_near_future.setValue(self.ui.slider_near_future.value())
+        # self.ui.spin_maxn.setValue(self.ui.slider_maxn.value())
+        # self.ui.spin_near_past.setValue(self.ui.slider_near_past.value())
+        # self.ui.spin_dt_samples.setValue(self.ui.slider_dt_samples.value())
+        # self.ui.spin_dim.setValue(self.ui.slider_dim.value())
+        # self.ui.spin_near_future.setRange(self.ui.slider_near_future.minimum(), self.ui.slider_near_future.maximum())
+        # self.ui.spin_maxn.setRange(self.ui.slider_maxn.minimum(), self.ui.slider_far_future.maximum())
+        # self.ui.spin_near_past.setRange(self.ui.slider_near_past.minimum(), self.ui.slider_near_past.maximum())
+        # self.ui.spin_dt_samples.setRange(self.ui.slider_dt_samples.minimum(), self.ui.slider_far_past.maximum())
+        # self.ui.spin_dim.setRange(self.ui.slider_dim.minimum(), self.ui.slider_far_past.maximum())
+
 
     def init_systray(self):
         self.ui.systray = QSystemTrayIcon(IconBank.main)
@@ -104,16 +118,18 @@ class MainWindow(QMainWindow):
         self.ui.slider_far_past.setValue(self.ui.slider_far_past.tickInterval())
 
     def collect_prediction_time_params(self):
-        return {"farp": self.ui.spin_far_past.value(),
-                "nearp": self.ui.spin_near_past.value(),
-                "farf": self.ui.spin_far_future.value(),
+        return {"nearp": self.ui.spin_near_past.value(),
                 "nearf": self.ui.spin_near_future.value(),
-                "maxn": self.ui.spinBox_maxNrSamples.value(),
-                "nth": self.ui.spinBox_eachNthSample.value()}
+                "maxn": self.ui.spin_maxn.value(),
+                "dim": self.ui.spin_dim.value(),
+                "dt": self.ui.spin_dt_samples.value(),
+                "pl_gbr": self.ui.checkBox_gradBoosting.isChecked(),
+                "pl_linear": self.ui.checkBox_expTendency.isChecked(),
+                "pl_guass": self.ui.checkBox_multidimPred.isChecked()}
 
     def on_btn_update_all_pressed(self):
         """"""
-        self.application.update_data_processor(self.ui.listWidget_stocks.currentItem().text(),**self.collect_prediction_time_params())
+        self.application.update_data_processor(self._actual_plotter_name,**self.collect_prediction_time_params())
 
     def on_action_favorite_triggered(self, *b):
         if not b:
@@ -158,6 +174,7 @@ class MainWindow(QMainWindow):
         about.show()
 
     def on_listWidget_stocks_itemActivated(self, item: QListWidgetItem):
+        self._actual_plotter_name = item.text()
         if item.text() in self._plotters.keys():
             self.ui.tabWidget.setCurrentWidget(self._plotters[item.text()])
         else:
@@ -176,30 +193,30 @@ class MainWindow(QMainWindow):
         self.ui.groupBox_predChecks.setVisible(b)
 
     def on_action_prediction_toggled(self, b: bool):
-        self.application.data_processors[self.ui.listWidget_stocks.currentItem().text()].predictor.hide(
+        self.application.data_processors[self._actual_plotter_name].predictor.hide(
             plh=self.application.predictor_cls.PLH_ALL, hide=not b)
 
     def on_checkBox_expTendency_toggled(self, b: bool):
-        self.application.data_processors[self.ui.listWidget_stocks.currentItem().text()].predictor.hide(plh=self.application.predictor_cls.PLH_LINEAR, hide=not b)
+        self.application.data_processors[self._actual_plotter_name].predictor.hide(plh=self.application.predictor_cls.PLH_LINEAR, hide=not b)
 
     def on_checkBox_gradBoosting_toggled(self, b: bool):
-        self.application.data_processors[self.ui.listWidget_stocks.currentItem().text()].predictor.hide(plh=self.application.predictor_cls.PLH_GRAD_BOOSTING, hide=not b)
+        self.application.data_processors[self._actual_plotter_name].predictor.hide(plh=self.application.predictor_cls.PLH_GRAD_BOOSTING, hide=not b)
 
     def on_checkBox_multidimPred_toggled(self, b: bool):
-        self.application.data_processors[self.ui.listWidget_stocks.currentItem().text()].predictor.hide(plh=self.application.predictor_cls.PLH_GAUSSIAN, hide=not b)
+        self.application.data_processors[self._actual_plotter_name].predictor.hide(plh=self.application.predictor_cls.PLH_GAUSSIAN, hide=not b)
 
     # def on_spinBox_eachNthSample_valueChanged(self, i: int):
     #     # DO NOT REMOVE THIS CONDITION! (Signal emitted also with i as a string)
     #     if type(i) is not int:
     #         return
-    #     self._ploter_params[self.ui.listWidget_stocks.currentItem().text()]["nth"] = i
+    #     self._ploter_params[self._actual_plotter_name]["nth"] = i
     #     pass
     #
     # def on_spinBox_maxNrSamples_valueChanged(self, i: int):
     #     # DO NOT REMOVE THIS CONDITION! (Signal emitted also with i as a string)
     #     if type(i) is not int:
     #         return
-    #     self._ploter_params[self.ui.listWidget_stocks.currentItem().text()]["maxn"] = i
+    #     self._ploter_params[self._actual_plotter_name]["maxn"] = i
     #     pass
 
     def update_stocks(self, updated_stocks: dict):
