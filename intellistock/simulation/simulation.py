@@ -44,13 +44,16 @@ class Simulation:
         while not self.finish:
             print("Simulation step")
             time.sleep(self.interval)
-            self.current_time += self.speed*self.interval
+            print("Simulation step2")
+            self.current_time += self.speed*datetime.timedelta(0,self.interval)
+            print("Simulation step3")
             # TODO: main thread
             self.application.set_graph_times(self.start_time, self.current_time)
+            print("Simulation step4")
 
     def buy_stock(self, stock_name, amount):
         # TODO: thread safe
-        price = self.application.get_stock_price(stock_name, self.current_time)*amount ;
+        price = self.application.get_stock_price(stock_name, self.current_time)*amount
         self.money -= price + abs(price) * self.interest
         self.stocks[stock_name] += amount
         self.update_stock_list()
