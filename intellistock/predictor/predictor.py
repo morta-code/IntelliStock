@@ -143,7 +143,7 @@ class EnsemblePredictor(Predictor):
             if self._tp["maxn"] != 0:
                 self.maxn = self._tp["maxn"]
             if self._tp["dim"] != 0:
-                self.nth = self._tp["dim"]
+                self.dim = self._tp["dim"]
             if self._tp["dt"] != 0:
                 self.dt_samples = self._tp["dt"] / 3600 / 24 / 365
         except KeyError as e:
@@ -168,7 +168,7 @@ class EnsemblePredictor(Predictor):
         self.t_min_prediction = min(self.t_present + self.near_future, 2 * self.t_present - self.t_begin)
 
     def _multidimensional_gaussian(self, update=False):
-        print(self._tp, self.dt_samples)
+        print(self.dim)
         # nr_training_samples = min(20, self.ts_t.size)
         # print(sorted(set(myList)))
         # xx, y, t = create_training_set(np.array([self.ts_t, self.ts_x]), nr_training_samples, self.dim, self.nth)
@@ -205,7 +205,6 @@ class EnsemblePredictor(Predictor):
         self.figure.draw()
 
     def _linear_regression(self, update=False):
-        print("_linear_regression: ", self.t_near_past, self.t_min_prediction)
         near_past_index = int(np.interp(self.t_near_past, self.ts_t, self.indices))
         t_linear = np.atleast_2d(self.ts_t[near_past_index:]).T
         x_linear = np.atleast_2d(self.ts_x[near_past_index:]).T
@@ -266,12 +265,13 @@ class EnsemblePredictor(Predictor):
         update = False
         while not self.interrupted():
             self._event.clear()
-            print("predictor:run: waiting for update...")
+            # print("predictor:run: waiting for update...")
             self._event.wait()
-            print("predictor:run: processing...")
+            # print("predictor:run: processing...")
 
             if self._data_set_changed:
-                print("Predictor: DATA_SET_CHANGED, but I don't give a damn about it")
+                pass
+                # print("Predictor: DATA_SET_CHANGED, but I don't give a damn about it")
             if self._tp_changed:
                 self.clear_all()
                 self.generate_time_values()
@@ -371,7 +371,6 @@ class DataProcessor:
             # self.predictor.update(**kwargs)
 
     def update(self, **kwargs):
-        print("DataProcessor::update - not implemented yet")
         if self.predictor:
             self.predictor.update(**kwargs)
 
