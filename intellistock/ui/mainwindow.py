@@ -1,8 +1,10 @@
 
-from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, QIcon, QCloseEvent, QColor, QSystemTrayIcon, QMessageBox
+from PyQt4.QtGui import QMainWindow, QListWidgetItem, QLabel, QIcon, QCloseEvent, QColor, QSystemTrayIcon, \
+    QMessageBox, QWidget
 from PyQt4.QtCore import QSettings
 from PyQt4.Qt import Qt
 from intellistock.ui.ui_mainwindow import Ui_MainWindow
+from intellistock.ui.simulationwidget import SimulationWidget
 from intellistock.ui.navigatorplotwidget import NavigatorPlotWidget
 
 from intellistock.data import data
@@ -52,6 +54,9 @@ class MainWindow(QMainWindow):
         self.ui.action_exit.setIcon(IconBank.exit)
         self.init_sliders()
         self.init_systray()
+        self.ui.simwidget = SimulationWidget(self)
+        self.ui.simwidget.setVisible(False)
+        self.ui.centralwidget.layout().addWidget(self.ui.simwidget)
 
         # Initialize members and settings
         self._settings = QSettings("IntelliStock", "IntelliStock")
@@ -121,10 +126,18 @@ class MainWindow(QMainWindow):
             self._favorites.append(item.text())
             item.setIcon(IconBank.star)
 
-    def on_action_simulation_triggered(self, *b):
-        if not b:
-            return
-        self.application.start_simulation(self.ui.listWidget_stocks.selectedItems()[0].text())
+    def on_action_simulation_toggled(self, b: bool):
+        # self.application.start_simulation(self.ui.listWidget_stocks.selectedItems()[0].text())
+        if b:
+            self.ui.mainwidget.setVisible(False)
+            self.ui.simwidget.setVisible(True)
+            self.ui.centralwidget.layout().setStretch(1, 7)
+            pass
+        else:
+            self.ui.mainwidget.setVisible(True)
+            self.ui.simwidget.setVisible(False)
+            self.ui.centralwidget.layout().setStretch(1, 7)
+            pass
 
     def on_lineEdit_search_textEdited(self, s: str):
         if s:
@@ -155,10 +168,8 @@ class MainWindow(QMainWindow):
     def on_listWidget_stocks_itemSelectionChanged(self):
         if self.ui.listWidget_stocks.selectedItems():
             self.ui.action_favorite.setEnabled(True)
-            self.ui.action_simulation.setEnabled(True)
         else:
             self.ui.action_favorite.setEnabled(False)
-            self.ui.action_simulation.setEnabled(False)
 
     def on_action_showPrediction_toggled(self, b: bool):
         self.ui.groupBox_time.setVisible(b)

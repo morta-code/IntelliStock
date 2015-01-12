@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Mon Jan 12 19:03:48 2015
+# Created: Mon Jan 12 23:30:27 2015
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -69,16 +69,23 @@ class Ui_MainWindow(object):
         self.progressBar_load.setObjectName(_fromUtf8("progressBar_load"))
         self.navigationLayout.addWidget(self.progressBar_load)
         self.horizontalLayout.addLayout(self.navigationLayout)
+        self.mainwidget = QtGui.QWidget(self.centralwidget)
+        self.mainwidget.setObjectName(_fromUtf8("mainwidget"))
+        self.horizontalLayout_3 = QtGui.QHBoxLayout(self.mainwidget)
+        self.horizontalLayout_3.setSpacing(0)
+        self.horizontalLayout_3.setSizeConstraint(QtGui.QLayout.SetMinimumSize)
+        self.horizontalLayout_3.setMargin(0)
+        self.horizontalLayout_3.setObjectName(_fromUtf8("horizontalLayout_3"))
         self.contentLayout = QtGui.QVBoxLayout()
         self.contentLayout.setObjectName(_fromUtf8("contentLayout"))
-        self.tabWidget = QtGui.QTabWidget(self.centralwidget)
+        self.tabWidget = QtGui.QTabWidget(self.mainwidget)
         self.tabWidget.setUsesScrollButtons(True)
         self.tabWidget.setTabsClosable(True)
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.contentLayout.addWidget(self.tabWidget)
         self.horizontalLayout_predictionOptions = QtGui.QHBoxLayout()
         self.horizontalLayout_predictionOptions.setObjectName(_fromUtf8("horizontalLayout_predictionOptions"))
-        self.groupBox_predChecks = QtGui.QGroupBox(self.centralwidget)
+        self.groupBox_predChecks = QtGui.QGroupBox(self.mainwidget)
         self.groupBox_predChecks.setObjectName(_fromUtf8("groupBox_predChecks"))
         self.verticalLayout = QtGui.QVBoxLayout(self.groupBox_predChecks)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
@@ -104,7 +111,7 @@ class Ui_MainWindow(object):
         self.spinBox_eachNthSample.setObjectName(_fromUtf8("spinBox_eachNthSample"))
         self.verticalLayout.addWidget(self.spinBox_eachNthSample)
         self.horizontalLayout_predictionOptions.addWidget(self.groupBox_predChecks)
-        self.groupBox_time = QtGui.QGroupBox(self.centralwidget)
+        self.groupBox_time = QtGui.QGroupBox(self.mainwidget)
         self.groupBox_time.setObjectName(_fromUtf8("groupBox_time"))
         self.gridLayout = QtGui.QGridLayout(self.groupBox_time)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
@@ -191,9 +198,10 @@ class Ui_MainWindow(object):
         self.gridLayout.addLayout(self.horizontalLayout_2, 5, 0, 1, 3)
         self.horizontalLayout_predictionOptions.addWidget(self.groupBox_time)
         self.contentLayout.addLayout(self.horizontalLayout_predictionOptions)
-        self.horizontalLayout.addLayout(self.contentLayout)
+        self.horizontalLayout_3.addLayout(self.contentLayout)
+        self.horizontalLayout.addWidget(self.mainwidget)
         self.horizontalLayout.setStretch(0, 1)
-        self.horizontalLayout.setStretch(1, 6)
+        self.horizontalLayout.setStretch(1, 7)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 734, 21))
@@ -238,7 +246,7 @@ class Ui_MainWindow(object):
         self.action_favorite.setEnabled(False)
         self.action_favorite.setObjectName(_fromUtf8("action_favorite"))
         self.action_simulation = QtGui.QAction(MainWindow)
-        self.action_simulation.setEnabled(False)
+        self.action_simulation.setCheckable(True)
         self.action_simulation.setObjectName(_fromUtf8("action_simulation"))
         self.action_showPrediction = QtGui.QAction(MainWindow)
         self.action_showPrediction.setCheckable(True)
