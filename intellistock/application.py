@@ -86,6 +86,8 @@ class Application:
         pass
 
     def start_simulation(self, name: str):
+        if self.simulation:
+            self.simulation.stop_simulation()
         self.simulation = Simulation(self)
         self.simulation.set_money(100000)
         self.simulation.set_interest(0.003)
