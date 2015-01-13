@@ -82,12 +82,15 @@ class PlotWidget(QWidget):
             self.axes.lines.remove(ploth)
             return True
         elif type(ploth) == list:
+            ret = False
             for pl in ploth:
                 if self.axes.lines.count(pl) > 0:
                     self.axes.lines.remove(pl)
+                    ret = True
                 if self.axes.patches.count(pl) > 0:
                     self.axes.patches.remove(pl)
-            return True
+                    ret = True
+            return ret
 
     @synchronized(plot_widget_lock)
     def hide_line(self, ploth=None, plotnr=None, hide=True):
@@ -198,13 +201,13 @@ def main_test():
         print("Assertion error: subplot - resplit figure")
 
     # test plot()
-    w.clear()    
     p = w.plot(t, x)[0]
     w.plot(t, x*2)
     w.plot(t, x*2, 'g')
     q = w.plot(t2, np.ones_like(t2) * 0.5)[0]
     w.draw()
-    
+    w.clear()
+
     # test erase_line()
     if not w.erase_line(ploth=p):
         print("Assertion error: erase_line by ploth")
@@ -236,6 +239,8 @@ def main_test():
     for (k, v) in w.axes.__dict__.items():
         print(k)
     print(w.axes.lines)
+
+    w.clear()
 
     # Qt keretrendszer futtatasa (main loop)
     app.exec_()
