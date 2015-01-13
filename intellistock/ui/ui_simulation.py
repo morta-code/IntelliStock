@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_simulation.ui'
 #
-# Created: Tue Jan 13 11:26:35 2015
+# Created: Tue Jan 13 12:58:26 2015
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -61,6 +61,8 @@ class Ui_SimulationForm(object):
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.tableWidget = QtGui.QTableWidget(SimulationForm)
         self.tableWidget.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
+        self.tableWidget.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
         self.tableWidget.setColumnCount(3)
         self.tableWidget.setRowCount(0)

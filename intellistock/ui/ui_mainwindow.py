@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainwindow.ui'
 #
-# Created: Tue Jan 13 07:17:54 2015
+# Created: Tue Jan 13 13:18:41 2015
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -75,7 +75,6 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.setMargin(0)
         self.horizontalLayout_3.setObjectName(_fromUtf8("horizontalLayout_3"))
         self.contentLayout = QtGui.QVBoxLayout()
-        self.contentLayout.setMargin(0)
         self.contentLayout.setObjectName(_fromUtf8("contentLayout"))
         self.tabWidget = QtGui.QTabWidget(self.mainwidget)
         self.tabWidget.setUsesScrollButtons(True)
@@ -214,7 +213,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setStretch(1, 7)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 743, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 743, 21))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuStock = QtGui.QMenu(self.menubar)
         self.menuStock.setObjectName(_fromUtf8("menuStock"))
@@ -335,6 +334,7 @@ class Ui_MainWindow(object):
         self.action_favorite.setStatusTip(_translate("MainWindow", "Kijelölt részvény hozzáadása/eltávolitása a kedvencek közül.", None))
         self.action_favorite.setShortcut(_translate("MainWindow", "Ctrl+F", None))
         self.action_simulation.setText(_translate("MainWindow", "Szimuláció", None))
+        self.action_simulation.setShortcut(_translate("MainWindow", "Ctrl+S", None))
         self.action_showPrediction.setText(_translate("MainWindow", "&Predikciós eszközök", None))
         self.action_showPrediction.setStatusTip(_translate("MainWindow", "Predikciós beállítások megjelenítése/elrejtése", None))
         self.action_showPrediction.setShortcut(_translate("MainWindow", "Ctrl+P", None))

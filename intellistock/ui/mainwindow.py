@@ -88,6 +88,8 @@ class MainWindow(QMainWindow):
                                                 (sw.ui.dial_transactFee.value())/100, sw.ui.dial_speed.value(),
                                                 sw.start_datetime()))
         sw.ui.button_stop.pressed.connect(self.application.stop_simulation)
+        sw.action_buy.triggered.connect(lambda: self.application.simulation.buy_stock(sw.selected_stock_name, 1))
+        sw.action_sell.triggered.connect(lambda: self.application.simulation.sell_stock(sw.selected_stock_name, 1))
 
     def initialize(self, initial_stocks: dict):
         """ Initialize datas only for opening window.

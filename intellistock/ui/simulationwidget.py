@@ -1,5 +1,6 @@
-from PyQt4.QtGui import QWidget, QTableWidgetItem
-from PyQt4.QtCore import QObject, QDateTime
+from PyQt4.QtGui import QWidget, QTableWidgetItem, QMenu, QAction
+from PyQt4.QtCore import QObject, QDateTime, QPoint
+from PyQt4.Qt import Qt
 from intellistock.ui.ui_simulation import Ui_SimulationForm
 from datetime import datetime
 
@@ -11,8 +12,12 @@ class SimulationWidget(QWidget):
         self.ui.setupUi(self)
         self.ui.label_trFee.setText(str(self.ui.dial_transactFee.value()/10)+" %")
         self.ui.label_simSpeed.setText(str(self.ui.dial_speed.value()))
+        self.ui.tableWidget.setContextMenuPolicy(Qt.CustomContextMenu)
         # Initialize extras (not automateable by Designer)
+        self.action_buy = QAction("Vétel", self)
+        self.action_sell = QAction("Eladás", self)
         # Initialize members and settings
+        self.selected_stock_name = ""
 
     def on_button_start_pressed(self):
         self.ui.button_stop.setEnabled(True)
@@ -29,6 +34,16 @@ class SimulationWidget(QWidget):
         self.ui.spin_cash.setEnabled(True)
         self.ui.dial_transactFee.setEnabled(True)
         self.ui.dial_speed.setEnabled(True)
+
+    def on_tableWidget_customContextMenuRequested(self, p: QPoint):
+        rowi = self.ui.tableWidget.indexAt(p).row()
+        if rowi < 0:
+            return
+        self.selected_stock_name = self.ui.tableWidget.item(rowi, 0).text()
+        menu = QMenu(self)
+        menu.addAction(self.action_buy)
+        menu.addAction(self.action_sell)
+        menu.popup(self.ui.tableWidget.viewport().mapToGlobal(p))
 
     def on_spin_cash_valueChanged(self, v: int):
         pass
