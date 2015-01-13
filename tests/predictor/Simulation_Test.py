@@ -33,3 +33,41 @@ class SimulationTest(unittest.TestCase):
         self.simulation.buy_stock("OTP", 40)
         self.assertEquals(30, self.simulation.stocks["MOL"])
         self.assertEquals(40, self.simulation.stocks["OTP"])
+
+    def testBuyPrice(self):
+        self.simulation.set_interest(0) #0%
+        self.simulation.set_money(1000)
+        self.simulation.buy_stock("MOL", 3)
+        self.assertEquals(700, self.simulation.money)
+
+    def testBuyPriceWithInterest(self):
+        self.simulation.set_interest(0.1) #10%
+        self.simulation.set_money(1000)
+        self.simulation.buy_stock("MOL", 3)
+        self.assertEquals(670, self.simulation.money)
+
+    def testSellPrice(self):
+        self.simulation.set_interest(0) #0%
+        self.simulation.set_money(1000)
+        self.simulation.sell_stock("MOL", 3)
+        self.assertEquals(1300, self.simulation.money)
+
+    def testSellPrice(self):
+        self.simulation.set_interest(0.1) #10%
+        self.simulation.set_money(1000)
+        self.simulation.sell_stock("MOL", 3)
+        self.assertEquals(1270, self.simulation.money)
+
+    def testBuyAndSellPrice(self):
+        self.simulation.set_interest(0) #0%
+        self.simulation.set_money(1000)
+        self.simulation.buy_stock("MOL", 3)
+        self.simulation.sell_stock("MOL", 3)
+        self.assertEquals(1000, self.simulation.money)
+
+    def testBuyAndSellPriceWithInterest(self):
+        self.simulation.set_interest(0.1) #10%
+        self.simulation.set_money(1000)
+        self.simulation.buy_stock("MOL", 3)
+        self.simulation.sell_stock("MOL", 3)
+        self.assertEquals(940, self.simulation.money)
