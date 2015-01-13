@@ -85,15 +85,19 @@ class Application:
         # todo: implement.
         pass
 
-    def start_simulation(self, name: str):
+    def start_simulation(self, money: int, interest: float, speed: int, start: datetime):
         if self.simulation:
             self.simulation.stop_simulation()
         self.simulation = Simulation(self)
-        self.simulation.set_money(100000)
-        self.simulation.set_interest(0.003)
-        self.simulation.set_speed(100)
-        self.simulation.set_start_time(datetime(2014, 1, 1))
+        self.simulation.set_money(money)
+        self.simulation.set_interest(interest)
+        self.simulation.set_speed(speed)
+        self.simulation.set_start_time(start)
         self.simulation.start_simulation()
+
+    def stop_simulation(self):
+        if self.simulation:
+            self.simulation.stop_simulation()
 
     def receive_simulation_result(self, simulation: Simulation, simulation_result):
         self.window.update_simulation_results(simulation_result)
