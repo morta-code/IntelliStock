@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_simulation.ui'
 #
-# Created: Tue Jan 13 02:44:01 2015
+# Created: Tue Jan 13 11:26:35 2015
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -34,6 +34,8 @@ class Ui_SimulationForm(object):
         self.gridLayout = QtGui.QGridLayout()
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.dateTime_start = QtGui.QDateTimeEdit(SimulationForm)
+        self.dateTime_start.setDateTime(QtCore.QDateTime(QtCore.QDate(2010, 1, 1), QtCore.QTime(0, 0, 0)))
+        self.dateTime_start.setCalendarPopup(True)
         self.dateTime_start.setObjectName(_fromUtf8("dateTime_start"))
         self.gridLayout.addWidget(self.dateTime_start, 1, 0, 1, 1)
         self.label = QtGui.QLabel(SimulationForm)
@@ -58,6 +60,7 @@ class Ui_SimulationForm(object):
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.tableWidget = QtGui.QTableWidget(SimulationForm)
+        self.tableWidget.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
         self.tableWidget.setColumnCount(3)
         self.tableWidget.setRowCount(0)
@@ -67,6 +70,8 @@ class Ui_SimulationForm(object):
         self.tableWidget.setHorizontalHeaderItem(1, item)
         item = QtGui.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(2, item)
+        self.tableWidget.horizontalHeader().setVisible(True)
+        self.tableWidget.horizontalHeader().setCascadingSectionResizes(False)
         self.horizontalLayout.addWidget(self.tableWidget)
         self.verticalLayout = QtGui.QVBoxLayout()
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
@@ -146,6 +151,7 @@ class Ui_SimulationForm(object):
         self.label_2.setText(_translate("SimulationForm", "Készpénz: (HUF)", None))
         self.button_start.setText(_translate("SimulationForm", "&Start", None))
         self.button_stop.setText(_translate("SimulationForm", "Sto&p", None))
+        self.tableWidget.setSortingEnabled(True)
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("SimulationForm", "Értékpapír", None))
         item = self.tableWidget.horizontalHeaderItem(1)

@@ -47,10 +47,10 @@ class SimulationWidget(QWidget):
         return datetime(qdt.date().year(),qdt.date().month(),qdt.date().day(),qdt.time().hour(),qdt.time().minute())
 
     def set_cash(self, i: int):
-        self.ui.label_cash.setText(str(i))
+        self.ui.label_cash.setText(str(int(i))+" Ft")
 
     def set_stocks_value(self, i: int):
-        self.ui.label_stocksValue.setText(str(i))
+        self.ui.label_stocksValue.setText(str(int(i))+" Ft")
 
     def set_stocks(self, stocks: dict):
         self.ui.tableWidget.setRowCount(len(stocks.keys()))
