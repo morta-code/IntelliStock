@@ -103,6 +103,10 @@ class Application:
         #TODO
         pass
 
+    def set_my_money(self, money):
+        #TODO
+        pass
+
     def get_stock_price(self, stock_name, data_time=datetime.now()):
         #TODO
         pass

@@ -59,16 +59,13 @@ class Simulation:
             self.stocks[stock_name] += amount
         else:
             self.stocks[stock_name] = amount
-        self.application.lock.acquire()
-        try:
-            self.update_stock_list()
-        finally:
-            self.application.lock.release()
+        self.update_stock_list()
 
     def update_stock_list(self):
         self.application.lock.acquire()
         try:
             self.application.set_my_stocks(self.stocks)
+            self.application.set_my_money(self.money)
         finally:
             self.application.lock.release()
 
