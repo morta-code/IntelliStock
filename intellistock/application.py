@@ -86,6 +86,8 @@ class Application:
         pass
 
     def start_simulation(self, money: int, interest: float, speed: int, start: datetime):
+        if self.simulation:
+            self.simulation.stop_simulation()
         self.simulation = Simulation(self)
         self.simulation.set_money(money)
         self.simulation.set_interest(interest)
