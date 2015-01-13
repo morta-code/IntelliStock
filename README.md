@@ -8,6 +8,7 @@ This is a collaborative assignment project of PPCU's [Scientific Python course](
 - PyQt4
 - Matplotlib with Qt4 backend
 - Numpy
+- sklearn
 
 # Reference
 
