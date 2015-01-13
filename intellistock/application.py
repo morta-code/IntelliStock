@@ -111,12 +111,19 @@ class Application:
         #TODO
         pass
 
-    def get_stock_price(self, stock_name, data_time=datetime.now()):
+    def get_stock_price(self, stock_name, data_time=None):
+        if not data_time:
+            data_time = self.get_current_time()
         return data.get_close(stock_name, data.datetime_to_dbdatetime(data_time))
 
     def set_graph_times(self, begin, end):
         #TODO
         pass
+
+    def get_current_time(self):
+        if self.simulation:
+            return self.simulation.current_time
+        return datetime.now()
 
 application = None
 
