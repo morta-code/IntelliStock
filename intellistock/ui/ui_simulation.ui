@@ -71,7 +71,23 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QTableWidget" name="tableWidget"/>
+      <widget class="QTableWidget" name="tableWidget">
+       <column>
+        <property name="text">
+         <string>Értékpapír</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Menniység</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Érték</string>
+        </property>
+       </column>
+      </widget>
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">

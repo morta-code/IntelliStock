@@ -1,4 +1,4 @@
-from PyQt4.QtGui import QWidget
+from PyQt4.QtGui import QWidget, QTableWidgetItem
 from PyQt4.QtCore import QObject, QDateTime
 from intellistock.ui.ui_simulation import Ui_SimulationForm
 from datetime import datetime
@@ -51,3 +51,6 @@ class SimulationWidget(QWidget):
 
     def set_stocks_value(self, i: int):
         self.ui.label_stocksValue.setText(str(i))
+
+    def set_stocks(self, stocks: dict):
+        pass

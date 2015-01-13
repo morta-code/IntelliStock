@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_simulation.ui'
 #
-# Created: Tue Jan 13 00:33:08 2015
+# Created: Tue Jan 13 01:46:34 2015
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -59,8 +59,14 @@ class Ui_SimulationForm(object):
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.tableWidget = QtGui.QTableWidget(SimulationForm)
         self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
-        self.tableWidget.setColumnCount(0)
+        self.tableWidget.setColumnCount(3)
         self.tableWidget.setRowCount(0)
+        item = QtGui.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(0, item)
+        item = QtGui.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(1, item)
+        item = QtGui.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(2, item)
         self.horizontalLayout.addWidget(self.tableWidget)
         self.verticalLayout = QtGui.QVBoxLayout()
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
@@ -140,6 +146,12 @@ class Ui_SimulationForm(object):
         self.label_2.setText(_translate("SimulationForm", "Készpénz: (HUF)", None))
         self.button_start.setText(_translate("SimulationForm", "&Start", None))
         self.button_stop.setText(_translate("SimulationForm", "Sto&p", None))
+        item = self.tableWidget.horizontalHeaderItem(0)
+        item.setText(_translate("SimulationForm", "Értékpapír", None))
+        item = self.tableWidget.horizontalHeaderItem(1)
+        item.setText(_translate("SimulationForm", "Menniység", None))
+        item = self.tableWidget.horizontalHeaderItem(2)
+        item.setText(_translate("SimulationForm", "Érték", None))
         self.label_3.setText(_translate("SimulationForm", "Tranzakciós díj:", None))
         self.label_4.setText(_translate("SimulationForm", "Szimuláció sebessége:", None))
         self.label_5.setText(_translate("SimulationForm", "Készpénz:", None))

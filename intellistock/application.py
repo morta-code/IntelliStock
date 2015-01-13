@@ -104,11 +104,11 @@ class Application:
         pass
 
     def set_my_stocks(self, stocks):
-        #TODO
+        self.window.ui.simwidget.set_stocks(stocks)
         pass
 
     def set_my_money(self, money):
-        #TODO
+        self.window.ui.simwidget.set_cash(money)
         pass
 
     def get_stock_price(self, stock_name, data_time=datetime.now()):
