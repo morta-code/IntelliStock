@@ -53,4 +53,9 @@ class SimulationWidget(QWidget):
         self.ui.label_stocksValue.setText(str(i))
 
     def set_stocks(self, stocks: dict):
-        pass
+        self.ui.tableWidget.setRowCount(len(stocks.keys()))
+        i = 0
+        for s, am in stocks.items():
+            self.ui.tableWidget.setItem(i, 0, QTableWidgetItem(s))
+            self.ui.tableWidget.setItem(i, 1, QTableWidgetItem(str(am)))
+            i += 1

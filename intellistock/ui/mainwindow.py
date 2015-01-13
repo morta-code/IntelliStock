@@ -168,6 +168,9 @@ class MainWindow(QMainWindow):
         about.show()
 
     def on_listWidget_stocks_itemActivated(self, item: QListWidgetItem):
+        if self.ui.simwidget.isVisible():
+            self.application.simulation.buy_stock(item.text(), 1)
+            return
         self._actual_plotter_name = item.text()
         if item.text() in self._plotters.keys():
             self.ui.tabWidget.setCurrentWidget(self._plotters[item.text()])
