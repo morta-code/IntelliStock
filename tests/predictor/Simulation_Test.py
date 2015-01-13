@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import Mock, MagicMock
-from simulation.simulation import Simulation
+from intellistock.simulation.simulation import Simulation
 
 
 class SimulationTest(unittest.TestCase):
