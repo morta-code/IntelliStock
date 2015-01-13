@@ -45,10 +45,14 @@ class Simulation:
         while not self.finish:
             print("Simulation step " + str(self.current_time))
             time.sleep(self.interval)
+            print("S1")
             self.current_time += self.speed*datetime.timedelta(0,self.interval)
+            print("S2")
             self.application.lock.acquire()
             try:
+                print("S3")
                 self.application.set_graph_times(self.start_time, self.current_time)
+                print("S4")
             finally:
                 self.application.lock.release()
 
