@@ -432,10 +432,10 @@ class DataProcessor:
             print("---------------------", maxt)
             print("---------------------", self.ts_t[0])
             if maxt < self.t_begin:
-                return
+                self.simulation = True
 
-            self.mini = int(np.interp(mint, self.ts_t, self.indices))
-            self.maxi = int(np.interp(maxt, self.ts_t, self.indices))
+            self.mini = max(0, int(np.interp(mint, self.ts_t, self.indices)))
+            self.maxi = min(len(self.ts_t), int(np.interp(maxt, self.ts_t, self.indices)))
             print("----------------------------", self.mini, self.maxi, len(self.ts_t))
             if self.maxi - self.mini > 10:
                 self.simulation = True
