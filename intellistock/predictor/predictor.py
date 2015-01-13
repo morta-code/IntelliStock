@@ -338,7 +338,7 @@ class EnsemblePredictor(Predictor):
     #     self._tp = self._args2dict(nearf=nearf, nearp=nearp, farf=farf, farp=farp)
 
     def update(self, **kwargs):
-        if kwargs["simulation"]:
+        if "simulation" in kwargs and kwargs["simulation"]:
             self.simulation = True
             self.set_data(kwargs["ts_t"], kwargs["ts_x"])
         else:
