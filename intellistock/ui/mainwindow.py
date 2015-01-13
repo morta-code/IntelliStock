@@ -80,18 +80,23 @@ class MainWindow(QMainWindow):
         self.ui.systray.show()
 
     def init_simwidget(self):
+        def upd_speed(v: int, b: bool):
+            if b:
+                self.application.simulation.speed = v
         self.ui.simwidget = SimulationWidget(self)
         sw = self.ui.simwidget
         sw.setVisible(False)
         self.ui.centralwidget.layout().addWidget(sw)
-        sw.ui.button_start.pressed.connect(lambda : self.application.start_simulation(sw.ui.spin_cash.value(),
+        sw.ui.button_start.pressed.connect(
+            lambda : self.application.start_simulation(sw.ui.spin_cash.value(),
                                                 (sw.ui.dial_transactFee.value())/100, sw.ui.dial_speed.value(),
                                                 sw.start_datetime()))
         sw.ui.button_stop.pressed.connect(self.application.stop_simulation)
         sw.action_buy.triggered.connect(lambda: self.application.simulation.buy_stock(sw.selected_stock_name, 1))
         sw.action_sell.triggered.connect(lambda: self.application.simulation.sell_stock(sw.selected_stock_name, 1))
-        sw.action_update.triggered.connect(lambda: self.application.simulation.update_stock_list())
+        #sw.action_update.triggered.connect(lambda: self.application.simulation.update_stock_list())
         sw.update_timer.timeout.connect(lambda: self.application.simulation.update_stock_list())
+        sw.ui.dial_speed.valueChanged.connect(lambda val: upd_speed(val, sw.running))
 
 
     def initialize(self, initial_stocks: dict):

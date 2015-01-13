@@ -17,13 +17,15 @@ class SimulationWidget(QWidget):
         # Initialize extras (not automateable by Designer)
         self.action_buy = QAction("Vétel", self)
         self.action_sell = QAction("Eladás", self)
-        self.action_update = QAction("Frissítés", self)
+        #self.action_update = QAction("Frissítés", self)
         self.cmenu = QMenu(self)
         self.cmenu.addAction(self.action_buy)
         self.cmenu.addAction(self.action_sell)
-        self.cmenu.addAction(self.action_update)
+        #self.cmenu.addAction(self.action_update)
         self.update_timer = QTimer()
+
         # Initialize members and settings
+        self.running = False
         self.selected_stock_name = ""
 
     def on_button_start_pressed(self):
@@ -32,16 +34,18 @@ class SimulationWidget(QWidget):
         self.ui.dateTime_start.setEnabled(False)
         self.ui.spin_cash.setEnabled(False)
         self.ui.dial_transactFee.setEnabled(False)
-        self.ui.dial_speed.setEnabled(False)
+        #self.ui.dial_speed.setEnabled(False)
         self.update_timer.start(2000)
+        self.running = True
 
     def on_button_stop_pressed(self):
+        self.running = False
         self.ui.button_stop.setEnabled(False)
         self.ui.button_start.setEnabled(True)
         self.ui.dateTime_start.setEnabled(True)
         self.ui.spin_cash.setEnabled(True)
         self.ui.dial_transactFee.setEnabled(True)
-        self.ui.dial_speed.setEnabled(True)
+        #self.ui.dial_speed.setEnabled(True)
         self.update_timer.stop()
 
     def on_tableWidget_customContextMenuRequested(self, p: QPoint):
