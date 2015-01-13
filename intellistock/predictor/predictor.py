@@ -274,9 +274,9 @@ class EnsemblePredictor(Predictor):
         update = False
         while not self.interrupted():
             self._event.clear()
-            # print("predictor:run: waiting for update...")
+            print("predictor:run: waiting for update...")
             self._event.wait()
-            # print("predictor:run: processing...")
+            print("predictor:run: processing...")
 
             if self.simulation:
                 self.clear_all()
@@ -284,6 +284,7 @@ class EnsemblePredictor(Predictor):
                 if self.interrupted():
                     return
                 self._linear_regression(update)
+                print("predictor:rum: simulation stepped on the plot")
             if self._tp_changed:
                 self.clear_all()
                 self.generate_time_values()
@@ -403,12 +404,15 @@ class DataProcessor:
         if self.simulation:
             if self.predictor:
                 self.predictor.update(simulation=True, ts_t=self.ts_t, ts_x=self.ts_x, **kwargs)
+                self._plot_observations()
                 return
         if self.predictor:
             self.predictor.update(**kwargs)
 
     def _plot_observations(self):
         self.figure.erase_line(ploth=self.pl)
+        # self.figure.clear()
+        # self.figure.draw()
         self.pl = self.figure.plot(self.ts_t[self.mini:self.maxi], self.ts_x[self.mini:self.maxi], 'b.-', markersize=6, label='observations')
         self.figure.set_axes_labels("time [year]", "stock price [Ft]")
         self.figure.set_axis_offset()

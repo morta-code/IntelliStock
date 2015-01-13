@@ -16,9 +16,6 @@ conn = None
 
 stocks = set()
 
-def get_trades(begin, end):
-    """Returns the trades between dates begin and end."""
-
 
 def get_stocks():
     """Returns the stocks currently stored in the database."""
@@ -61,9 +58,10 @@ def get_trades(begin: int, end: int, paper_name: str=None):
 
 
 def get_close(date: int, paper_name: str):
-    cur = conn.execute("SELECT StockData.close FROM StockData WHERE paper_name = ? AND datetime = ?",
+    cur = conn.execute("SELECT close FROM (SELECT MAX(id) as max_id, paper_name FROM StockData WHERE datetime <= ? GROUP BY paper_name) AS MAX_IDS INNER JOIN StockData ON MAX_IDS.paper_name = StockData.paper_name AND StockData.id = MAX_IDS.max_id AND StockData.paper_name = ?",
                        (date, paper_name))
-    return cur.fetchone()
+
+    return cur.fetchone()[0]
 
 
 # -------- time conversions ---------- #

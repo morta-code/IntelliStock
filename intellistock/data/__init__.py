@@ -40,13 +40,12 @@ def initialize_database():
         print("loading " + f)
         load_from_csv(f)
 
-
 def load_from_csv(csv_path):
     global stocks    
     
     urlpath = urlopen(ARCHIVE_BASE_URL + "/" + csv_path)
     
-    file = urlpath.read().decode('utf-8')
+    file = urlpath.read().decode('ISO-8859-1')
     
     csv_reader = csv.reader(io.StringIO(file))
     next(csv_reader) #skip header
