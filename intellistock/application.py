@@ -114,7 +114,9 @@ class Application:
     def get_stock_price(self, stock_name, data_time=None):
         if not data_time:
             data_time = self.get_current_time()
-        return data.get_close(stock_name, data.datetime_to_dbdatetime(data_time))
+        q = data.get_close(stock_name, data.datetime_to_dbdatetime(data_time))
+        print("Data query: " + stock_name + " @ " + str(data_time) + " = " + str(q))
+        return q
 
     def set_graph_times(self, begin, end):
         dp = self.data_processors[self.window._actual_plotter_name]

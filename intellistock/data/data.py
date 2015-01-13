@@ -57,8 +57,9 @@ def get_trades(begin: int, end: int, paper_name: str=None):
     return cur.fetchall()
 
 
-def get_close(date: int, paper_name: str):
-    cur = conn.execute("SELECT close FROM (SELECT MAX(id) as max_id, paper_name FROM StockData WHERE datetime <= ? GROUP BY paper_name) AS MAX_IDS INNER JOIN StockData ON MAX_IDS.paper_name = StockData.paper_name AND StockData.id = MAX_IDS.max_id AND StockData.paper_name = ?",
+def get_close(paper_name: str, date: str):
+    print(date)
+    cur = conn.execute("SELECT close FROM (SELECT MAX(id) as max_id FROM StockData WHERE datetime <= ? AND paper_name = ? GROUP BY paper_name) AS MAX_IDS INNER JOIN StockData ON StockData.id = MAX_IDS.max_id",
                        (date, paper_name))
     row = cur.fetchone()
 
