@@ -37,9 +37,10 @@ def initialize_database():
     files = urlpath.read().decode('utf-8').split()
 
     for f in files:
+        print("loading " + f)
         load_from_csv(f)
-        return
-        
+
+
 def load_from_csv(csv_path):
     global stocks    
     
