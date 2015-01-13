@@ -16,9 +16,6 @@ conn = None
 
 stocks = set()
 
-def get_trades(begin, end):
-    """Returns the trades between dates begin and end."""
-
 
 def get_stocks():
     """Returns the stocks currently stored in the database."""
