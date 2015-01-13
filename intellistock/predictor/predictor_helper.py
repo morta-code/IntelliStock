@@ -51,6 +51,44 @@ def last_n_time_data(ts: np.array, n: int=5, maxtimeint: float=0.5 / 365):
         append_new_clip()
 
 
+def create_training_test_set(ts: np.array, nr_samples: int, nr_features: int, dt_between: float):
+    target = set()
+    gen = last_n_time_data(ts, nr_features+1)
+    xx = np.zeros((nr_samples, nr_features))
+    y = np.zeros(nr_samples)
+    t = np.zeros_like(y)
+    clip = next(gen)[0]
+    tclip = tuple(clip[1, :nr_features])
+
+    xx_test = np.zeros((nr_samples, nr_features))
+    y_test = np.zeros(nr_samples)
+    t_test = np.zeros_like(y)
+    tclip_test = tuple(clip[1, :nr_features])
+    j = 0
+    for i in range(nr_samples):
+        xx[i, :] = clip[1, :nr_features]
+        y[i] = clip[1, nr_features]
+        t[i] = clip[0, nr_features]
+
+        test = True
+        while t[i] - clip[0, nr_features] < dt_between:
+            if test and (t[i] - clip[0, nr_features] > dt_between / 2):
+                test = False
+                xx_test[j, :] = clip[1, :nr_features]
+                y_test[j] = clip[1, nr_features]
+                t_test[j] = clip[0, nr_features]
+                j += 1
+
+            target.add(tclip)
+            while tclip in target:
+                try:
+                    clip = next(gen)[0]
+                    tclip = tuple(clip[1, :nr_features])
+                except StopIteration:
+                    return xx[i::-1, :], y[i::-1], t[i::-1], xx_test[j::-1], y_test[j::-1], t[j::-1]
+    return xx[::-1, :], y[::-1], t[::-1], xx_test[j::-1], y_test[j::-1], t[j::-1]
+
+
 def create_training_set(ts: np.array, nr_samples: int=100, nr_features: int=4, nr_steps_between: int=1):
     target = set()
     gen = last_n_time_data(ts, nr_features+1)
