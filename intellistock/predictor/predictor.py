@@ -426,8 +426,8 @@ class DataProcessor:
         if mint and maxt:
             self.simulation = False
 
-            mint = date2year(mint)+10.00923
-            maxt = date2year(maxt)+10.00923
+            mint = date2year(mint)
+            maxt = date2year(maxt)
             print("---------------------", mint)
             print("---------------------", maxt)
             print("---------------------", self.ts_t[0])
