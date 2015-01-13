@@ -67,10 +67,15 @@ class SimulationWidget(QWidget):
     def set_stocks_value(self, i: int):
         self.ui.label_stocksValue.setText(str(int(i))+" Ft")
 
-    def set_stocks(self, stocks: dict):
+    def set_stocks(self, stocks: dict, get_stock_price: callable):
         self.ui.tableWidget.setRowCount(len(stocks.keys()))
         i = 0
+        sum_of_stocks = 0
         for s, am in stocks.items():
+            val = am*get_stock_price(s)
             self.ui.tableWidget.setItem(i, 0, QTableWidgetItem(s))
             self.ui.tableWidget.setItem(i, 1, QTableWidgetItem(str(am)))
+            self.ui.tableWidget.setItem(i, 2, QTableWidgetItem(str(val)))
             i += 1
+            sum_of_stocks += val
+        self.set_stocks_value(sum_of_stocks)

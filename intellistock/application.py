@@ -104,7 +104,7 @@ class Application:
         pass
 
     def set_my_stocks(self, stocks):
-        self.window.ui.simwidget.set_stocks(stocks)
+        self.window.ui.simwidget.set_stocks(stocks, self.get_stock_price)
         pass
 
     def set_my_money(self, money):
