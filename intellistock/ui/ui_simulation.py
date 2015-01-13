@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_simulation.ui'
 #
-# Created: Tue Jan 13 01:46:34 2015
+# Created: Tue Jan 13 02:44:01 2015
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -102,7 +102,7 @@ class Ui_SimulationForm(object):
         self.verticalLayout.addLayout(self.formLayout_2)
         self.dial_speed = QtGui.QDial(SimulationForm)
         self.dial_speed.setMinimum(1)
-        self.dial_speed.setMaximum(1000)
+        self.dial_speed.setMaximum(100000)
         self.dial_speed.setObjectName(_fromUtf8("dial_speed"))
         self.verticalLayout.addWidget(self.dial_speed)
         self.label_5 = QtGui.QLabel(SimulationForm)
