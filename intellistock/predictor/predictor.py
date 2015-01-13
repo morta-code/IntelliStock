@@ -175,6 +175,7 @@ class EnsemblePredictor(Predictor):
         # print(sorted(set(myList)))
         # xx, y, t = create_training_set(np.array([self.ts_t, self.ts_x]), nr_training_samples, self.dim, self.nth)
         # xx, y, t = create_training_set_2(np.array([self.ts_t, self.ts_x]), self.maxn, self.dim, self.dt_samples)
+        print(self.ts_t.shape, self.ts_x.shape)
         xx, y, t, xx_test, y_test, t_test = create_training_test_set(np.array([self.ts_t, self.ts_x]), self.maxn, self.dim, self.dt_samples)
 
         print(xx_test, t_test, y_test, len(t_test))
@@ -403,7 +404,7 @@ class DataProcessor:
     def update(self, **kwargs):
         if self.simulation:
             if self.predictor:
-                self.predictor.update(simulation=True, ts_t=self.ts_t, ts_x=self.ts_x, **kwargs)
+                # self.predictor.update(simulation=True, ts_t=self.ts_t, ts_x=self.ts_x, **kwargs)
                 self._plot_observations()
                 return
         if self.predictor:
