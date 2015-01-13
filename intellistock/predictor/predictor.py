@@ -5,9 +5,9 @@
 #  Created on Sat Nov 29 15:41:43 CET 2014
 #
 
-from intellistock.data.data import int2year
+from intellistock.data.data import int2year, date2year
 from intellistock.ui.plotwidget import PlotWidget
-from intellistock.predictor.predictor_helper import create_training_set, create_training_set_2
+from intellistock.predictor.predictor_helper import create_training_set, create_training_set_2, create_training_test_set
 
 from threading import Thread, Event
 
@@ -133,6 +133,8 @@ class EnsemblePredictor(Predictor):
         self.dim = 6
         self.dt_samples = 10 / 3600 / 24 / 365
 
+        self.simulation = False
+
     def generate_time_params(self):
         try:
             self.near_past = self._tp["nearp"] / 24 / 365
@@ -172,11 +174,15 @@ class EnsemblePredictor(Predictor):
         # nr_training_samples = min(20, self.ts_t.size)
         # print(sorted(set(myList)))
         # xx, y, t = create_training_set(np.array([self.ts_t, self.ts_x]), nr_training_samples, self.dim, self.nth)
-        xx, y, t = create_training_set_2(np.array([self.ts_t, self.ts_x]), self.maxn, self.dim, self.dt_samples)
+        # xx, y, t = create_training_set_2(np.array([self.ts_t, self.ts_x]), self.maxn, self.dim, self.dt_samples)
+        xx, y, t, xx_test, y_test, t_test = create_training_test_set(np.array([self.ts_t, self.ts_x]), self.maxn, self.dim, self.dt_samples)
+
+        print(xx_test, t_test, y_test, len(t_test))
 
         # Instantiate a Gaussian Process model
         gp = GaussianProcess(corr='cubic', theta0=1e-2, thetaL=1e-4, thetaU=1e-1, random_start=100)
         gp.fit(xx, y)
+        print(gp.score(xx_test, y_test))
 
         prediction_ticks = 20
 
@@ -220,6 +226,9 @@ class EnsemblePredictor(Predictor):
         self.figure.draw()
 
     def _gradient_boosting_regressor(self, update=False):
+        if self.simulation:
+            return
+
         far_past_index = int(np.interp(self.t_far_past, self.ts_t, self.indices))
         t_ensemble = np.atleast_2d(self.ts_t[far_past_index:]).T
         x_ensemble = np.atleast_2d(self.ts_x[far_past_index:]).T.ravel()
@@ -269,9 +278,12 @@ class EnsemblePredictor(Predictor):
             self._event.wait()
             # print("predictor:run: processing...")
 
-            if self._data_set_changed:
-                pass
-                # print("Predictor: DATA_SET_CHANGED, but I don't give a damn about it")
+            if self.simulation:
+                self.clear_all()
+                self.generate_time_values()
+                if self.interrupted():
+                    return
+                self._linear_regression(update)
             if self._tp_changed:
                 self.clear_all()
                 self.generate_time_values()
@@ -325,10 +337,15 @@ class EnsemblePredictor(Predictor):
     #     self._tp = self._args2dict(nearf=nearf, nearp=nearp, farf=farf, farp=farp)
 
     def update(self, **kwargs):
-        self._tp_changed = True
+        if kwargs["simulation"]:
+            self.simulation = True
+            self.set_data(kwargs["ts_t"], kwargs["ts_x"])
+        else:
+            self._tp_changed = True
         self._tp = kwargs
         self.generate_time_params()
         self._event.set()
+        print("update vege")
 
 
 class DataProcessor:
@@ -338,6 +355,14 @@ class DataProcessor:
         self.ts_t = self.ts_x = None
         self.predictor = predictor
         self.figure = figure
+
+        self.simulation = False
+        self.mini = 0
+        self.maxi = 0
+        self.t_begin = 0
+        self.t_end = 0
+
+        self.pl = None
 
     def set_predictor(self, predictor):
         self.predictor = predictor
@@ -351,6 +376,10 @@ class DataProcessor:
         if raw_data:
             self.ts_t = np.asarray(list(map(lambda t: int2year(t[1]), raw_data)), dtype=float)
             self.ts_x = np.asarray(list(map(lambda t: t[2], raw_data)), dtype=float)
+            self.indices = np.arange(len(self.ts_t))
+            self.maxi = len(self.ts_t)
+            self.t_begin = self.ts_t[0]
+            self.t_end = self.ts_t[len(self.ts_t)-1]
 
         if time_series:
             pass
@@ -371,18 +400,46 @@ class DataProcessor:
             # self.predictor.update(**kwargs)
 
     def update(self, **kwargs):
+        if self.simulation:
+            if self.predictor:
+                self.predictor.update(simulation=True, ts_t=self.ts_t, ts_x=self.ts_x, **kwargs)
+                return
         if self.predictor:
             self.predictor.update(**kwargs)
 
     def _plot_observations(self):
-        self.figure.plot(self.ts_t, self.ts_x, 'b.-', markersize=6, label='observations')
+        self.figure.erase_line(ploth=self.pl)
+        self.pl = self.figure.plot(self.ts_t[self.mini:self.maxi], self.ts_x[self.mini:self.maxi], 'b.-', markersize=6, label='observations')
         self.figure.set_axes_labels("time [year]", "stock price [Ft]")
         self.figure.set_axis_offset()
         self.figure.legend(loc='upper left')
         self.figure.draw()
 
     def interrupt(self):
-        self.predictor.interrupt();
+        self.predictor.interrupt()
+
+    def set_minmaxt(self, mint=None, maxt=None):
+        if mint and maxt:
+            self.simulation = False
+
+            mint = date2year(mint)+10.00923
+            maxt = date2year(maxt)+10.00923
+            print("---------------------", mint)
+            print("---------------------", maxt)
+            print("---------------------", self.ts_t[0])
+            if maxt < self.t_begin:
+                return
+
+            self.mini = int(np.interp(mint, self.ts_t, self.indices))
+            self.maxi = int(np.interp(maxt, self.ts_t, self.indices))
+            print("----------------------------", self.mini, self.maxi, len(self.ts_t))
+            if self.maxi - self.mini > 10:
+                self.simulation = True
+        else:
+            self.simulation = False
+            self.mini = 0
+            self.maxi = len(self.ts_t)
+        return self.simulation
 
 if __name__ == "__main__":
     np = NaivePredictor()
