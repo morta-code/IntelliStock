@@ -6,9 +6,9 @@ from simulation.simulation import Simulation
 class SimulationTest(unittest.TestCase):
 
     def setUp(self):
-        mock_application = Mock()
-        mock_application.get_stock_price = MagicMock(return_value=100)
-        self.simulation = Simulation(mock_application)
+        self.mock_application = Mock()
+        self.mock_application.get_stock_price = MagicMock(return_value=100)
+        self.simulation = Simulation(self.mock_application)
 
     def testBuy(self):
         self.simulation.buy_stock("OTP", 100)
@@ -71,3 +71,21 @@ class SimulationTest(unittest.TestCase):
         self.simulation.buy_stock("MOL", 3)
         self.simulation.sell_stock("MOL", 3)
         self.assertEquals(940, self.simulation.money)
+
+    def testBuyAndSellAtDifferentPrices(self):
+        self.simulation.set_interest(0) #0%
+        self.simulation.set_money(1000)
+        self.mock_application.get_stock_price = MagicMock(return_value=100)
+        self.simulation.buy_stock("MOL", 3)
+        self.mock_application.get_stock_price = MagicMock(return_value=200)
+        self.simulation.sell_stock("MOL", 3)
+        self.assertEquals(1000-300+600, self.simulation.money)
+
+    def testBuyAndSellAtDifferentPricesWithInterest(self):
+        self.simulation.set_interest(0.1) #10%
+        self.simulation.set_money(1000)
+        self.mock_application.get_stock_price = MagicMock(return_value=100)
+        self.simulation.buy_stock("MOL", 3)
+        self.mock_application.get_stock_price = MagicMock(return_value=200)
+        self.simulation.sell_stock("MOL", 3)
+        self.assertEquals(1000-300-30+600-60, self.simulation.money)

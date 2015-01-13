@@ -8,7 +8,7 @@ class Simulation:
     def __init__(self, application):
         self.application = application
         self.speed = -1
-        self.interval = 0.1
+        self.interval = 1
         self.finish = False
         self.start_time = datetime.datetime.now()
         self.money = 0
