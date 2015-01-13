@@ -90,6 +90,9 @@ class MainWindow(QMainWindow):
         sw.ui.button_stop.pressed.connect(self.application.stop_simulation)
         sw.action_buy.triggered.connect(lambda: self.application.simulation.buy_stock(sw.selected_stock_name, 1))
         sw.action_sell.triggered.connect(lambda: self.application.simulation.sell_stock(sw.selected_stock_name, 1))
+        sw.action_update.triggered.connect(lambda: self.application.simulation.update_stock_list())
+        sw.update_timer.timeout.connect(lambda: self.application.simulation.update_stock_list())
+
 
     def initialize(self, initial_stocks: dict):
         """ Initialize datas only for opening window.

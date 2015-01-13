@@ -1,5 +1,5 @@
 from PyQt4.QtGui import QWidget, QTableWidgetItem, QMenu, QAction
-from PyQt4.QtCore import QObject, QDateTime, QPoint
+from PyQt4.QtCore import QObject, QDateTime, QPoint, QTimer
 from PyQt4.Qt import Qt
 from intellistock.ui.ui_simulation import Ui_SimulationForm
 from datetime import datetime
@@ -13,9 +13,16 @@ class SimulationWidget(QWidget):
         self.ui.label_trFee.setText(str(self.ui.dial_transactFee.value()/10)+" %")
         self.ui.label_simSpeed.setText(str(self.ui.dial_speed.value()))
         self.ui.tableWidget.setContextMenuPolicy(Qt.CustomContextMenu)
+        
         # Initialize extras (not automateable by Designer)
         self.action_buy = QAction("Vétel", self)
         self.action_sell = QAction("Eladás", self)
+        self.action_update = QAction("Frissítés", self)
+        self.cmenu = QMenu(self)
+        self.cmenu.addAction(self.action_buy)
+        self.cmenu.addAction(self.action_sell)
+        self.cmenu.addAction(self.action_update)
+        self.update_timer = QTimer()
         # Initialize members and settings
         self.selected_stock_name = ""
 
@@ -26,6 +33,7 @@ class SimulationWidget(QWidget):
         self.ui.spin_cash.setEnabled(False)
         self.ui.dial_transactFee.setEnabled(False)
         self.ui.dial_speed.setEnabled(False)
+        self.update_timer.start(2000)
 
     def on_button_stop_pressed(self):
         self.ui.button_stop.setEnabled(False)
@@ -34,16 +42,14 @@ class SimulationWidget(QWidget):
         self.ui.spin_cash.setEnabled(True)
         self.ui.dial_transactFee.setEnabled(True)
         self.ui.dial_speed.setEnabled(True)
+        self.update_timer.stop()
 
     def on_tableWidget_customContextMenuRequested(self, p: QPoint):
         rowi = self.ui.tableWidget.indexAt(p).row()
         if rowi < 0:
             return
         self.selected_stock_name = self.ui.tableWidget.item(rowi, 0).text()
-        menu = QMenu(self)
-        menu.addAction(self.action_buy)
-        menu.addAction(self.action_sell)
-        menu.popup(self.ui.tableWidget.viewport().mapToGlobal(p))
+        self.cmenu.popup(self.ui.tableWidget.viewport().mapToGlobal(p))
 
     def on_spin_cash_valueChanged(self, v: int):
         pass
