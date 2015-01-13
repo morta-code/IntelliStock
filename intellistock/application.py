@@ -112,9 +112,7 @@ class Application:
         pass
 
     def get_stock_price(self, stock_name, data_time=datetime.now()):
-        #TODO
-        data.get_close(stock_name, data.datetime_to_dbdatetime(data_time))
-        pass
+        return data.get_close(stock_name, data.datetime_to_dbdatetime(data_time))
 
     def set_graph_times(self, begin, end):
         #TODO
