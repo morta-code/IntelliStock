@@ -59,6 +59,13 @@ def get_trades(begin: int, end: int, paper_name: str=None):
     cur = conn.execute(sql)
     return cur.fetchall()
 
+
+def get_close(date: int, paper_name: str):
+    cur = conn.execute("SELECT StockData.close FROM StockData WHERE paper_name = ? AND datetime = ?",
+                       (date, paper_name))
+    return cur.fetchone()
+
+
 # -------- time conversions ---------- #
 
 
@@ -71,3 +78,9 @@ def int2year(d: int):
     d = datetime(int(d // 1e10), int(d // 1e8 % 100), int(d // 1e6 % 100), int(d // 1e4 % 100), int(d // 1e2 % 100), int(d % 100))
     return date2year(d)
 
+
+def datetime_to_dbdatetime(dt: datetime):
+    datestr = str(dt.year) + "%02d" % dt.month + "%02d" % dt.day
+    tt = dt.timetuple()
+    timestr = "%02d" % tt.tm_hour + "%02d" % tt.tm_min +  "%02d" % tt.tm_sec
+    return int(datestr) * 1000000 + int(timestr)
