@@ -401,20 +401,18 @@ class DataProcessor:
             # self.predictor.update(**kwargs)
 
     def update(self, **kwargs):
-        self.figure.clear()
-        print("update-===========")
-        return
         if self.simulation:
             if self.predictor:
                 self.predictor.update(simulation=True, ts_t=self.ts_t, ts_x=self.ts_x, **kwargs)
+                self._plot_observations()
                 return
         if self.predictor:
             self.predictor.update(**kwargs)
 
     def _plot_observations(self):
-        if not self.figure.erase_line(ploth=self.pl):
-            print("asd ada sd asd --------------------------------==============================@@@@@@@@@@@@@@@@@")
-        self.figure.clear()
+        self.figure.erase_line(ploth=self.pl)
+        # self.figure.clear()
+        # self.figure.draw()
         self.pl = self.figure.plot(self.ts_t[self.mini:self.maxi], self.ts_x[self.mini:self.maxi], 'b.-', markersize=6, label='observations')
         self.figure.set_axes_labels("time [year]", "stock price [Ft]")
         self.figure.set_axis_offset()
