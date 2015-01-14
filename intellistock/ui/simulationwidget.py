@@ -17,16 +17,18 @@ class SimulationWidget(QWidget):
         # Initialize extras (not automateable by Designer)
         self.action_buy = QAction("Vétel", self)
         self.action_sell = QAction("Eladás", self)
-        #self.action_update = QAction("Frissítés", self)
+        self.action_sell_all = QAction("Mind eladása", self)
         self.cmenu = QMenu(self)
         self.cmenu.addAction(self.action_buy)
+        self.cmenu.addSeparator()
         self.cmenu.addAction(self.action_sell)
-        #self.cmenu.addAction(self.action_update)
+        self.cmenu.addAction(self.action_sell_all)
         self.update_timer = QTimer()
 
         # Initialize members and settings
         self.running = False
         self.selected_stock_name = ""
+        self.speed = 0
 
     def on_button_start_pressed(self):
         self.ui.button_stop.setEnabled(True)
@@ -65,7 +67,8 @@ class SimulationWidget(QWidget):
         self.ui.label_trFee.setText(str(v/10)+" %")
 
     def on_dial_speed_valueChanged(self, v: int):
-        self.ui.label_simSpeed.setText(str(v))
+        self.speed = self.calc_speed(v)
+        self.ui.label_simSpeed.setText(str(self.speed))
 
     def start_datetime(self) -> datetime:
         qdt = self.ui.dateTime_start.dateTime()
@@ -89,3 +92,7 @@ class SimulationWidget(QWidget):
             i += 1
             sum_of_stocks += val
         self.set_stocks_value(sum_of_stocks)
+
+    def calc_speed(self, v = int):
+        # todo
+        return v
